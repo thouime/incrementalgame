@@ -6,6 +6,8 @@ const PickUp = preload("res://Scenes/pickup.tscn")
 @onready var inventory_interface: Control = $UI/InventoryInterface
 @onready var hot_bar_inventory: PanelContainer = $UI/HotBarInventory
 
+# Added version control
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	inventory_interface.mouse_filter = Control.MOUSE_FILTER_IGNORE
