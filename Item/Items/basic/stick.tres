@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=4 format=3 uid="uid://c8ia8q7d2wx6o"]
+
+[ext_resource type="Script" path="res://Item/item_data.gd" id="1_bftsd"]
+[ext_resource type="Texture2D" uid="uid://bulp7tkpnj8vn" path="res://Item/#1 - Transparent Icons.png" id="2_flx56"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wjt34"]
+atlas = ExtResource("2_flx56")
+region = Rect2(352, 544, 32, 32)
+
+[resource]
+script = ExtResource("1_bftsd")
+name = "Stick"
+description = "A thin piece of wood that has fallen from a bush or tree. Can be used for crafting basic tools and objects."
+stackable = true
+texture = SubResource("AtlasTexture_wjt34")

@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="InventoryData" load_steps=16 format=3 uid="uid://bitwkfta0d2uu"]
+
+[ext_resource type="Script" path="res://Inventory/inventory_data.gd" id="1_8fppb"]
+[ext_resource type="Script" path="res://Inventory/slot_data.gd" id="2_r8gg3"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Item/Items/basic/stick.tres" id="3_b7qy8"]
+[ext_resource type="Resource" uid="uid://c4yne4f4cx1uw" path="res://Item/Items/healing/health_potion.tres" id="3_k4qdp"]
+[ext_resource type="Resource" uid="uid://bkbrdn41jos3k" path="res://Item/Items/battle/iron_helm.tres" id="4_74xol"]
+[ext_resource type="Resource" uid="uid://bvd8gpu7r0l5c" path="res://Item/Items/basic/wood.tres" id="4_juplj"]
+[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Item/Items/basic/leaf.tres" id="7_0u3m0"]
+
+[sub_resource type="Resource" id="Resource_v2cvc"]
+script = ExtResource("2_r8gg3")
+item_data = ExtResource("3_k4qdp")
+quantity = 4
+
+[sub_resource type="Resource" id="Resource_p3n4r"]
+script = ExtResource("2_r8gg3")
+item_data = ExtResource("4_74xol")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_0qqod"]
+script = ExtResource("2_r8gg3")
+item_data = ExtResource("3_b7qy8")
+quantity = 97
+
+[sub_resource type="Resource" id="Resource_rnwhd"]
+script = ExtResource("2_r8gg3")
+item_data = ExtResource("4_juplj")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_tq131"]
+script = ExtResource("2_r8gg3")
+item_data = ExtResource("7_0u3m0")
+quantity = 99
+
+[sub_resource type="Resource" id="Resource_fb4cn"]
+script = ExtResource("2_r8gg3")
+item_data = ExtResource("3_b7qy8")
+quantity = 99
+
+[sub_resource type="Resource" id="Resource_b8rjm"]
+script = ExtResource("2_r8gg3")
+item_data = ExtResource("3_b7qy8")
+quantity = 99
+
+[sub_resource type="Resource" id="Resource_divsr"]
+script = ExtResource("2_r8gg3")
+item_data = ExtResource("3_b7qy8")
+quantity = 99
+
+[resource]
+script = ExtResource("1_8fppb")
+slot_datas = Array[ExtResource("2_r8gg3")]([SubResource("Resource_v2cvc"), SubResource("Resource_p3n4r"), SubResource("Resource_0qqod"), SubResource("Resource_rnwhd"), SubResource("Resource_tq131"), SubResource("Resource_fb4cn"), SubResource("Resource_b8rjm"), SubResource("Resource_divsr")])

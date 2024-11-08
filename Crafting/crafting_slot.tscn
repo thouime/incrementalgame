@@ -1,0 +1,57 @@
+[gd_scene load_steps=5 format=3 uid="uid://cv6y5ynvreyg8"]
+
+[ext_resource type="Script" path="res://Crafting/crafting_slot.gd" id="1_xuakc"]
+[ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="1_yss3i"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xdoaq"]
+atlas = ExtResource("1_yss3i")
+region = Rect2(352, 416, 32, 32)
+
+[sub_resource type="LabelSettings" id="LabelSettings_c1i77"]
+font_size = 10
+
+[node name="CraftingSlot" type="PanelContainer"]
+custom_minimum_size = Vector2(32, 32)
+offset_right = 32.0
+offset_bottom = 32.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_xuakc")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Craftable" type="TextureRect" parent="MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = SubResource("AtlasTexture_xdoaq")
+expand_mode = 1
+stretch_mode = 3
+
+[node name="QuantityContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="QuantityLabel" type="Label" parent="MarginContainer/HBoxContainer/QuantityContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "x99"
+label_settings = SubResource("LabelSettings_c1i77")
+horizontal_alignment = 1
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

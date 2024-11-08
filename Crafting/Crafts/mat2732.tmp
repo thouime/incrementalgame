@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://dkqv5bkqgfvr0"]
+
+[ext_resource type="Script" path="res://Crafting/Crafts/material_info.gd" id="1_le313"]
+[ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="1_xko77"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4i3b8"]
+atlas = ExtResource("1_xko77")
+region = Rect2(352, 544, 32, 32)
+
+[node name="Material" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -347.0
+offset_bottom = -688.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+script = ExtResource("1_le313")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 2
+texture = SubResource("AtlasTexture_4i3b8")
+
+[node name="MaterialName" type="Label" parent="."]
+layout_mode = 2
+text = "Material"
+
+[node name="Quantity" type="Label" parent="."]
+layout_mode = 2
+text = "x35"
