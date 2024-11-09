@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://cqko5mheasqtt"]
 
-[ext_resource type="Shader" path="res://Shaders/aura.gdshader" id="1_lvva2"]
+[ext_resource type="Shader" path="res://Objects/Shaders/aura.gdshader" id="1_lvva2"]
 
 [resource]
 resource_local_to_scene = true

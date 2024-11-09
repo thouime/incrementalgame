@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://clxpt0o22wqni"]
 
-[ext_resource type="Shader" path="res://Shaders/aura.gdshader" id="1_efrtx"]
+[ext_resource type="Shader" path="res://Objects/Shaders/aura.gdshader" id="1_efrtx"]
 [ext_resource type="Script" path="res://Objects/object.gd" id="2_u8dp0"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Art/objects/objects.png" id="3_al1du"]
 

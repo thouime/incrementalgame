@@ -12,7 +12,7 @@ const Slot = preload("res://Crafting/crafting_slot.tscn")
 @export var craft_datas: Array[CraftData]
 
 # Small interface element that displays info about each craftable
-const CRAFT_INFO = preload("res://Crafting/Crafts/craft_info.tscn")
+const CRAFT_INFO = preload("res://Crafting/craft_info.tscn")
 # Flag to check if mouse is hovering over Craftables for more info
 var craft_hovering = false
 

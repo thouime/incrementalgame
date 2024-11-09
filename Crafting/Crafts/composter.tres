@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="2_87lh3"]
 [ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Item/Items/basic/stick.tres" id="2_rq8b6"]
 [ext_resource type="PackedScene" uid="uid://clxpt0o22wqni" path="res://Objects/object.tscn" id="4_uab0f"]
-[ext_resource type="Shader" path="res://Shaders/aura.gdshader" id="5_v5rjc"]
+[ext_resource type="Shader" path="res://Objects/Shaders/aura.gdshader" id="5_v5rjc"]
 [ext_resource type="Script" path="res://Objects/composter.gd" id="6_1sei0"]
 
 [sub_resource type="Resource" id="Resource_a5stn"]

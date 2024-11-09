@@ -1,34 +1,37 @@
-[gd_scene load_steps=40 format=3 uid="uid://bgi5nv12xjmka"]
+[gd_scene load_steps=46 format=3 uid="uid://bgi5nv12xjmka"]
 
-[ext_resource type="Script" path="res://Scripts/main.gd" id="1_27ga2"]
-[ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Player/player.tscn" id="2_tlcox"]
-[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Art/objects/objects.png" id="3_avgy6"]
-[ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://Scenes/world.tscn" id="4_bjdlx"]
-[ext_resource type="Script" path="res://Inventory/inventory_data_equip.gd" id="4_c86a1"]
-[ext_resource type="Script" path="res://Scenes/tree.gd" id="4_go552"]
-[ext_resource type="Script" path="res://Scenes/bush.gd" id="5_fitum"]
-[ext_resource type="Shader" path="res://Shaders/aura.gdshader" id="5_i0ikp"]
-[ext_resource type="PackedScene" uid="uid://cjvrn7m4iia17" path="res://Scenes/inventory.tscn" id="8_ci7ef"]
-[ext_resource type="Script" path="res://Inventory/inventory_interface.gd" id="9_7p0m2"]
-[ext_resource type="PackedScene" uid="uid://dj0urcd0clvl4" path="res://Inventory/slot.tscn" id="11_dmqj7"]
-[ext_resource type="Script" path="res://Item/Drop Table/common_drops.gd" id="11_jog15"]
-[ext_resource type="Script" path="res://Scenes/chest.gd" id="12_35oxv"]
-[ext_resource type="PackedScene" uid="uid://c8wct85o6jfcu" path="res://Inventory/hot_bar_inventory.tscn" id="12_vuxpa"]
-[ext_resource type="Texture2D" uid="uid://1kukmo2577le" path="res://Art/objects/chest_01.png" id="12_y47eu"]
-[ext_resource type="Script" path="res://Inventory/inventory_data.gd" id="13_wepqw"]
-[ext_resource type="Script" path="res://Inventory/slot_data.gd" id="14_h8jtc"]
-[ext_resource type="Script" path="res://Item/Drop Table/drop_table.gd" id="14_hi1gl"]
-[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Item/Items/stick.tres" id="15_ovsxf"]
-[ext_resource type="Resource" uid="uid://bvd8gpu7r0l5c" path="res://Item/Items/wood.tres" id="16_2d1gt"]
-[ext_resource type="PackedScene" uid="uid://ciuy4rj4cpsvn" path="res://Scenes/pickup.tscn" id="18_jf68m"]
-
-[sub_resource type="Resource" id="Resource_ckvex"]
-script = ExtResource("13_wepqw")
-slot_datas = Array[ExtResource("14_h8jtc")]([null, null, null, null, null, null, null, null, null, null])
+[ext_resource type="Script" path="res://main.gd" id="1_xtwid"]
+[ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Player/player.tscn" id="2_h00hh"]
+[ext_resource type="Resource" uid="uid://bitwkfta0d2uu" path="res://Inventory/test_inv.tres" id="3_nbs8y"]
+[ext_resource type="Script" path="res://Inventory/inventory_data_equip.gd" id="4_2dnpy"]
+[ext_resource type="Script" path="res://Inventory/slot_data.gd" id="5_b2i4h"]
+[ext_resource type="Script" path="res://Objects/tree.gd" id="6_ip07t"]
+[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Art/objects/objects.png" id="7_8rb2x"]
+[ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://World/world.tscn" id="8_8lnwa"]
+[ext_resource type="Shader" path="res://Objects/Shaders/aura.gdshader" id="9_4puhs"]
+[ext_resource type="Script" path="res://Objects/bush.gd" id="10_6vtjc"]
+[ext_resource type="Script" path="res://Item/Drop Table/common_drops.gd" id="11_v20go"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Item/Items/basic/stick.tres" id="12_jsnrj"]
+[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Item/Items/basic/leaf.tres" id="13_4hqj5"]
+[ext_resource type="Script" path="res://Item/Drop Table/drop_table.gd" id="14_yiqgm"]
+[ext_resource type="Script" path="res://Inventory/inventory_interface.gd" id="15_4fcd7"]
+[ext_resource type="PackedScene" uid="uid://cjvrn7m4iia17" path="res://Inventory/inventory.tscn" id="16_gmsb7"]
+[ext_resource type="PackedScene" uid="uid://dj0urcd0clvl4" path="res://Inventory/slot.tscn" id="17_gq7v4"]
+[ext_resource type="PackedScene" uid="uid://c8wct85o6jfcu" path="res://Inventory/hot_bar_inventory.tscn" id="18_ntxon"]
+[ext_resource type="PackedScene" uid="uid://bp0gw7kcfe8n3" path="res://Crafting/crafting_menu.tscn" id="19_urs44"]
+[ext_resource type="Script" path="res://Crafting/craft_data.gd" id="20_mjmg7"]
+[ext_resource type="Resource" uid="uid://blampwk84srx8" path="res://Crafting/Crafts/composter.tres" id="21_ifvgd"]
+[ext_resource type="Resource" uid="uid://dpm7vhcmkm2j2" path="res://Crafting/Crafts/test_item.tres" id="22_bgh5u"]
+[ext_resource type="Script" path="res://Objects/chest.gd" id="23_bn12c"]
+[ext_resource type="Script" path="res://Inventory/inventory_data.gd" id="24_xf1d2"]
+[ext_resource type="Texture2D" uid="uid://1kukmo2577le" path="res://Art/objects/chest_01.png" id="25_x6fqa"]
+[ext_resource type="PackedScene" uid="uid://ciuy4rj4cpsvn" path="res://Item/pickup.tscn" id="26_eues2"]
+[ext_resource type="PackedScene" uid="uid://cefnc8f41wint" path="res://Objects/chest.tscn" id="27_l85p4"]
+[ext_resource type="PackedScene" uid="uid://by4s6muul7tdg" path="res://Objects/composter.tscn" id="28_6qef4"]
 
 [sub_resource type="Resource" id="Resource_0msbn"]
-script = ExtResource("4_c86a1")
-slot_datas = Array[ExtResource("14_h8jtc")]([null])
+script = ExtResource("4_2dnpy")
+slot_datas = Array[ExtResource("5_b2i4h")]([null])
 
 [sub_resource type="Shader" id="Shader_pv86w"]
 code = "shader_type canvas_item;
@@ -125,7 +128,7 @@ size = Vector2(41.5, 55)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_51lhn"]
 resource_local_to_scene = true
-shader = ExtResource("5_i0ikp")
+shader = ExtResource("9_4puhs")
 shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
@@ -135,43 +138,33 @@ shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
 
 [sub_resource type="Resource" id="Resource_fnq7y"]
-script = ExtResource("14_h8jtc")
-item_data = ExtResource("15_ovsxf")
+script = ExtResource("5_b2i4h")
+item_data = ExtResource("12_jsnrj")
 quantity = 1
 
-[sub_resource type="Resource" id="Resource_cm1up"]
-script = ExtResource("14_h8jtc")
-item_data = ExtResource("16_2d1gt")
+[sub_resource type="Resource" id="Resource_hckqj"]
+script = ExtResource("5_b2i4h")
+item_data = ExtResource("13_4hqj5")
 quantity = 1
 
 [sub_resource type="Resource" id="Resource_wphjt"]
-script = ExtResource("11_jog15")
-slot_datas = Array[ExtResource("14_h8jtc")]([SubResource("Resource_fnq7y"), SubResource("Resource_cm1up")])
+script = ExtResource("11_v20go")
+slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_fnq7y"), SubResource("Resource_hckqj")])
 
-[sub_resource type="Resource" id="Resource_u3qwm"]
-script = ExtResource("14_hi1gl")
-common_chance = 0.6
+[sub_resource type="Resource" id="Resource_57j8k"]
+script = ExtResource("14_yiqgm")
+common_chance = 0.25
 rare_chance = 0.25
-ultra_rare_chance = 0.1
-unique_chance = 0.05
+ultra_rare_chance = 0.25
+unique_chance = 0.25
 common_drops = SubResource("Resource_wphjt")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s1rac"]
 size = Vector2(24, 10.75)
 
-[sub_resource type="Resource" id="Resource_oj586"]
-script = ExtResource("14_h8jtc")
-item_data = ExtResource("15_ovsxf")
-quantity = 30
-
-[sub_resource type="Resource" id="Resource_2ar6g"]
-script = ExtResource("14_h8jtc")
-item_data = ExtResource("16_2d1gt")
-quantity = 1
-
 [sub_resource type="Resource" id="Resource_e5npx"]
-script = ExtResource("13_wepqw")
-slot_datas = Array[ExtResource("14_h8jtc")]([SubResource("Resource_oj586"), null, null, null, SubResource("Resource_2ar6g"), null])
+script = ExtResource("24_xf1d2")
+slot_datas = Array[ExtResource("5_b2i4h")]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ofy0l"]
 size = Vector2(28, 12)
@@ -180,19 +173,33 @@ size = Vector2(28, 12)
 size = Vector2(40, 44.5)
 
 [sub_resource type="Resource" id="Resource_gmm5h"]
-script = ExtResource("14_h8jtc")
-item_data = ExtResource("15_ovsxf")
+script = ExtResource("5_b2i4h")
+item_data = ExtResource("12_jsnrj")
 quantity = 1
 
-[node name="Main" type="Node"]
-script = ExtResource("1_27ga2")
+[sub_resource type="Resource" id="Resource_w4a1l"]
+script = ExtResource("24_xf1d2")
+slot_datas = Array[ExtResource("5_b2i4h")]([null, null, null, null, null, null, null, null, null, null])
 
-[node name="Player" parent="." instance=ExtResource("2_tlcox")]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wjxxi"]
+shader = ExtResource("9_4puhs")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[node name="Main" type="Node"]
+script = ExtResource("1_xtwid")
+
+[node name="Player" parent="." instance=ExtResource("2_h00hh")]
 z_index = 2
 position = Vector2(266, 483)
 scale = Vector2(1, 1)
 collision_layer = 2
-inventory_data = SubResource("Resource_ckvex")
+inventory_data = ExtResource("3_nbs8y")
 equip_inventory_data = SubResource("Resource_0msbn")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
@@ -207,13 +214,13 @@ collide_with_areas = true
 material = SubResource("ShaderMaterial_wdyxv")
 position = Vector2(252, 213)
 scale = Vector2(2, 2)
-script = ExtResource("4_go552")
+script = ExtResource("6_ip07t")
 metadata/_edit_group_ = true
 
 [node name="Sprite1" type="Sprite2D" parent="Tree"]
 z_index = 3
 use_parent_material = true
-texture = ExtResource("3_avgy6")
+texture = ExtResource("7_8rb2x")
 region_enabled = true
 region_rect = Rect2(1, 80, 45, 44)
 
@@ -221,7 +228,7 @@ region_rect = Rect2(1, 80, 45, 44)
 z_index = 1
 use_parent_material = true
 position = Vector2(1.5, 31)
-texture = ExtResource("3_avgy6")
+texture = ExtResource("7_8rb2x")
 region_enabled = true
 region_rect = Rect2(7, 124, 36, 20)
 
@@ -238,7 +245,7 @@ z_index = 4
 position = Vector2(0.75, 7.5)
 shape = SubResource("RectangleShape2D_2edif")
 
-[node name="World" parent="." instance=ExtResource("4_bjdlx")]
+[node name="World" parent="." instance=ExtResource("8_8lnwa")]
 position = Vector2(48, 168)
 metadata/_edit_lock_ = true
 
@@ -246,14 +253,15 @@ metadata/_edit_lock_ = true
 material = SubResource("ShaderMaterial_51lhn")
 position = Vector2(370, 398)
 scale = Vector2(2, 2)
-script = ExtResource("5_fitum")
-drop_table = SubResource("Resource_u3qwm")
+script = ExtResource("10_6vtjc")
+drop_table = SubResource("Resource_57j8k")
+gather_time = 1.5
 metadata/_edit_group_ = true
 
 [node name="Sprite1" type="Sprite2D" parent="Bush"]
 z_index = 3
 use_parent_material = true
-texture = ExtResource("3_avgy6")
+texture = ExtResource("7_8rb2x")
 region_enabled = true
 region_rect = Rect2(96, 112, 32, 21)
 
@@ -261,7 +269,7 @@ region_rect = Rect2(96, 112, 32, 21)
 z_index = 1
 use_parent_material = true
 position = Vector2(0, 17)
-texture = ExtResource("3_avgy6")
+texture = ExtResource("7_8rb2x")
 region_enabled = true
 region_rect = Rect2(96, 133, 32, 11)
 
@@ -287,23 +295,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("9_7p0m2")
+script = ExtResource("15_4fcd7")
 
-[node name="PlayerInventory" parent="UI/InventoryInterface" instance=ExtResource("8_ci7ef")]
+[node name="PlayerInventory" parent="UI/InventoryInterface" instance=ExtResource("16_gmsb7")]
 layout_mode = 0
 offset_left = 130.0
 offset_top = 20.0
 offset_right = 170.0
 offset_bottom = 60.0
 
-[node name="EquipInventory" parent="UI/InventoryInterface" instance=ExtResource("8_ci7ef")]
+[node name="EquipInventory" parent="UI/InventoryInterface" instance=ExtResource("16_gmsb7")]
 layout_mode = 0
 offset_left = 350.0
 offset_top = 20.0
 offset_right = 390.0
 offset_bottom = 60.0
 
-[node name="ExternalInventory" parent="UI/InventoryInterface" instance=ExtResource("8_ci7ef")]
+[node name="ExternalInventory" parent="UI/InventoryInterface" instance=ExtResource("16_gmsb7")]
 visible = false
 layout_mode = 0
 offset_left = 110.0
@@ -311,28 +319,37 @@ offset_top = 195.0
 offset_right = 150.0
 offset_bottom = 235.0
 
-[node name="GrabbedSlot" parent="UI/InventoryInterface" instance=ExtResource("11_dmqj7")]
+[node name="GrabbedSlot" parent="UI/InventoryInterface" instance=ExtResource("17_gq7v4")]
 visible = false
 modulate = Color(1, 1, 1, 0.490196)
 self_modulate = Color(1, 1, 1, 0)
 layout_mode = 0
 
-[node name="HotBarInventory" parent="UI" instance=ExtResource("12_vuxpa")]
+[node name="HotBarInventory" parent="UI" instance=ExtResource("18_ntxon")]
+visible = false
 offset_left = 126.0
 offset_top = 651.0
 offset_right = 354.0
 offset_bottom = 699.0
 
+[node name="CraftingMenu" parent="UI" instance=ExtResource("19_urs44")]
+offset_left = 97.0
+offset_top = 519.0
+offset_right = 429.0
+offset_bottom = 575.0
+craft_datas = Array[ExtResource("20_mjmg7")]([ExtResource("21_ifvgd"), ExtResource("22_bgh5u")])
+
 [node name="Chest" type="StaticBody2D" parent="." groups=["external_inventory"]]
+visible = false
 position = Vector2(131, 260)
 collision_mask = 0
-script = ExtResource("12_35oxv")
+script = ExtResource("23_bn12c")
 inventory_data = SubResource("Resource_e5npx")
 metadata/_edit_group_ = true
 
 [node name="Sprite2D" type="Sprite2D" parent="Chest"]
 scale = Vector2(2, 2)
-texture = ExtResource("12_y47eu")
+texture = ExtResource("25_x6fqa")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
@@ -348,9 +365,17 @@ collision_mask = 0
 position = Vector2(0, -5.75)
 shape = SubResource("RectangleShape2D_ddmys")
 
-[node name="Pickup" parent="." instance=ExtResource("18_jf68m")]
+[node name="Pickup" parent="." instance=ExtResource("26_eues2")]
 position = Vector2(260, 405)
 slot_data = SubResource("Resource_gmm5h")
+
+[node name="Chest2" parent="." groups=["external_inventory"] instance=ExtResource("27_l85p4")]
+position = Vector2(133, 488)
+inventory_data = SubResource("Resource_w4a1l")
+
+[node name="Composter" parent="." instance=ExtResource("28_6qef4")]
+material = SubResource("ShaderMaterial_wjxxi")
+position = Vector2(144, 348)
 
 [connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]
 [connection signal="gui_input" from="UI/InventoryInterface" to="UI/InventoryInterface" method="_on_gui_input"]

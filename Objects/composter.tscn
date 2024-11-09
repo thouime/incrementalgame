@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://clxpt0o22wqni" path="res://Objects/object.tscn" id="1_b4dkm"]
 [ext_resource type="Script" path="res://Objects/composter.gd" id="1_wf30t"]
-[ext_resource type="Shader" path="res://Shaders/aura.gdshader" id="2_apjcb"]
+[ext_resource type="Shader" path="res://Objects/Shaders/aura.gdshader" id="2_apjcb"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_tvhbn"]
 shader = ExtResource("2_apjcb")

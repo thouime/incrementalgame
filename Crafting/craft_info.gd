@@ -3,7 +3,7 @@ extends PanelContainer
 @onready var v_box_container: VBoxContainer = $VBoxContainer
 @onready var craft_name: Label = $VBoxContainer/CraftName
 
-const MATERIAL_INFO = preload("res://Crafting/Crafts/material_info.tscn")
+const MATERIAL_INFO = preload("res://Crafting/material_info.tscn")
 
 func set_info(craft: CraftData) -> void:
 	craft_name.text = craft.name

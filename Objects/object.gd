@@ -25,7 +25,8 @@ func _get_offset() -> void:
 func focus_object() -> void:
 	var material = self.material
 	if material and material is ShaderMaterial:
-		material.set_shader_parameter("focus", not material.get_shader_parameter("focus"))
+		material.set_shader_parameter("focus", 
+		not material.get_shader_parameter("focus"))
 
 func _on_selection_mouse_entered() -> void:
 	focus_object()
