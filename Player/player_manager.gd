@@ -1,7 +1,7 @@
 extends Node
 
-var player
-var player_inventory
+var player: CharacterBody2D
+var player_inventory: InventoryData
 
 func use_slot_data(slot_data: SlotData) -> void:
 	slot_data.item_data.use(player)

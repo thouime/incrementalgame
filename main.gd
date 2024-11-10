@@ -38,13 +38,26 @@ func create_timer(duration, _on_timeout) -> Timer:
 	return timer
 
 func toggle_inventory_interface(external_inventory_owner = null) -> void:
-	inventory_interface.visible = not inventory_interface.visible
+	# Check if opening or closing player inventory
+	if external_inventory_owner:
+		# Always set the external inventory if it's provided
+		inventory_interface.set_external_inventory(external_inventory_owner)
+		inventory_interface.visible = true  # Ensure it opens if interacting with external
+	else:
+		# Toggle only the player's inventory visibility
+		inventory_interface.visible = not inventory_interface.visible
+		# Clear any external inventory if closing or only showing player inventory
+		if not inventory_interface.visible:
+			inventory_interface.clear_external_inventory()
 	
+	# Handle the hot bar based on visibility
 	if inventory_interface.visible:
 		hot_bar_inventory.hide()
 	else:
 		hot_bar_inventory.show()
-	
+
+
+func toggle_external_inventory(external_inventory_owner) -> void:
 	if external_inventory_owner and inventory_interface.visible:
 		inventory_interface.set_external_inventory(external_inventory_owner)
 	else:

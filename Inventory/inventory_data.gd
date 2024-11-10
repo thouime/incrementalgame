@@ -7,7 +7,7 @@ signal inventory_interact(inventory_data: InventoryData, index: int, button: int
 signal inventory_updated(inventory_data: InventoryData)
 
 func grab_slot_data(index: int) -> SlotData:
-	var slot_data = slot_datas[index]
+	var slot_data: SlotData = slot_datas[index]
 	
 	if slot_data:
 		slot_datas[index] = null
@@ -17,7 +17,7 @@ func grab_slot_data(index: int) -> SlotData:
 		return null
 
 func drop_slot_data(grabbed_slot_data: SlotData, index: int) -> SlotData:
-	var slot_data = slot_datas[index]
+	var slot_data: SlotData = slot_datas[index]
 	
 	var return_slot_data: SlotData
 	if slot_data and slot_data.can_fully_merge_with(grabbed_slot_data):
@@ -30,7 +30,7 @@ func drop_slot_data(grabbed_slot_data: SlotData, index: int) -> SlotData:
 	return return_slot_data
 
 func drop_single_slot_data(grabbed_slot_data: SlotData, index: int) -> SlotData:
-	var slot_data = slot_datas[index]
+	var slot_data: SlotData = slot_datas[index]
 	
 	if not slot_data:
 		slot_datas[index] = grabbed_slot_data.create_single_slot_data()
@@ -45,7 +45,7 @@ func drop_single_slot_data(grabbed_slot_data: SlotData, index: int) -> SlotData:
 		return null
 
 func use_slot_data(index: int) -> void:
-	var slot_data = slot_datas[index]
+	var slot_data: SlotData = slot_datas[index]
 	
 	if not slot_data:
 		return
@@ -81,11 +81,8 @@ func pick_up_slot_data(slot_data: SlotData) -> bool:
 	print("Inventory is full!")
 	return false
 
-func is_inventory_full(slot_data: SlotData) -> bool:
-	return false
-
 func reduce_slot_amount(index: int, amount: int) -> void:
-	var slot_data = slot_datas[index]
+	var slot_data: SlotData = slot_datas[index]
 	if slot_data:
 		slot_data.quantity -= amount
 		if slot_data and slot_data.quantity < 1:
@@ -94,51 +91,42 @@ func reduce_slot_amount(index: int, amount: int) -> void:
 	inventory_updated.emit(self)
 
 # Check if there is enough materials available
-# Otherwise return an empty list
-func check_total_materials(material: ItemData, quantity: int) -> Array:
-	# List of materials to be removed from inventory
-	var materials = []
+func check_materials(material: ItemData, quantity: int) -> Dictionary:
+	# Keeps track of the materials, inventory index, and missing amount
+	var materials = {material: {"missing": 0, "required": quantity, 
+								"inv_slots": []}}
 	var inventory_items = slot_datas
-	# Total amount needed
-	var required_quantity = quantity
-	# Current amount found
-	var quantity_needed = required_quantity
+	var remaining_quantity = quantity
+
+	# Check each inventory slot for the material, adding info to dictionary
 	for index in inventory_items.size():
 		var slot = inventory_items[index]
 		if slot and slot.item_data == material:
-			# Quantity of current item
 			var available_quantity = slot.quantity
-			# There's enough in the slot
-			if available_quantity >= required_quantity:
-				quantity_needed = 0
-				materials.append(index)
+			if available_quantity >= remaining_quantity:
+				remaining_quantity = 0
+				materials[material]["inv_slots"].append(index)
 				break
-			# If there's not enough in the slot, subtract what's available
-			# and continue to the next item
 			else:
-				quantity_needed -= available_quantity
-				materials.append(index)
-				continue
-	if quantity_needed == 0:
-		print("There is enough ", material.name, "s for crafting!")
-		return materials
-	else:
-		return []
+				materials[material]["inv_slots"].append(index)
+				remaining_quantity -= available_quantity
+	materials[material]["missing"] = remaining_quantity
+	return materials
 
-func reduce_slot_datas(materials: Dictionary) -> void:
+func remove_items(materials: Dictionary) -> void:
 	#var materials = check_total_materials(material, quantity)
 	for material in materials.keys():
 		var inventory_items = slot_datas
-		var required_quantity = material.quantity
+		var required_quantity = materials[material]["required"]
 		# Current amount found
 		var current_quantity = required_quantity
-		for index in materials[material]["slots"]:
-			var slot = inventory_items[index]
+		for inv_slot in materials[material]["inv_slots"]:
+			var slot = inventory_items[inv_slot]
 			if slot and slot.quantity <= current_quantity:
 				current_quantity = current_quantity - slot.quantity
-				reduce_slot_amount(index, slot.quantity)
+				reduce_slot_amount(inv_slot, slot.quantity)
 			else:
-				reduce_slot_amount(index, current_quantity)
-				
+				reduce_slot_amount(inv_slot, current_quantity)
+
 func on_slot_clicked(index: int, button: int) -> void:
 	inventory_interact.emit(self, index, button)

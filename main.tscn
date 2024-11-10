@@ -331,7 +331,7 @@ craft_datas = Array[ExtResource("20_mjmg7")]([ExtResource("21_ifvgd"), ExtResour
 position = Vector2(260, 405)
 slot_data = SubResource("Resource_gmm5h")
 
-[node name="Chest2" parent="." groups=["external_inventory"] instance=ExtResource("27_l85p4")]
+[node name="Chest" parent="." groups=["external_inventory"] instance=ExtResource("27_l85p4")]
 position = Vector2(133, 488)
 inventory_data = SubResource("Resource_w4a1l")
 

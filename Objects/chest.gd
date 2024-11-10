@@ -11,6 +11,7 @@ func _ready() -> void:
 func interact_action(player: CharacterBody2D) -> void:
 	toggle_inventory.emit(self)
 
+# Opening using raycast and interact key (E)
 func player_interact() -> void:
 	toggle_inventory.emit(self)
 

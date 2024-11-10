@@ -17,7 +17,9 @@ func _physics_process(delta: float) -> void:
 	
 	# If the player is too far from an external inventory.
 	if external_inventory_owner:
-		if external_inventory_owner.global_position.distance_to(PlayerManager.get_global_position()) > 50:
+		if external_inventory_owner.global_position.distance_to(
+			PlayerManager.get_global_position()
+		) > 50:
 			force_close.emit()
 
 func set_player_inventory_data(inventory_data: InventoryData) -> void:

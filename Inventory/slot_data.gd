@@ -22,14 +22,14 @@ func can_partially_merge_with(other_slot_data: SlotData) -> bool:
 			and MAX_STACK_SIZE - quantity > 0
 		
 func partially_merge_with() -> void:
-	var space_left = MAX_STACK_SIZE - quantity
+	var space_left: int = MAX_STACK_SIZE - quantity
 	quantity += space_left
 
 func fully_merge_with(other_slot_data: SlotData) -> void:
 	quantity += other_slot_data.quantity
 
 func create_single_slot_data() -> SlotData:
-	var new_slot_data = duplicate()
+	var new_slot_data: SlotData = duplicate()
 	new_slot_data.quantity = 1
 	quantity -= 1
 	return new_slot_data
