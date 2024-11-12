@@ -22,6 +22,7 @@ var state = State.IDLE
 var target_position = Vector2.ZERO
 var interact_target: Node = null
 var cursor_position: Vector2
+var grid_active = false
 
 signal toggle_inventory()
 
@@ -56,10 +57,12 @@ func _process(delta: float) -> void:
 	handle_movement(delta)
 	
 	# Get the cursor's global position
-	if grid.visible:
+	if grid_active:
 		cursor_position = get_global_mouse_position()
 		draw_grid(cursor_position)
-
+	else:
+		grid.visible = false
+		
 	# Non movement inputs
 	if Input.is_action_just_pressed("inventory"):
 		toggle_inventory.emit()
@@ -67,12 +70,21 @@ func _process(delta: float) -> void:
 		interact()
 	if Input.is_action_just_pressed("toggle_menu"):
 		print("Toggle Menu")
+		# Check if no menus are open
+		# Check if grid is open
+		# If there's nothing to cancel or close, open the menu
+		
 	if Input.is_action_just_pressed("grid"):
-		grid.visible = not grid.visible
+		grid_active = not grid_active
+	if Input.is_action_just_pressed("cancel"):
+		if grid_active:
+			grid_active = not grid_active
 
 
 func draw_grid(cursor_position: Vector2) -> void:
 	grid.draw_grid(cursor_position)
+	if not grid.visible:
+		grid.visible = true
 
 func any_menu_is_open() -> bool:
 	return false
