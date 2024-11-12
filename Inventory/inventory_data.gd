@@ -93,16 +93,21 @@ func reduce_slot_amount(index: int, amount: int) -> void:
 # Check if there is enough materials available
 func check_materials(material: ItemData, quantity: int) -> Dictionary:
 	# Keeps track of the materials, inventory index, and missing amount
-	var materials = {material: {"missing": 0, "required": quantity, 
-								"inv_slots": []}}
-	var inventory_items = slot_datas
-	var remaining_quantity = quantity
+	var materials: Dictionary = { material: 
+			{ 
+			"missing": 0, 
+			"required": quantity, 
+			"inv_slots": [] 
+			}
+		}
+	var inventory_items: Array[SlotData] = slot_datas
+	var remaining_quantity: int = quantity
 
 	# Check each inventory slot for the material, adding info to dictionary
 	for index in inventory_items.size():
-		var slot = inventory_items[index]
+		var slot: SlotData = inventory_items[index]
 		if slot and slot.item_data == material:
-			var available_quantity = slot.quantity
+			var available_quantity: int = slot.quantity
 			if available_quantity >= remaining_quantity:
 				remaining_quantity = 0
 				materials[material]["inv_slots"].append(index)
