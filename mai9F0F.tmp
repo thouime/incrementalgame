@@ -184,16 +184,20 @@ shader_parameter/focus = 0
 script = ExtResource("1_xtwid")
 
 [node name="Grid" type="Control" parent="."]
+visible = false
 light_mask = 0
 visibility_layer = 512
 z_index = 100
 layout_mode = 3
 anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 script = ExtResource("23_rhjmk")
 
 [node name="Cursor" type="Sprite2D" parent="Grid"]
 visible = false
 z_index = 1
+position = Vector2(243, 404)
 scale = Vector2(2, 2)
 texture = ExtResource("7_8rb2x")
 region_enabled = true
@@ -251,7 +255,7 @@ position = Vector2(0.75, 7.5)
 shape = SubResource("RectangleShape2D_2edif")
 
 [node name="World" parent="." instance=ExtResource("8_8lnwa")]
-position = Vector2(64, 160)
+position = Vector2(48, 160)
 metadata/_edit_lock_ = true
 
 [node name="Bush" type="StaticBody2D" parent="."]

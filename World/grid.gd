@@ -1,8 +1,12 @@
 extends Control
 
-var tile_size: Vector2 = Vector2(16, 16)
+@export var tile_size: Vector2 = Vector2(16, 16)
+@export var grid_size: Vector2 = Vector2(32, 32)
 @export var world_grid_width: int = 100
 @export var world_grid_height: int = 100
+
+# Temporary variable for the cursor during grid view
+@onready var build_cursor: Sprite2D = $Cursor
 
 var world_grid_visible = false
 
@@ -20,41 +24,131 @@ var world_grid_visible = false
 			#draw_line(Vector2(x, y), Vector2(x, y + tile_size.y), Color(1, 1, 1), 1)  # Left
 			#draw_line(Vector2(x + tile_size.x, y), Vector2(x + tile_size.x, y + tile_size.y), Color(1, 1, 1), 1)  # Right
 
-func draw_grid(cursor_pos: Vector2) -> void:
-	var rows: int  = 5
-	var cols: int = 5
-	var padding: int = 8 # Padding between cells
+func set_cursor(sprite: Sprite2D) -> void:
+	# Texture is a default
+	if sprite:
+		build_cursor.texture = sprite.texture
+		# Check if the passed sprite uses a region
+		if sprite.region_enabled:
+			build_cursor.region_enabled = true
+			build_cursor.region_rect = sprite.region_rect  # Set the same region
+		else:
+			build_cursor.region_enabled = false  # If no region, use the full texture
+			build_cursor.region_rect = Rect2()  # Reset region rectangle
+
+# Optional parameter that forces cursor snapping to grid size
+func update_cursor(use_grid_size: bool = false) -> void:
+	var cursor_pos = get_global_mouse_position()
+	var snapped_x: int
+	var snapped_y: int
 	
-	# Calculate the center offset in terms of grid cells
+	if use_grid_size:
+		# Snap based on grid size
+		snapped_x = int(cursor_pos.x / grid_size.x) * grid_size.x
+		snapped_y = int(cursor_pos.y / grid_size.y) * grid_size.y
+	else:
+		# Snap based on tile size (default behavior)
+		snapped_x = int(cursor_pos.x / tile_size.x) * tile_size.x
+		snapped_y = int(cursor_pos.y / tile_size.y) * tile_size.y
+	
+	var snapped_position = Vector2(snapped_x, snapped_y)
+	var offset = (grid_size - tile_size) / 2
+	
+	# Adjusted padding (for grid cells in your visual layout)
+	var padding: int = 16
+	
+	# Center the build cursor
+	build_cursor.position = snapped_position + offset + Vector2(padding / 2, padding / 2)
+
+func get_cursor(use_grid_size: bool = false) -> Vector2:
+	var cursor_pos = get_global_mouse_position()
+	var snapped_x: int
+	var snapped_y: int
+	
+	if use_grid_size:
+		# Snap based on grid size
+		snapped_x = int(cursor_pos.x / grid_size.x) * grid_size.x
+		snapped_y = int(cursor_pos.y / grid_size.y) * grid_size.y
+	else:
+		# Snap based on tile size (default behavior)
+		snapped_x = int(cursor_pos.x / tile_size.x) * tile_size.x
+		snapped_y = int(cursor_pos.y / tile_size.y) * tile_size.y
+	
+	var snapped_position = Vector2(snapped_x, snapped_y)
+	var offset = (grid_size - tile_size) / 2
+	
+	# Adjusted padding (for grid cells in your visual layout)
+	var padding: int = 16
+	
+	var build_position = snapped_position + offset + Vector2(padding / 2, padding / 2)
+	
+	return build_position
+	
+func draw_grid(use_grid_size: bool = false) -> void:
+	var cursor_pos = get_global_mouse_position()
+	var rows: int = 5
+	var cols: int = 5
+
+	# Calculate center offsets for centering
 	var center_offset_x = cols / 2
 	var center_offset_y = rows / 2
+
+	var snapped_cursor_x: int
+	var snapped_cursor_y: int
+
+	if use_grid_size:
+		# Snap the cursor position based on tile size
+		snapped_cursor_x = int(cursor_pos.x / grid_size.x) * grid_size.x
+		snapped_cursor_y = int(cursor_pos.y / grid_size.y) * grid_size.y
+	else:
+		snapped_cursor_x = int(cursor_pos.x / tile_size.x) * tile_size.x
+		snapped_cursor_y = int(cursor_pos.y / tile_size.y) * tile_size.y
+		
+	# Adjust padding
+	var padding: int = tile_size.x
 	
-	# Set start position based on cursor position
-	var start_pos_x = int(cursor_pos.x / tile_size.x) - center_offset_x
-	var start_pos_y = int(cursor_pos.y / tile_size.y) - center_offset_y
+		# Calculate total grid size including padding based on selected size
+	var total_grid_width: int
+	var total_grid_height: int
 	
-	# Clear existing grid cells before redrawing
+	if use_grid_size:
+		# Use grid size for calculations
+		total_grid_width = cols * grid_size.x + (cols - 1) * padding - tile_size.x * 2
+		total_grid_height = rows * grid_size.y + (rows - 1) * padding - tile_size.y * 2
+	else:
+		# Use tile size for calculations
+		total_grid_width = cols * grid_size.x + (cols - 1) * padding - tile_size.x * 2
+		total_grid_height = rows * grid_size.y + (rows - 1) * padding - tile_size.y * 2
+
+	# Center the start position based on total grid dimensions
+	# Align grid to center
+	var start_x = snapped_cursor_x - int(total_grid_width / 2)
+	var start_y = snapped_cursor_y - int(total_grid_height / 2)
+
+	# Clear previous ColorRect nodes
 	for child in self.get_children():
-		child.queue_free()
-	
+		if child is ColorRect:
+			child.queue_free()
+
+	# Create grid with padding
 	for row in range(rows):
 		for col in range(cols):
-			# Skip drawing the center cell
+			# Skip the center cell if necessary
 			if row == center_offset_y and col == center_offset_x:
 				continue
-				
+
 			var cell = ColorRect.new()
-			var cell_x = start_pos_x + col
-			var cell_y = start_pos_y + row
-			cell.custom_minimum_size = tile_size - Vector2(padding, padding)
-			cell.color = Color(1, 1, 1, 0.2) # Slightly transparent color
-			# Calculate cell position in the world, applying padding and centering the cell within each tile
+			cell.custom_minimum_size = grid_size  # Set visual size to 32x32
+			cell.color = Color(1, 1, 1, 0.2)
+
+			# Position the cell with padding applied
 			cell.position = Vector2(
-				(cell_x * tile_size.x) + (padding / 2),
-				(cell_y * tile_size.y) + (padding / 2)
+				start_x + (col * (grid_size.x + padding)),
+				start_y + (row * (grid_size.y + padding))
 			)
+
 			self.add_child(cell)
-	
+
 func toggle_grid_lines() -> void:
 	world_grid_visible = !world_grid_visible
 	#queue_redraw()
