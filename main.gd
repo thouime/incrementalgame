@@ -19,7 +19,7 @@ func _ready() -> void:
 	for node in get_tree().get_nodes_in_group("external_inventory"):
 		node.toggle_inventory.connect(toggle_inventory_interface)
 
-func update_label(label: Label, material: int):
+func update_label(label: Label, material: int) -> void:
 	# Split the label text into prefix and current value
 	var label_text = label.text.split(": ")
 	if label_text.size() > 1:

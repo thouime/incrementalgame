@@ -27,7 +27,7 @@ shader_parameter/add_margins = true
 shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
 
-[sub_resource type="PackedScene" id="PackedScene_eidmm"]
+[sub_resource type="PackedScene" id="PackedScene_ac480"]
 _bundled = {
 "base_scene": 0,
 "conn_count": 0,
@@ -44,7 +44,7 @@ _bundled = {
 [resource]
 script = ExtResource("1_pqv7l")
 type = 1
-object_scene = SubResource("PackedScene_eidmm")
+object_scene = SubResource("PackedScene_ac480")
 name = "Composter"
 description = "A wooden container that converts organic material into dirt."
 menu_texture = SubResource("AtlasTexture_oaa3q")

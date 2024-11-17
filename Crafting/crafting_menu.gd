@@ -5,6 +5,10 @@ const Slot = preload("res://Crafting/crafting_slot.tscn")
 # Small interface element that displays info about each craftable
 const CRAFT_INFO = preload("res://Crafting/craft_info.tscn")
 
+# Reference to the tilemap
+@onready var world: Node2D = $"../../World"
+@onready var grass_tiles: TileMapLayer = world.get_node("Grass")
+
 # For adding nodes to the scene
 @onready var main: Node = $"../.."
 @onready var crafting_grid: GridContainer = $MarginContainer/CraftingGrid
@@ -45,8 +49,10 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if grid_active and placement_mode:
 				if preview_object:
-					# Check if you can place the object here (you can add checks here)
-
+					# Check if object can be placed
+					# Checks if attempting to place on void or another object
+					if(!can_place(grid.get_cursor(), grass_tiles, 32)):
+						return
 					# Remove the required items to craft the object
 					inventory.remove_items(items_to_remove)
 					items_to_remove.clear()
@@ -82,7 +88,6 @@ func _input(event: InputEvent) -> void:
 				grid_active = false
 				grid.visible = false
 				placement_mode = false
-
 
 func draw_grid() -> void:
 	grid.draw_grid()
@@ -172,6 +177,16 @@ func craft(material_slots: Dictionary, craft_slot: CraftData) -> void:
 		print("Preparing grid...")
 		var new_object = craft_slot.object_scene.instantiate()
 		var sprite = new_object.get_node("Sprite1")
+		
+		# Ensure unique material and shader
+		if new_object.material:
+			if new_object.material is ShaderMaterial:
+				# Duplicate the material and shader to make them unique
+				var material = new_object.material.duplicate()
+				if material.shader:
+					material.shader = material.shader.duplicate()
+				new_object.material = material
+			
 		preview_object = new_object
 		items_to_remove = material_slots
 		# Change the cursor to the sprite of the craft
@@ -202,6 +217,77 @@ func print_missing(missing_materials: Dictionary) -> void:
 	
 	print(missing_string)
 
+func check_area(position: Vector2, grid_size: int) -> bool:
+	# Define the area to check for overlappin gobjects
+	var shape = RectangleShape2D.new()
+	shape.extents = Vector2(grid_size / 2, grid_size / 2)
+	
+	# Set up the physics query
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsShapeQueryParameters2D.new()
+	query.shape = shape
+	query.transform = Transform2D(0, position)
+	
+	# Perform the physics query
+	var results = space_state.intersect_shape(query, 1)
+	if results.size() > 0:
+		print("There is an object in the way.")
+	return results.size() == 0
+
+func check_ground(position: Vector2, tile_map_layer: TileMapLayer, grid_size: int) -> bool:
+	# Convert the world position to the local position relative to the tilemap
+	var local_position = tile_map_layer.to_local(position)
+	
+	if grid_size > 16:
+		# Calculate the top-left corner of the bounding box for the 32x32 object
+		var top_left_cell = tile_map_layer.local_to_map(local_position - Vector2(grid_size / 2, grid_size / 2))
+		
+		# Calculate the number of cells to check in each direction (2 cells horizontally and vertically for a 32x32 object)
+		var cells_to_check = Vector2(2, 2)
+		
+		# Loop through the affected cells and check if there's a tile at each position
+		for x in range(top_left_cell.x, top_left_cell.x + cells_to_check.x):
+			for y in range(top_left_cell.y, top_left_cell.y + cells_to_check.y):
+				# Check if there's a tile at this position
+				var data = tile_map_layer.get_cell_tile_data(Vector2i(x, y))
+				
+				if !data:  # If no tile data exists at this position
+					print("There's no land to place on.")
+					return false  # Return false immediately if no tile is found
+				
+				var tile_id = data.terrain
+				
+				# Check for specific tiles (e.g., ground or grass)
+				if tile_id == 0:
+					print("Ground tile found at ", x, y)
+				elif tile_id == 1:
+					print("Grass tile found at ", x, y)
+				else:
+					print("Other tile found at ", x, y)
+					
+		# If all cells are valid, return true after all checks
+		return true
+	else:
+		# For smaller grid sizes (e.g., <= 16), just check a single tile
+		var clicked_cell = tile_map_layer.local_to_map(local_position)
+		var data = tile_map_layer.get_cell_tile_data(clicked_cell)
+		if data:
+			var tile_id = data.terrain
+			print(tile_id)
+			#if tile_id == 0:
+				#print("Ground tile clicked!")
+			#elif tile_id == 1:
+				#print("Grass tile clicked!")
+			#else:
+				#print("Other tile clicked!")
+			return true
+		else:
+			print("There's no land to place on.")
+			return false
+
+func can_place(position: Vector2, tilemap: TileMapLayer, grid_size: int) -> bool:
+	return check_area(position, grid_size) and check_ground(position, tilemap, grid_size)
+	
 func on_slot_hovered(index: int):
 	show_craft_info(index)
 

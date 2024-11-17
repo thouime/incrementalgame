@@ -120,13 +120,13 @@ func check_materials(material: ItemData, quantity: int) -> Dictionary:
 
 func remove_items(materials: Dictionary) -> void:
 	#var materials = check_total_materials(material, quantity)
-	for material in materials.keys():
-		var inventory_items = slot_datas
-		var required_quantity = materials[material]["required"]
+	for material: ItemData in materials.keys():
+		var inventory_items: Array = slot_datas
+		var required_quantity: int = materials[material]["required"] as int
 		# Current amount found
-		var current_quantity = required_quantity
-		for inv_slot in materials[material]["inv_slots"]:
-			var slot = inventory_items[inv_slot]
+		var current_quantity: int = required_quantity
+		for inv_slot: int in materials[material]["inv_slots"]:
+			var slot: SlotData = inventory_items[inv_slot]
 			if slot and slot.quantity <= current_quantity:
 				current_quantity = current_quantity - slot.quantity
 				reduce_slot_amount(inv_slot, slot.quantity)
