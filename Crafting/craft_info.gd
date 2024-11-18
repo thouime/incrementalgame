@@ -10,7 +10,7 @@ func set_info(craft: CraftData) -> void:
 
 func add_material(item: ItemData, quantity: int) -> void:
 	# Instance the material info scene
-	var material_info = MATERIAL_INFO.instantiate()
+	var material_info: HBoxContainer = MATERIAL_INFO.instantiate()
 	if material_info:
 		v_box_container.add_child(material_info)
 		material_info.set_info(item.texture, item.name, quantity)

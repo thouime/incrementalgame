@@ -21,13 +21,13 @@ func _ready() -> void:
 
 func update_label(label: Label, material: int) -> void:
 	# Split the label text into prefix and current value
-	var label_text = label.text.split(": ")
+	var label_text: Array[String] = label.text.split(": ")
 	if label_text.size() > 1:
-		var prefix = label_text[0]
+		var prefix: String = label_text[0]
 		label.text = prefix + ": "+ str(material)
 
-func create_timer(duration, _on_timeout) -> Timer:
-	var timer = Timer.new()
+func create_timer(duration: int, _on_timeout: Callable) -> Timer:
+	var timer: Timer = Timer.new()
 	timer.wait_time = duration
 	timer.autostart = false
 	timer.one_shot = false
@@ -35,7 +35,7 @@ func create_timer(duration, _on_timeout) -> Timer:
 	timer.timeout.connect(_on_timeout)
 	return timer
 
-func toggle_inventory_interface(external_inventory_owner = null) -> void:
+func toggle_inventory_interface(external_inventory_owner: Node = null) -> void:
 	# Check if opening or closing player inventory
 	if external_inventory_owner:
 		# Always set the external inventory if it's provided
@@ -55,14 +55,14 @@ func toggle_inventory_interface(external_inventory_owner = null) -> void:
 		hot_bar_inventory.show()
 
 
-func toggle_external_inventory(external_inventory_owner) -> void:
+func toggle_external_inventory(external_inventory_owner: Node) -> void:
 	if external_inventory_owner and inventory_interface.visible:
 		inventory_interface.set_external_inventory(external_inventory_owner)
 	else:
 		inventory_interface.clear_external_inventory()
 
 func _on_inventory_interface_drop_slot_data(slot_data: SlotData) -> void:
-	var pick_up = PICKUP.instantiate()
+	var pick_up: Area2D = PICKUP.instantiate()
 	pick_up.slot_data = slot_data
 	pick_up.position = player.get_drop_position()
 	add_child(pick_up)

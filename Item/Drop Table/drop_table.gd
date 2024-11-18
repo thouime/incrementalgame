@@ -3,7 +3,8 @@ extends Resource
 class_name DropTable
 
 enum Rarity { COMMON, RARE, ULTRA_RARE, UNIQUE }
-var rng = RandomNumberGenerator.new()
+
+var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 @export var common_chance: float = 0.6
 @export var rare_chance: float = 0.25
@@ -21,7 +22,7 @@ var rarity_probabilities: Dictionary = {}
 
 func setup() -> void:
 	# Dictionary to map rarity to its corresponding drop resource and probability
-	var drop_resources = {
+	var drop_resources: Dictionary = {
 		Rarity.COMMON: [common_drops, common_chance],
 		Rarity.RARE: [rare_drops, rare_chance],
 		Rarity.ULTRA_RARE: [ultra_rare_drops, ultra_rare_chance],
@@ -29,14 +30,12 @@ func setup() -> void:
 	}
 
 	# Iterate over the dictionary to initialize items_by_rarity and rarity_probabilities
-	for rarity in drop_resources.keys():
-		var drops_resource = drop_resources[rarity][0]
-		var chance = drop_resources[rarity][1]
+	for rarity: int in drop_resources.keys():
+		var drops_resource: Resource = drop_resources[rarity][0] as Resource
+		var chance: float = drop_resources[rarity][1] as float
 		if drops_resource:
 			items_by_rarity[rarity] = drops_resource.slot_datas
 			rarity_probabilities[rarity] = chance
-		else:
-			push_error(str(rarity) + " drops resource not assigned.")
 
 	# Normalize probabilities (optional but recommended)
 	_normalize_probabilities()
@@ -50,15 +49,15 @@ func add_item(item: SlotData, rarity: int) -> void:
 
 # Normalizes the rarity probabilities to sum to 1.0
 func _normalize_probabilities() -> void:
-	var total = common_chance + rare_chance + ultra_rare_chance + unique_chance
-	for rarity in rarity_probabilities.keys():
+	var total: float = common_chance + rare_chance + ultra_rare_chance + unique_chance
+	for rarity: int in rarity_probabilities.keys():
 		rarity_probabilities[rarity] /= total
 
 # Private function to get a random rarity based on probabilities
 func _get_random_rarity() -> int:
-	var roll = rng.randf()
-	var cumulative = 0.0
-	for rarity in rarity_probabilities.keys():
+	var roll: float = rng.randf()
+	var cumulative: float = 0.0
+	for rarity: int in rarity_probabilities.keys():
 		cumulative += rarity_probabilities[rarity]
 		if roll < cumulative:
 			return rarity
@@ -66,12 +65,12 @@ func _get_random_rarity() -> int:
 
 func get_random_drop() -> SlotData:
 	# Get a random rarity based on probabilities
-	var rarity = _get_random_rarity()
+	var rarity: int = _get_random_rarity()
 	#print("Selected rarity:", rarity)  # For debugging
 
 	# Check if there are items in the initially selected rarity
 	if items_by_rarity.has(rarity) and items_by_rarity[rarity].size() > 0:
-		var drops = items_by_rarity[rarity]
+		var drops: Array = items_by_rarity[rarity]
 		return drops[rng.randi_range(0, drops.size() - 1)]
 
 	# Define a fallback order for rarities: Unique, Ultra Rare, Rare, Common
@@ -88,9 +87,9 @@ func get_random_drop() -> SlotData:
 			return null  # No items available
 
 	# Look for the first rarity with available items in fallback rarities
-	for current_rarity in fallback_rarities:
+	for current_rarity: int in fallback_rarities:
 		if items_by_rarity.has(current_rarity) and items_by_rarity[current_rarity].size() > 0:
-			var drops = items_by_rarity[current_rarity]
+			var drops: Array = items_by_rarity[current_rarity]
 			return drops[rng.randi_range(0, drops.size() - 1)]
 
 	# If no items are found in any rarity, return null and push an error
@@ -98,7 +97,7 @@ func get_random_drop() -> SlotData:
 	return null
 
 func simulate_drops(num_drops: int = 1000) -> void:
-	var drop_counts = {
+	var drop_counts: Dictionary = {
 		Rarity.COMMON: 0,
 		Rarity.RARE: 0,
 		Rarity.ULTRA_RARE: 0,
@@ -106,10 +105,10 @@ func simulate_drops(num_drops: int = 1000) -> void:
 	}
 
 	for i in range(num_drops):
-		var dropped_item = get_random_drop()
+		var dropped_item: SlotData = get_random_drop()
 		if dropped_item:
 			# Check the rarity based on the drop's source in items_by_rarity
-			for rarity in items_by_rarity.keys():
+			for rarity: int in items_by_rarity.keys():
 				if dropped_item in items_by_rarity[rarity]:
 					drop_counts[rarity] += 1
 					break  # Exit once the rarity is found

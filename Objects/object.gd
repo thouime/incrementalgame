@@ -4,6 +4,7 @@ extends StaticBody2D
 
 # Offset for the player to be distanced from the object
 var player_offset: float = 0.0
+
 signal interact
 
 func _ready() -> void:
@@ -23,10 +24,10 @@ func _get_offset() -> void:
 	player_offset = player_offset / 2 + 10
 
 func focus_object() -> void:
-	var material = self.material
-	if material and material is ShaderMaterial:
-		material.set_shader_parameter("focus", 
-		not material.get_shader_parameter("focus"))
+	var object_material: Material = self.material
+	if object_material and object_material is ShaderMaterial:
+		object_material.set_shader_parameter("focus", 
+		not object_material.get_shader_parameter("focus"))
 
 func _on_selection_mouse_entered() -> void:
 	focus_object()
@@ -34,15 +35,22 @@ func _on_selection_mouse_entered() -> void:
 func _on_selection_mouse_exited() -> void:
 	focus_object()
 
-func _on_selection_input_event(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+func _on_selection_input_event(
+	_viewport: Node, 
+	event: InputEvent, 
+	_shape_idx: int
+) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			emit_signal("interact", global_position, player_offset, self)
+			interact.emit(global_position, player_offset, self)
 			
 # Method to be overriden
-func interact_action(player: CharacterBody2D) -> void:
+func interact_action(_player: CharacterBody2D) -> void:
 	print("Interacting with object at:", global_position)
 
 # Method to be overriden
-func stop_interact_action(player: CharacterBody2D) -> void:
+func stop_interact_action(_player: CharacterBody2D) -> void:
 	print("Stopping Action")
+
+func _on_interact_signal() -> void:
+	print("Interact signal activated")

@@ -17,12 +17,12 @@ func start_timer(player: CharacterBody2D) -> void:
 	timer.timeout.connect(_on_timer_timeout.bind(player))
 	timer.start()
 
-func stop_interact_action(player: CharacterBody2D) -> void:
+func stop_interact_action(_player: CharacterBody2D) -> void:
 	if timer:
 		timer.stop()
 		timer.queue_free()
 		timer = null
 		print("Stopped gathering.")
 	
-func _on_timer_timeout(player: CharacterBody2D) -> void:
+func _on_timer_timeout(_player: CharacterBody2D) -> void:
 	print("Timer timeout sent")

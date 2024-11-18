@@ -1,5 +1,5 @@
 extends "object.gd"
 
-func _ready():
+func _ready() -> void:
 	super._ready()
 	

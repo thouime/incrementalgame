@@ -1,24 +1,21 @@
 extends CharacterBody2D
 
 @export var player_speed: int = 400
-@export var woodcutting_level = 1
-@export var mining_level = 1
-@export var smithing_level = 1
 @export var inventory_data: InventoryData
 @export var equip_inventory_data: InventoryDataEquip
 
-@onready var animated_sprite = $AnimatedSprite2D
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var interact_ray: RayCast2D = $Camera2D/InteractRay
 @onready var camera: Camera2D = $Camera2D
 
-var screen_size
-var player_size
-var sprite_offset = Vector2(144, 144)
-var last_direction = Vector2(0, -1) # Face up by default
+var screen_size: Vector2
+var player_size: Vector2
+var sprite_offset: Vector2 = Vector2(144, 144)
+var last_direction: Vector2 = Vector2(0, -1) # Face up by default
 var health: int = 5
-enum State { IDLE, MOVING, GATHERING }
-var state = State.IDLE
-var target_position = Vector2.ZERO
+enum State { IDLE, MOVING, GATHERING, BUILDING }
+var state: State = State.IDLE
+var target_position: Vector2 = Vector2.ZERO
 var interact_target: Node = null
 
 signal toggle_inventory()
@@ -34,12 +31,12 @@ func _ready() -> void:
 	call_deferred("_connect_interact_signals")
 	
 # Sprite and Animations
-func set_animation():
-	var current_animation = animated_sprite.animation
-	var current_frame = animated_sprite.frame
-	var sprite_frames = animated_sprite.sprite_frames
-	var player_texture = sprite_frames.get_frame_texture(current_animation, current_frame)
-	var sprite_size = player_texture.get_size()
+func set_animation() -> void:
+	var current_animation: String = animated_sprite.animation
+	var current_frame: int = animated_sprite.frame
+	var sprite_frames: SpriteFrames = animated_sprite.sprite_frames
+	var player_texture: Texture = sprite_frames.get_frame_texture(current_animation, current_frame)
+	var sprite_size: Vector2 = player_texture.get_size()
 	player_size = sprite_size - sprite_offset
 	animated_sprite.play()
 
@@ -73,41 +70,41 @@ func close_all_menus() -> void:
 func toggle_escape_menu() -> void:
 	pass
 
-func handle_movement(delta) -> void:
-	var velocity = Vector2.ZERO
-	var directions = {
+func handle_movement(delta: float) -> void:
+	var player_velocity: Vector2 = Vector2.ZERO
+	var directions: Dictionary = {
 		"move_right": Vector2.RIGHT,
 		"move_left": Vector2.LEFT,
 		"move_down": Vector2.DOWN,
 		"move_up": Vector2.UP
 	}
-	var animations = {
+	var animations: Dictionary = {
 		Vector2.RIGHT: "walk_right",
 		Vector2.LEFT: "walk_left",
 		Vector2.DOWN: "walk_down",
 		Vector2.UP: "walk_up"
 	}
-	var idle_animations = {
+	var idle_animations: Dictionary = {
 		Vector2.RIGHT: "idle_right",
 		Vector2.LEFT: "idle_left",
 		Vector2.DOWN: "idle_down",
 		Vector2.UP: "idle_up"
 	}
-	velocity = handle_key_movement(delta, directions, animations)
+	player_velocity = handle_key_movement(delta, directions)
 	if state == State.MOVING:
-		velocity = move_towards_target(delta, animations)
-	# Normalize velocity and move the player
-	if velocity.length() > 0:
+		player_velocity = move_towards_target(delta)
+	# Normalize player_velocity and move the player
+	if player_velocity.length() > 0:
 		# Set movement animations
 		animated_sprite.animation = animations[last_direction]
 		
 		# Flip the sprite if facing left
-		if velocity.x != 0:
-			animated_sprite.flip_h = velocity.x < 0
+		if player_velocity.x != 0:
+			animated_sprite.flip_h = player_velocity.x < 0
 			
 		# Start movement
-		velocity = velocity.normalized() * player_speed
-		position += velocity * delta
+		player_velocity = player_velocity.normalized() * player_speed
+		position += player_velocity * delta
 		move_and_slide()
 		
 		# Set RayCast2D target position based on the player's size and direction
@@ -119,14 +116,14 @@ func handle_movement(delta) -> void:
 	elif state == State.IDLE:
 		animated_sprite.animation = idle_animations[last_direction]
 
-func handle_key_movement(delta: float, directions, animations) -> Vector2:
-	var velocity = Vector2.ZERO
+func handle_key_movement(_delta: float, directions: Dictionary) -> Vector2:
+	var player_velocity: Vector2 = Vector2.ZERO
 	# Check for movement inputs
-	for action in directions.keys():
+	for action: String in directions.keys():
 		if Input.is_action_pressed(action):
 			# Get direction based on the key pressed
-			var direction = directions[action]
-			velocity += direction
+			var direction: Vector2 = directions[action]
+			player_velocity += direction
 			last_direction = direction
 			
 			# Interrupt player gathering
@@ -136,34 +133,34 @@ func handle_key_movement(delta: float, directions, animations) -> Vector2:
 			# Set state to idle to interrupt other movement actions, reset interact_target
 			state = State.IDLE
 			interact_target = null
-	return velocity
+	return player_velocity
 
-func move_towards_target(delta: float, animations) -> Vector2:
+func move_towards_target(delta: float) -> Vector2:
 	# Calculate the direction vector to the target position
-	var direction = (target_position - global_position).normalized()
+	var direction: Vector2 = (target_position - global_position).normalized()
 	# Get the animation direction based on which is closest to the object
 	last_direction = get_closest_direction(direction)
 	
-	# Calculate the velocity
-	var velocity = direction * player_speed
+	# Calculate the player_velocity
+	var player_velocity: Vector2 = direction * player_speed
 
 	# Start gathering if the player is close to the object
 	if global_position.distance_to(target_position) <= 10:
 		state = State.GATHERING
 		gather_from_target(delta)
-		velocity = Vector2.ZERO
+		player_velocity = Vector2.ZERO
 	
-	return velocity
+	return player_velocity
 
 func get_closest_direction(direction: Vector2) -> Vector2:
 	# Calculate dot products with each main direction
-	var dot_right = direction.dot(Vector2.RIGHT)
-	var dot_left = direction.dot(Vector2.LEFT)
-	var dot_up = direction.dot(Vector2.UP)
-	var dot_down = direction.dot(Vector2.DOWN)
+	var dot_right: float = direction.dot(Vector2.RIGHT)
+	var dot_left: float = direction.dot(Vector2.LEFT)
+	var dot_up: float = direction.dot(Vector2.UP)
+	var dot_down: float = direction.dot(Vector2.DOWN)
 
 	# Determine which direction has the highest dot product (most aligned)
-	var max_dot = max(dot_right, dot_left, dot_up, dot_down)
+	var max_dot: float = max(dot_right, dot_left, dot_up, dot_down)
 
 	# Set default priority order for cases where directions are equally close
 	if max_dot == dot_right:
@@ -175,18 +172,18 @@ func get_closest_direction(direction: Vector2) -> Vector2:
 	else:
 		return Vector2.DOWN
 
-func gather_from_target(delta: float) -> void:
+func gather_from_target(_delta: float) -> void:
 	# Gather animation
 	if interact_target:
 		interact_target.interact_action(self)
 		
 func interact() -> void:
 	if interact_ray.is_colliding():
-		var collider = interact_ray.get_collider()
+		var collider: Area2D = interact_ray.get_collider()
 		# Check if collider has player_interact method, if not there may be a custom area
 		# that's a child of the parent. Therefore, check the parent instead.
 		if collider:
-			var parent = collider.get_parent()
+			var parent: StaticBody2D = collider.get_parent()
 			if collider.has_method("player_interact"):
 				collider.player_interact()
 			elif parent.has_method("player_interact"):
@@ -195,10 +192,10 @@ func interact() -> void:
 				print("Object doesn't have player_interact method.")
 
 func get_drop_position() -> Vector2:
-	var player_position = self.global_position
-	var direction = last_direction.normalized()
-	var offset_distance = 40
-	var drop_position = player_position + direction * offset_distance
+	var player_position: Vector2 = self.global_position
+	var direction: Vector2 = last_direction.normalized()
+	var offset_distance: int = 40
+	var drop_position: Vector2 = player_position + direction * offset_distance
 	drop_position.y += 12
 	return drop_position
 

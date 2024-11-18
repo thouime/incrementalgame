@@ -1,0 +1,363 @@
+[gd_scene load_steps=42 format=3 uid="uid://bgi5nv12xjmka"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_xtwid"]
+[ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Player/player.tscn" id="2_h00hh"]
+[ext_resource type="Resource" uid="uid://bitwkfta0d2uu" path="res://Inventory/test_inv.tres" id="3_nbs8y"]
+[ext_resource type="Script" path="res://Inventory/inventory_data_equip.gd" id="4_2dnpy"]
+[ext_resource type="Script" path="res://Inventory/slot_data.gd" id="5_b2i4h"]
+[ext_resource type="Script" path="res://Objects/tree.gd" id="6_ip07t"]
+[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Art/objects/objects.png" id="7_8rb2x"]
+[ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://World/world.tscn" id="8_8lnwa"]
+[ext_resource type="Shader" path="res://Objects/Shaders/aura.gdshader" id="9_4puhs"]
+[ext_resource type="Script" path="res://Objects/bush.gd" id="10_6vtjc"]
+[ext_resource type="Script" path="res://Item/Drop Table/common_drops.gd" id="11_v20go"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Item/Items/basic/stick.tres" id="12_jsnrj"]
+[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Item/Items/basic/leaf.tres" id="13_4hqj5"]
+[ext_resource type="Script" path="res://Item/Drop Table/drop_table.gd" id="14_yiqgm"]
+[ext_resource type="Script" path="res://Inventory/inventory_interface.gd" id="15_4fcd7"]
+[ext_resource type="PackedScene" uid="uid://cjvrn7m4iia17" path="res://Inventory/inventory.tscn" id="16_gmsb7"]
+[ext_resource type="PackedScene" uid="uid://dj0urcd0clvl4" path="res://Inventory/slot.tscn" id="17_gq7v4"]
+[ext_resource type="PackedScene" uid="uid://c8wct85o6jfcu" path="res://Inventory/hot_bar_inventory.tscn" id="18_ntxon"]
+[ext_resource type="PackedScene" uid="uid://bp0gw7kcfe8n3" path="res://Crafting/crafting_menu.tscn" id="19_urs44"]
+[ext_resource type="Script" path="res://Crafting/craft_data.gd" id="20_mjmg7"]
+[ext_resource type="Resource" uid="uid://blampwk84srx8" path="res://Crafting/Crafts/composter.tres" id="21_ifvgd"]
+[ext_resource type="Resource" uid="uid://dpm7vhcmkm2j2" path="res://Crafting/Crafts/test_item.tres" id="22_bgh5u"]
+[ext_resource type="Script" path="res://World/grid.gd" id="23_rhjmk"]
+[ext_resource type="Script" path="res://Inventory/inventory_data.gd" id="24_xf1d2"]
+[ext_resource type="PackedScene" uid="uid://ciuy4rj4cpsvn" path="res://Item/pickup.tscn" id="26_eues2"]
+[ext_resource type="PackedScene" uid="uid://cefnc8f41wint" path="res://Objects/chest.tscn" id="27_l85p4"]
+[ext_resource type="PackedScene" uid="uid://by4s6muul7tdg" path="res://Objects/composter.tscn" id="28_6qef4"]
+
+[sub_resource type="Resource" id="Resource_0msbn"]
+script = ExtResource("4_2dnpy")
+slot_datas = Array[ExtResource("5_b2i4h")]([null])
+
+[sub_resource type="Shader" id="Shader_pv86w"]
+code = "shader_type canvas_item;
+
+uniform vec4 color : source_color = vec4(1.0);
+uniform float width : hint_range(0, 10) = 1.0;
+uniform int pattern : hint_range(0, 2) = 0; // diamond, circle, square
+uniform bool inside = true;
+uniform bool add_margins = true; // only useful when inside is false
+uniform vec2 number_of_images = vec2(1.0); // number of horizontal and vertical images in the sprite sheet
+uniform int focus = 0; // 0 for false, 1 for true
+
+void vertex() {
+    if (add_margins) {
+        VERTEX += sign(VERTEX) * width; // replace sign(VERTEX) by (sign(VERTEX) * 2.0 - 1.0) if not Centered
+    }
+}
+
+bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, vec2 image_top_left, vec2 image_bottom_right, sampler2D texture) {
+    for (float i = -ceil(width); i <= ceil(width); i++) {
+        float x = abs(i) > width ? width * sign(i) : i;
+        float offset;
+
+        if (pattern == 0) {
+            offset = width - abs(x);
+        } else if (pattern == 1) {
+            offset = floor(sqrt(pow(width + 0.5, 2) - x * x));
+        } else if (pattern == 2) {
+            offset = width;
+        }
+
+        for (float j = -ceil(offset); j <= ceil(offset); j++) {
+            float y = abs(j) > offset ? offset * sign(j) : j;
+            vec2 xy = uv + texture_pixel_size * vec2(x, y);
+
+            if ((xy != clamp(xy, image_top_left, image_bottom_right) || texture(texture, xy).a <= 0.0) == inside) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void fragment() {
+    vec2 uv = UV;
+    vec2 image_top_left = floor(uv * number_of_images) / number_of_images;
+    vec2 image_bottom_right = image_top_left + vec2(1.0) / number_of_images;
+
+    if (add_margins) {
+        vec2 texture_pixel_size = vec2(1.0) / (vec2(1.0) / TEXTURE_PIXEL_SIZE + vec2(width * 2.0) * number_of_images);
+
+        // Calculate the UV coordinates while adding margins
+        uv = (uv - texture_pixel_size * width - image_top_left) * TEXTURE_PIXEL_SIZE / texture_pixel_size + image_top_left;
+
+        // Clamp UV to ensure we don't sample outside the intended area
+        uv = clamp(uv, image_top_left, image_bottom_right);
+        
+        // Only sample if the UV is within the bounds
+        if (uv == image_top_left || uv == image_bottom_right) {
+            COLOR.a = 0.0; // Make it fully transparent if clamped to edges
+        } else {
+            COLOR = texture(TEXTURE, uv);
+        }
+    } else {
+        COLOR = texture(TEXTURE, uv);
+    }
+
+	// Use shader if the object is being focused
+	if (focus == 1) {
+	    if ((COLOR.a > 0.0) == inside && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, image_top_left, image_bottom_right, TEXTURE)) {
+	        COLOR.rgb = inside ? mix(COLOR.rgb, color.rgb, color.a) : color.rgb;
+	        COLOR.a += (1.0 - COLOR.a) * color.a;
+	    }
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wdyxv"]
+resource_local_to_scene = true
+shader = SubResource("Shader_pv86w")
+shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj4gj"]
+size = Vector2(13.5, 5.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2edif"]
+size = Vector2(41.5, 55)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_51lhn"]
+resource_local_to_scene = true
+shader = ExtResource("9_4puhs")
+shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[sub_resource type="Resource" id="Resource_fnq7y"]
+script = ExtResource("5_b2i4h")
+item_data = ExtResource("12_jsnrj")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_hckqj"]
+script = ExtResource("5_b2i4h")
+item_data = ExtResource("13_4hqj5")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_wphjt"]
+script = ExtResource("11_v20go")
+slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_fnq7y"), SubResource("Resource_hckqj")])
+
+[sub_resource type="Resource" id="Resource_57j8k"]
+script = ExtResource("14_yiqgm")
+common_chance = 0.25
+rare_chance = 0.25
+ultra_rare_chance = 0.25
+unique_chance = 0.25
+common_drops = SubResource("Resource_wphjt")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s1rac"]
+size = Vector2(24, 10.75)
+
+[sub_resource type="Resource" id="Resource_gmm5h"]
+script = ExtResource("5_b2i4h")
+item_data = ExtResource("12_jsnrj")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_w4a1l"]
+script = ExtResource("24_xf1d2")
+slot_datas = Array[ExtResource("5_b2i4h")]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wjxxi"]
+shader = ExtResource("9_4puhs")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[node name="Main" type="Node"]
+script = ExtResource("1_xtwid")
+
+[node name="Grid" type="Control" parent="."]
+light_mask = 0
+visibility_layer = 512
+z_index = 100
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("23_rhjmk")
+
+[node name="Cursor" type="Sprite2D" parent="Grid"]
+visible = false
+z_index = 1
+scale = Vector2(2, 2)
+texture = ExtResource("7_8rb2x")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 16)
+
+[node name="Player" parent="." instance=ExtResource("2_h00hh")]
+z_index = 2
+position = Vector2(266, 483)
+scale = Vector2(1, 1)
+collision_layer = 2
+inventory_data = ExtResource("3_nbs8y")
+equip_inventory_data = SubResource("Resource_0msbn")
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+
+[node name="InteractRay" type="RayCast2D" parent="Player/Camera2D"]
+position = Vector2(0, 8)
+target_position = Vector2(35, 1)
+collision_mask = 5
+collide_with_areas = true
+
+[node name="Tree" type="StaticBody2D" parent="."]
+material = SubResource("ShaderMaterial_wdyxv")
+position = Vector2(252, 213)
+scale = Vector2(2, 2)
+script = ExtResource("6_ip07t")
+gather_time = null
+metadata/_edit_group_ = true
+
+[node name="Sprite1" type="Sprite2D" parent="Tree"]
+z_index = 3
+use_parent_material = true
+texture = ExtResource("7_8rb2x")
+region_enabled = true
+region_rect = Rect2(1, 80, 45, 44)
+
+[node name="Sprite2" type="Sprite2D" parent="Tree"]
+z_index = 1
+use_parent_material = true
+position = Vector2(1.5, 31)
+texture = ExtResource("7_8rb2x")
+region_enabled = true
+region_rect = Rect2(7, 124, 36, 20)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Tree"]
+z_index = 2
+position = Vector2(0.25, 24.25)
+shape = SubResource("RectangleShape2D_gj4gj")
+
+[node name="Selection" type="Area2D" parent="Tree"]
+
+[node name="MouseArea" type="CollisionShape2D" parent="Tree/Selection"]
+visible = false
+z_index = 4
+position = Vector2(0.75, 7.5)
+shape = SubResource("RectangleShape2D_2edif")
+
+[node name="World" parent="." instance=ExtResource("8_8lnwa")]
+position = Vector2(64, 160)
+metadata/_edit_lock_ = true
+
+[node name="Bush" type="StaticBody2D" parent="."]
+material = SubResource("ShaderMaterial_51lhn")
+position = Vector2(370, 398)
+scale = Vector2(2, 2)
+script = ExtResource("10_6vtjc")
+drop_table = SubResource("Resource_57j8k")
+gather_time = 1.5
+metadata/_edit_group_ = true
+
+[node name="Sprite1" type="Sprite2D" parent="Bush"]
+z_index = 3
+use_parent_material = true
+texture = ExtResource("7_8rb2x")
+region_enabled = true
+region_rect = Rect2(96, 112, 32, 21)
+
+[node name="Sprite2" type="Sprite2D" parent="Bush"]
+z_index = 1
+use_parent_material = true
+position = Vector2(0, 17)
+texture = ExtResource("7_8rb2x")
+region_enabled = true
+region_rect = Rect2(96, 133, 32, 11)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Bush"]
+z_index = 3
+position = Vector2(0, 7)
+shape = SubResource("RectangleShape2D_s1rac")
+
+[node name="Selection" type="Area2D" parent="Bush"]
+
+[node name="MouseArea" type="CollisionShape2D" parent="Bush/Selection"]
+z_index = 4
+position = Vector2(-0.25, 5)
+shape = SubResource("RectangleShape2D_2edif")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="InventoryInterface" type="Control" parent="UI"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("15_4fcd7")
+
+[node name="PlayerInventory" parent="UI/InventoryInterface" instance=ExtResource("16_gmsb7")]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 20.0
+offset_right = 170.0
+offset_bottom = 60.0
+
+[node name="EquipInventory" parent="UI/InventoryInterface" instance=ExtResource("16_gmsb7")]
+layout_mode = 0
+offset_left = 350.0
+offset_top = 20.0
+offset_right = 390.0
+offset_bottom = 60.0
+
+[node name="ExternalInventory" parent="UI/InventoryInterface" instance=ExtResource("16_gmsb7")]
+visible = false
+layout_mode = 0
+offset_left = 110.0
+offset_top = 195.0
+offset_right = 150.0
+offset_bottom = 235.0
+
+[node name="GrabbedSlot" parent="UI/InventoryInterface" instance=ExtResource("17_gq7v4")]
+visible = false
+modulate = Color(1, 1, 1, 0.490196)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+
+[node name="HotBarInventory" parent="UI" instance=ExtResource("18_ntxon")]
+visible = false
+offset_left = 126.0
+offset_top = 651.0
+offset_right = 354.0
+offset_bottom = 699.0
+
+[node name="CraftingMenu" parent="UI" instance=ExtResource("19_urs44")]
+offset_left = 97.0
+offset_top = 519.0
+offset_right = 429.0
+offset_bottom = 575.0
+craft_datas = Array[ExtResource("20_mjmg7")]([ExtResource("21_ifvgd"), ExtResource("22_bgh5u")])
+
+[node name="Pickup" parent="." instance=ExtResource("26_eues2")]
+visible = false
+position = Vector2(260, 405)
+slot_data = SubResource("Resource_gmm5h")
+
+[node name="Chest" parent="." groups=["external_inventory"] instance=ExtResource("27_l85p4")]
+position = Vector2(133, 488)
+inventory_data = SubResource("Resource_w4a1l")
+
+[node name="Composter" parent="." instance=ExtResource("28_6qef4")]
+material = SubResource("ShaderMaterial_wjxxi")
+position = Vector2(144, 348)
+
+[connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]
+[connection signal="gui_input" from="UI/InventoryInterface" to="UI/InventoryInterface" method="_on_gui_input"]
+[connection signal="visibility_changed" from="UI/InventoryInterface" to="UI/InventoryInterface" method="_on_visibility_changed"]
