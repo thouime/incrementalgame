@@ -13,8 +13,6 @@ var player_size: Vector2
 var sprite_offset: Vector2 = Vector2(144, 144)
 var last_direction: Vector2 = Vector2(0, -1) # Face up by default
 var health: int = 5
-enum State { IDLE, MOVING, GATHERING, BUILDING }
-var state: State = State.IDLE
 var target_position: Vector2 = Vector2.ZERO
 var interact_target: Node = null
 
@@ -24,6 +22,7 @@ signal toggle_inventory()
 func _ready() -> void:
 	PlayerManager.player = self
 	PlayerManager.player_inventory = inventory_data
+	PlayerManager.state = PlayerManager.State.IDLE
 	screen_size = get_viewport_rect().size
 	set_animation()
 	
@@ -91,7 +90,7 @@ func handle_movement(delta: float) -> void:
 		Vector2.UP: "idle_up"
 	}
 	player_velocity = handle_key_movement(delta, directions)
-	if state == State.MOVING:
+	if PlayerManager.state == PlayerManager.State.MOVING:
 		player_velocity = move_towards_target(delta)
 	# Normalize player_velocity and move the player
 	if player_velocity.length() > 0:
@@ -110,10 +109,10 @@ func handle_movement(delta: float) -> void:
 		# Set RayCast2D target position based on the player's size and direction
 		interact_ray.target_position = last_direction * 35 # Set the ray length to 100 pixels
 		
-	elif state == State.GATHERING:
+	elif PlayerManager.state == PlayerManager.State.GATHERING:
 		# Face up at the object
 		animated_sprite.animation = idle_animations[Vector2.UP]
-	elif state == State.IDLE:
+	elif PlayerManager.state == PlayerManager.State.IDLE:
 		animated_sprite.animation = idle_animations[last_direction]
 
 func handle_key_movement(_delta: float, directions: Dictionary) -> Vector2:
@@ -127,11 +126,11 @@ func handle_key_movement(_delta: float, directions: Dictionary) -> Vector2:
 			last_direction = direction
 			
 			# Interrupt player gathering
-			if state == State.GATHERING and interact_target:
+			if PlayerManager.state == PlayerManager.State.GATHERING and interact_target:
 				interact_target.stop_interact_action(self)
 				
 			# Set state to idle to interrupt other movement actions, reset interact_target
-			state = State.IDLE
+			PlayerManager.state = PlayerManager.State.IDLE
 			interact_target = null
 	return player_velocity
 
@@ -146,7 +145,7 @@ func move_towards_target(delta: float) -> Vector2:
 
 	# Start gathering if the player is close to the object
 	if global_position.distance_to(target_position) <= 10:
-		state = State.GATHERING
+		PlayerManager.state = PlayerManager.State.GATHERING
 		gather_from_target(delta)
 		player_velocity = Vector2.ZERO
 	
@@ -206,12 +205,12 @@ func _on_interact_signal(pos: Vector2, offset: float, object: StaticBody2D) -> v
 	# Check if they are already interacting with the same object
 	if not object == interact_target:
 		# Interrupt player if they are already gathering
-		if state == State.GATHERING and interact_target:
+		if PlayerManager.state == PlayerManager.State.GATHERING and interact_target:
 			interact_target.stop_interact_action(self)
 		target_position = pos
 		# Target underneath the object so player is in the front
 		target_position.y += offset
-		state = State.MOVING
+		PlayerManager.state = PlayerManager.State.MOVING
 
 		print("Player is moving towards: ", target_position)
 		interact_target = object # Store the interact target

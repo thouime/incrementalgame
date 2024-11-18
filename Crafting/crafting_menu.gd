@@ -47,43 +47,7 @@ func _input(event: InputEvent) -> void:
 	# Handle left mouse button press
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if grid_active and placement_mode:
-				if preview_object:
-					# Check if object can be placed
-					# Checks if attempting to place on void or another object
-					if(!can_place(grid.get_cursor(), grass_tiles, 32)):
-						return
-					var player_state = PlayerManager.player.State
-					if player_state != player_state.BUILDING:
-						print("test")
-						
-					# Remove the required items to craft the object
-					inventory.remove_items(items_to_remove)
-					items_to_remove.clear()
-
-					# Add the object to the world
-					main.add_child(preview_object)
-					preview_object.connect("interact", PlayerManager.player._on_interact_signal)
-
-					# Set object position to the grid cursor position
-					preview_object.position = grid.get_cursor()
-
-					print("Object added to world.")
-
-					# Reset the preview object for the next action
-					preview_object = null
-
-					# Change mouse mode back to visible
-					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-					grid.build_cursor.visible = false
-
-					# Deactivate grid and placement mode
-					grid_active = false
-					grid.visible = false
-					placement_mode = false
-				else:
-					print("There is no reference to the object!")
-				
+			place_object()
 		# Handle cancel action (e.g., pressing the "cancel" action key)
 		elif event.is_action_pressed("cancel"):
 			if grid_active:
@@ -92,6 +56,44 @@ func _input(event: InputEvent) -> void:
 				grid_active = false
 				grid.visible = false
 				placement_mode = false
+
+func place_object() -> void:
+	if grid_active and placement_mode:
+		if preview_object:
+			# Check if object can be placed
+			# Checks if attempting to place on void or another object
+			if(!can_place(grid.get_cursor(), grass_tiles, 32)):
+				return
+			
+			if PlayerManager.state != PlayerManager.State.BUILDING:
+				PlayerManager.set_player_state(PlayerManager.State.BUILDING)
+			
+			# Remove the required items to craft the object
+			inventory.remove_items(items_to_remove)
+			items_to_remove.clear()
+
+			# Add the object to the world
+			main.add_child(preview_object)
+			preview_object.connect("interact", PlayerManager.player._on_interact_signal)
+
+			# Set object position to the grid cursor position
+			preview_object.position = grid.get_cursor()
+
+			print("Object added to world.")
+
+			# Reset the preview object for the next action
+			preview_object = null
+
+			# Change mouse mode back to visible
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			grid.build_cursor.visible = false
+
+			# Deactivate grid and placement mode
+			grid_active = false
+			grid.visible = false
+			placement_mode = false
+		else:
+			print("There is no reference to the object!")
 
 func draw_grid() -> void:
 	grid.draw_grid()
