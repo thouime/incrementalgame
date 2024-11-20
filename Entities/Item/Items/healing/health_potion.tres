@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDataConsumable" load_steps=4 format=3 uid="uid://c4yne4f4cx1uw"]
+
+[ext_resource type="Script" path="res://Entities/Item/item_data_consumable.gd" id="1_qu7bn"]
+[ext_resource type="Texture2D" uid="uid://bulp7tkpnj8vn" path="res://Entities/Item/#1 - Transparent Icons.png" id="2_ui8yr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4t530"]
+atlas = ExtResource("2_ui8yr")
+region = Rect2(0, 288, 32, 32)
+
+[resource]
+script = ExtResource("1_qu7bn")
+heal_value = 1
+name = "Health Potion"
+description = "A concoted vial that remarkably cures wounds."
+stackable = true
+texture = SubResource("AtlasTexture_4t530")

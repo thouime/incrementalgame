@@ -1,0 +1,51 @@
+[gd_resource type="Resource" script_class="CraftData" load_steps=12 format=3 uid="uid://blampwk84srx8"]
+
+[ext_resource type="Script" path="res://Utilities/Crafting/material_slot_data.gd" id="1_8kewf"]
+[ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="1_pqv7l"]
+[ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="2_87lh3"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick.tres" id="2_rq8b6"]
+[ext_resource type="PackedScene" uid="uid://clxpt0o22wqni" path="res://Entities/Objects/object.tscn" id="4_uab0f"]
+[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="5_v5rjc"]
+[ext_resource type="Script" path="res://Entities/Objects/composter.gd" id="6_1sei0"]
+
+[sub_resource type="Resource" id="Resource_a5stn"]
+script = ExtResource("1_8kewf")
+quantity = 30
+item_data = ExtResource("2_rq8b6")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oaa3q"]
+atlas = ExtResource("2_87lh3")
+region = Rect2(448, 352, 32, 32)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tvhbn"]
+shader = ExtResource("5_v5rjc")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[sub_resource type="PackedScene" id="PackedScene_ac480"]
+_bundled = {
+"base_scene": 0,
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"names": PackedStringArray("Composter", "material", "scale", "script", "Sprite1", "CollisionShape2D", "Selection", "MouseArea", "position"),
+"node_count": 2,
+"node_paths": [NodePath("Selection")],
+"nodes": PackedInt32Array(-1, -1, 2147483647, 0, -1, 3, 1, 1, 2, 2, 3, 3, 0, 1073741824, 0, 2147483647, 262151, -1, 1, 8, 4, 0),
+"variants": [ExtResource("4_uab0f"), SubResource("ShaderMaterial_tvhbn"), Vector2(2, 2), ExtResource("6_1sei0"), Vector2(0, 0.625)],
+"version": 3
+}
+
+[resource]
+script = ExtResource("1_pqv7l")
+type = 1
+object_scene = SubResource("PackedScene_ac480")
+name = "Composter"
+description = "A wooden container that converts organic material into dirt."
+menu_texture = SubResource("AtlasTexture_oaa3q")
+material_slot_datas = Array[ExtResource("1_8kewf")]([SubResource("Resource_a5stn"), null])

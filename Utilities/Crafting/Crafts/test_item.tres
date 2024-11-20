@@ -1,0 +1,54 @@
+[gd_resource type="Resource" script_class="CraftData" load_steps=16 format=3 uid="uid://dpm7vhcmkm2j2"]
+
+[ext_resource type="Script" path="res://Utilities/Crafting/material_slot_data.gd" id="2_fpr5m"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick.tres" id="3_lc47t"]
+[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf.tres" id="4_rtohs"]
+[ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="5_msjxs"]
+[ext_resource type="PackedScene" uid="uid://by4s6muul7tdg" path="res://Entities/Objects/composter.tscn" id="6_342ef"]
+[ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="7_7wmc5"]
+[ext_resource type="Resource" uid="uid://bkbrdn41jos3k" path="res://Entities/Item/Items/battle/iron_helm.tres" id="7_tnv2a"]
+[ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="8_f8xtt"]
+
+[sub_resource type="Resource" id="Resource_a5stn"]
+script = ExtResource("2_fpr5m")
+quantity = 30
+item_data = ExtResource("3_lc47t")
+
+[sub_resource type="Resource" id="Resource_8qsce"]
+script = ExtResource("2_fpr5m")
+quantity = 10
+item_data = ExtResource("4_rtohs")
+
+[sub_resource type="Resource" id="Resource_s8m5e"]
+script = ExtResource("2_fpr5m")
+quantity = 1
+item_data = ExtResource("4_rtohs")
+
+[sub_resource type="Resource" id="Resource_0uq21"]
+script = ExtResource("2_fpr5m")
+quantity = 50
+item_data = ExtResource("3_lc47t")
+
+[sub_resource type="Resource" id="Resource_kj2nx"]
+script = ExtResource("2_fpr5m")
+quantity = 10
+item_data = ExtResource("3_lc47t")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oaa3q"]
+atlas = ExtResource("5_msjxs")
+region = Rect2(448, 352, 32, 32)
+
+[sub_resource type="Resource" id="Resource_bhwam"]
+script = ExtResource("8_f8xtt")
+item_data = ExtResource("7_tnv2a")
+quantity = 1
+
+[resource]
+script = ExtResource("7_7wmc5")
+type = 0
+object_scene = ExtResource("6_342ef")
+slot_data = SubResource("Resource_bhwam")
+name = "Iron Helm"
+description = "A wooden container that converts organic material into dirt."
+menu_texture = SubResource("AtlasTexture_oaa3q")
+material_slot_datas = Array[ExtResource("2_fpr5m")]([SubResource("Resource_a5stn"), SubResource("Resource_8qsce"), SubResource("Resource_s8m5e"), SubResource("Resource_0uq21"), SubResource("Resource_kj2nx")])

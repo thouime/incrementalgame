@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://clxpt0o22wqni"]
+
+[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="1_efrtx"]
+[ext_resource type="Script" path="res://Entities/Objects/object.gd" id="2_u8dp0"]
+[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="3_al1du"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s3k23"]
+shader = ExtResource("1_efrtx")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4klis"]
+size = Vector2(8.5, 7.4375)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fk0x8"]
+size = Vector2(8.5, 8.25)
+
+[node name="Object" type="StaticBody2D"]
+material = SubResource("ShaderMaterial_s3k23")
+position = Vector2(100, 100)
+script = ExtResource("2_u8dp0")
+metadata/_edit_group_ = true
+
+[node name="Sprite1" type="Sprite2D" parent="."]
+z_index = 3
+use_parent_material = true
+texture = ExtResource("3_al1du")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 2
+position = Vector2(0, 0.5)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_4klis")
+
+[node name="Selection" type="Area2D" parent="."]
+scale = Vector2(2, 2)
+
+[node name="MouseArea" type="CollisionShape2D" parent="Selection"]
+z_index = 4
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_fk0x8")

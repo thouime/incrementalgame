@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-PlayerManager="*res://Player/player_manager.gd"
+PlayerManager="*res://Entities/Player/player_manager.gd"
 
 [debug]
 

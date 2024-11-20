@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDataEquip" load_steps=4 format=3 uid="uid://bkbrdn41jos3k"]
+
+[ext_resource type="Script" path="res://Entities/Item/item_data_equip.gd" id="1_83tau"]
+[ext_resource type="Texture2D" uid="uid://bulp7tkpnj8vn" path="res://Entities/Item/#1 - Transparent Icons.png" id="2_1forn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q70fw"]
+atlas = ExtResource("2_1forn")
+region = Rect2(96, 224, 32, 32)
+
+[resource]
+script = ExtResource("1_83tau")
+defence = 1
+name = "Iron Helm"
+description = "A piece of armor used to protect thine skull."
+stackable = false
+texture = SubResource("AtlasTexture_q70fw")
