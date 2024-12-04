@@ -61,9 +61,6 @@ func place_object() -> void:
 		if(!can_place(grid.get_cursor(), grass_tiles, 32)):
 			return
 		
-		if PlayerManager.state != PlayerManager.State.BUILDING:
-			PlayerManager.set_player_state(PlayerManager.State.BUILDING)
-		
 		# Remove the required items to craft the object
 		inventory.remove_items(items_to_remove)
 		items_to_remove.clear()
