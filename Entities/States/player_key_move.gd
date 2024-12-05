@@ -9,6 +9,9 @@ func enter() -> void:
 	parent.target_position = Vector2.ZERO
 	parent.interact_target = null
 	
+func exit() -> void:
+	pass
+	
 func process_input(event: InputEvent) -> State:
 	return null
 	
@@ -41,6 +44,14 @@ func handle_key_movement() -> Vector2:
 			velocity += direction
 			parent.direction = direction
 	return velocity
+
+func process_frame(delta: float) -> State:
+	# Change to build state
+	if ready_to_build:
+		ready_to_build = false # Reset the flag
+		return build_state
+	
+	return null
 
 func _on_interact_signal(
 	pos: Vector2, 

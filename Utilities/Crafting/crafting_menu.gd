@@ -1,9 +1,27 @@
 extends PanelContainer
 
+# Let the state machine know that it can enter the building state
+signal start_building
+signal stop_building
+
 const Slot = preload("res://Utilities/Crafting/crafting_slot.tscn")
 
 # Small interface element that displays info about each craftable
 const CRAFT_INFO = preload("res://Utilities/Crafting/craft_info.tscn")
+
+# All the different craftable items/objects
+@export var craft_datas: Array[CraftData]
+
+# Flag to check if mouse is hovering over Craftables for more info
+var craft_hovering: bool = false
+
+# Check if the grid is active
+var grid_active: bool = false
+var placement_mode: bool = false
+
+# Temporary "ghost" object that follos the mouse.
+var preview_object: Node = null
+var items_to_remove: Dictionary
 
 # Reference to the tilemap
 @onready var world: Node2D = $"../../World"
@@ -18,22 +36,8 @@ const CRAFT_INFO = preload("res://Utilities/Crafting/craft_info.tscn")
 # For displaying where to build crafted objects
 @onready var grid: Control = $"../../Grid"
 
-# All the different craftable items/objects
-@export var craft_datas: Array[CraftData]
-
 # Get a reference to the player's inventory for crafting
 @onready var inventory: InventoryData = PlayerManager.player_inventory
-
-# Flag to check if mouse is hovering over Craftables for more info
-var craft_hovering: bool = false
-
-# Check if the grid is active
-var grid_active: bool = false
-var placement_mode: bool = false
-
-# Temporary "ghost" object that follos the mouse.
-var preview_object: Node = null
-var items_to_remove: Dictionary
 
 func _ready() -> void:
 	populate_crafting_grid()
@@ -49,6 +53,7 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if grid_active and placement_mode:
 				place_object()
+				stop_building.emit()
 		# Handle cancel action (e.g., pressing the "cancel" action key)
 		elif event.is_action_pressed("cancel"):
 			if grid_active:
@@ -67,7 +72,7 @@ func place_object() -> void:
 
 		# Add the object to the world
 		main.add_child(preview_object)
-		preview_object.connect("interact", PlayerManager.player._on_interact_signal)
+		#preview_object.connect("interact", PlayerManager.player._on_interact_signal)
 
 		# Set object position to the grid cursor position
 		preview_object.position = grid.get_cursor()
@@ -182,6 +187,7 @@ func try_craft(craft_slot: CraftData) -> void:
 		
 func craft(material_slots: Dictionary, craft_slot: CraftData) -> void:
 	if craft_slot.type == craft_slot.Type.OBJECT:
+		emit_signal("start_building")
 		print("Preparing grid...")
 		var new_object: StaticBody2D = craft_slot.object_scene.instantiate()
 		var sprite: Sprite2D = new_object.get_node("Sprite1")
@@ -315,3 +321,6 @@ func on_slot_hovered(index: int) -> void:
 
 func on_slot_exited(index: int) -> void:
 	hide_craft_info(index)
+
+func _on_stop_building() -> void:
+	cancel_place_object()

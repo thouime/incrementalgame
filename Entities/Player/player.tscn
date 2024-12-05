@@ -422,14 +422,16 @@ collide_with_areas = true
 script = ExtResource("3_677he")
 initial_state = NodePath("PlayerIdle")
 
-[node name="PlayerIdle" type="Node" parent="StateMachine" node_paths=PackedStringArray("key_move_state", "click_move_state")]
+[node name="PlayerIdle" type="Node" parent="StateMachine" node_paths=PackedStringArray("key_move_state", "click_move_state", "build_state")]
 script = ExtResource("4_26u2a")
 key_move_state = NodePath("../PlayerKeyMove")
 click_move_state = NodePath("../PlayerClickMove")
+build_state = NodePath("../PlayerBuilding")
 
-[node name="PlayerKeyMove" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state")]
+[node name="PlayerKeyMove" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state", "build_state")]
 script = ExtResource("5_kcpsp")
 idle_state = NodePath("../PlayerIdle")
+build_state = NodePath("../PlayerBuilding")
 
 [node name="PlayerClickMove" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state", "gather_state", "build_state", "key_move_state")]
 script = ExtResource("6_doxm0")
@@ -444,5 +446,6 @@ key_move_state = NodePath("../PlayerKeyMove")
 click_move_state = NodePath("../PlayerClickMove")
 build_state = NodePath("../PlayerBuilding")
 
-[node name="PlayerBuilding" type="Node" parent="StateMachine"]
+[node name="PlayerBuilding" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state")]
 script = ExtResource("8_gbgay")
+idle_state = NodePath("../PlayerIdle")

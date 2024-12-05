@@ -29,15 +29,13 @@ func process_physics(delta: float) -> State:
 	
 	return null
 
-# Check if they are already interacting with the same object
-#if not object == interact_target:
-	## Interrupt player if they are already gathering
-	#if state == State.GATHERING and interact_target:
-		#interact_target.stop_interact_action(self)
-	#target_position = pos
-	## Target underneath the object so player is in the front
-	#target_position.y += offset
-	#state = State.MOVING
+func process_frame(delta: float) -> State:
+	# Change to build state
+	if ready_to_build:
+		ready_to_build = false
+		return build_state
+	
+	return null
 
 func _on_interact_signal(
 	pos: Vector2, 
@@ -47,11 +45,5 @@ func _on_interact_signal(
 	# Check if they are already interacting with the same object
 	if object != parent.interact_target:
 		parent.interact_target = object
-		
-		# Interrupt player if they are already gathering
-		#if interact_target:
-			#interact_target.stop_interact_action(self)
-		
 		parent.target_position = pos
-		# Target underneath the object so player is in the front
 		parent.target_position.y += offset

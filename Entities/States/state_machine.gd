@@ -6,23 +6,29 @@ var current_state : State
 var last_direction: Vector2 = Vector2.UP
 # Keep track of the current interacting object
 var interact_target: Node = null
+var crafting_menu: PanelContainer = null
 
 # Initialize the state machine by giving each child state a reference to the
 # parent object it belongs to and enter the default initial_state
-func init(parent: Player) -> void:
+func init(parent: Player, crafting_menu_ref: PanelContainer) -> void:
 	for child in get_children():
 		child.parent = parent
+	
+	crafting_menu = crafting_menu_ref
 	
 	# Initialize to the default state
 	change_state(initial_state)
 	
 	call_deferred("_connect_interact_signals")
+	call_deferred("_connect_crafting_signal")
 
 func change_state(new_state: State) -> void:
 	if current_state:
 		current_state.exit()
 	
 	current_state = new_state
+	if current_state.has_signal("stop_building"):
+		current_state.set_signal(crafting_menu)
 	current_state.enter()
 
 # Pass through functions for the Player to call,
@@ -46,7 +52,15 @@ func _connect_interact_signals() -> void:
 	for node in get_tree().get_nodes_in_group("interactables"):
 		if not node.is_connected("interact", _on_interact_signal):
 			node.connect("interact", _on_interact_signal)
-			
+	
 func _on_interact_signal(pos: Vector2, offset: float, object: StaticBody2D) -> void:
 	if current_state and current_state.has_method("_on_interact_signal"):
 		current_state._on_interact_signal(pos, offset, object)
+
+func _connect_crafting_signal() -> void:
+	if crafting_menu.has_signal("start_building"):
+		crafting_menu.connect("start_building", _on_building_signal)
+
+func _on_building_signal() -> void:
+	if current_state and current_state.has_method("start_building"):
+		current_state.start_building()

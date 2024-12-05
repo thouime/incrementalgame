@@ -23,6 +23,9 @@ var idle_animations = {
 	Vector2.DOWN: "idle_down",
 	Vector2.UP: "idle_up"
 }
+# Handle building state using a variable that gets changed via signal
+var ready_to_build: bool = false
+var craft_slot: CraftData
 
 # Code the runs when entering the state
 func enter():
@@ -41,3 +44,6 @@ func process_frame(delta: float) -> State:
 
 func process_physics(delta: float) -> State:
 	return null
+
+func start_building() -> void:
+	ready_to_build = true
