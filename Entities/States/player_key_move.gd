@@ -13,6 +13,12 @@ func exit() -> void:
 	pass
 	
 func process_input(event: InputEvent) -> State:
+	# Check for movement inputs
+	for action in directions.keys():
+		# Remove target for clicking objects if an object is clicked while moving
+		# Should only click object to move if it's clicked just after movement
+		if Input.is_action_just_released(action):
+			parent.target_position = Vector2.ZERO
 	return null
 	
 func process_physics(delta: float) -> State:
@@ -58,5 +64,8 @@ func _on_interact_signal(
 	offset: float,
 	object: StaticBody2D
 ) -> void:
-		
-	print("Interact Signal!")
+	# Check if they are already interacting with the same object
+	if object != parent.interact_target:
+		parent.interact_target = object
+		parent.target_position = pos
+		parent.target_position.y += offset
