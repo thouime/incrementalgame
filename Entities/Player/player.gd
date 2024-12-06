@@ -24,6 +24,7 @@ var interact_target: Node = null
 func _ready() -> void:
 	PlayerManager.player = self
 	PlayerManager.player_inventory = inventory_data
+	PlayerManager.state_machine = state_machine
 	screen_size = get_viewport_rect().size
 	set_animation()
 	state_machine.init(self, crafting_menu)
