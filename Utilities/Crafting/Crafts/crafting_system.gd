@@ -1,59 +1,22 @@
-extends PanelContainer
+extends Node
 
-# Let the state machine know that it can enter the building state
 signal start_building
 signal stop_building
-signal craft_item_request
 
-const Slot = preload("res://Utilities/Crafting/crafting_slot.tscn")
-
-# Small interface element that displays info about each craftable
-const CRAFT_INFO = preload("res://Utilities/Crafting/craft_info.tscn")
-
-# All the different craftable items/objects
-@export var craft_datas: Array[CraftData]
-
-# Flag to check if mouse is hovering over Craftables for more info
-var craft_hovering: bool = false
-
+var preview_object: Node = null # Temporary "ghost" object that follos the mouse.
+var items_to_remove: Dictionary
 # Check if the grid is active
 var grid_active: bool = false
 var placement_mode: bool = false
 
-# Temporary "ghost" object that follos the mouse.
-var preview_object: Node = null
-var items_to_remove: Dictionary
-
+@onready var main: Node = $"../.."
 # Reference to the tilemap
 @onready var world: Node2D = $"../../World"
 @onready var grass_tiles: TileMapLayer = world.get_node("Grass")
-
-# For adding nodes to the scene
-@onready var main: Node = $"../.."
-@onready var crafting_grid: GridContainer = $MarginContainer/CraftingGrid
-# For moving menus outside the PanelContainer
-@onready var canvas_layer: CanvasLayer = $CanvasLayer
-
+# Reference to player inventory
+@onready var inventory: InventoryData = PlayerManager.player_inventory
 # For displaying where to build crafted objects
 @onready var grid: Control = $"../../Grid"
-
-# Get a reference to the player's inventory for crafting
-@onready var inventory: InventoryData = PlayerManager.player_inventory
-
-func _ready() -> void:
-	populate_crafting_grid()
-
-# Create the crafting grid for each craftable item
-func populate_crafting_grid() -> void:
-	for craft_data in craft_datas:
-		var slot: PanelContainer = Slot.instantiate()
-		crafting_grid.add_child(slot)
-		if craft_data:
-			slot.set_craft_data(craft_data)
-			add_info(craft_data)
-		slot.craft_slot_clicked.connect(self.on_slot_clicked)
-		slot.craft_slot_hovered.connect(self.on_slot_hovered)
-		slot.craft_slot_exited.connect(self.on_slot_exited)
 
 func _process(_delta: float) -> void:
 	# Get the cursor's global position
@@ -72,100 +35,9 @@ func _input(event: InputEvent) -> void:
 			if grid_active:
 				cancel_place_object()
 
-func place_object() -> void:
-	if preview_object:
-		# Check if object can be placed
-		# Checks if attempting to place on void or another object
-		if(!can_place(grid.get_cursor(), grass_tiles, 32)):
-			return
-		
-		# Remove the required items to craft the object
-		inventory.remove_items(items_to_remove)
-		items_to_remove.clear()
-
-		# Add the object to the world
-		main.add_child(preview_object)
-		preview_object.connect("interact", PlayerManager.state_machine._on_interact_signal)
-
-		# Set object position to the grid cursor position
-		preview_object.position = grid.get_cursor()
-
-		print("Object added to world.")
-
-		# Reset the preview object for the next action
-		preview_object = null
-
-		# Change mouse mode back to visible
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		grid.build_cursor.visible = false
-
-		# Deactivate grid and placement mode
-		grid_active = false
-		grid.visible = false
-		placement_mode = false
-	else:
-		print("There is no reference to the object!")
-
-func cancel_place_object() -> void:
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	grid.build_cursor.visible = false
-	grid_active = false
-	grid.visible = false
-	placement_mode = false
-
-func draw_grid() -> void:
-	grid.draw_grid()
-	grid.update_cursor()
-	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
-	grid.build_cursor.visible = true
-	grid_active = true
-	grid.visible = true
-	placement_mode = true
-
-func add_info(craft_data: CraftData) -> void:
-	# Create info interface that shows each type of material required
-	var craft_info: PanelContainer = CRAFT_INFO.instantiate()
-	canvas_layer.add_child(craft_info)
-	craft_info.set_info(craft_data)
-	
-	var materials: Array = craft_data.material_slot_datas
-	for craft_material: MaterialSlotData in materials:
-		if craft_material:
-			craft_info.add_material(
-				craft_material.item_data, 
-				craft_material.quantity
-			)
-			
-	# Position craft_info window above crafting interface
-	set_info_pos(craft_info)
-
-func set_info_pos(craft_info: Control) -> void:
-	var menu_position: Vector2 = self.global_position
-	var padding: int = 10
-	var new_pos: float = craft_info.get_combined_minimum_size().y + padding
-	craft_info.global_position = menu_position - Vector2(0, new_pos)
-
-func show_craft_info(craft_slot: int) -> void:
-	if not craft_hovering:
-		craft_hovering = true
-		var craft_info: PanelContainer = canvas_layer.get_child(craft_slot)
-		if craft_info:
-			craft_info.show()
-	
-func hide_craft_info(craft_slot: int) -> void:
-	if craft_hovering:
-		craft_hovering = false
-		var craft_info: PanelContainer = canvas_layer.get_child(craft_slot)
-		if craft_info:
-			craft_info.hide()
-			
-func on_slot_clicked(craft_slot: int, _button: int) -> void:
-	#try_craft(craft_datas[craft_slot])
-	craft_item_request.emit(craft_datas[craft_slot])
-
-# Check if you have required materials in inventory
-# Maybe later it will automatically check external inventories like chests?
+# Check if the player has the required materials in the player inventory
 func try_craft(craft_slot: CraftData) -> void:
+	print(inventory)
 	var material_slots: Dictionary = {}
 	var missing_materials: bool = false
 	
@@ -186,7 +58,7 @@ func try_craft(craft_slot: CraftData) -> void:
 	else:
 		# Print Missing materials
 		print_missing(material_slots)
-		
+
 func craft(material_slots: Dictionary, craft_slot: CraftData) -> void:
 	if craft_slot.type == craft_slot.Type.OBJECT:
 		emit_signal("start_building")
@@ -236,6 +108,15 @@ func print_missing(missing_materials: Dictionary) -> void:
 	
 	print(missing_string)
 
+func draw_grid() -> void:
+	grid.draw_grid()
+	grid.update_cursor()
+	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+	grid.build_cursor.visible = true
+	grid_active = true
+	grid.visible = true
+	placement_mode = true
+
 func check_area(cursor_position: Vector2, grid_size: int) -> bool:
 	# Define the area to check for overlapping objects
 	var shape: RectangleShape2D = RectangleShape2D.new()
@@ -243,7 +124,7 @@ func check_area(cursor_position: Vector2, grid_size: int) -> bool:
 
 	# Set up the physics query
 	var space_state: PhysicsDirectSpaceState2D = (
-		get_world_2d().direct_space_state
+		PlayerManager.player.get_world_2d().direct_space_state
 	)
 	var query: PhysicsShapeQueryParameters2D = (
 		PhysicsShapeQueryParameters2D.new()
@@ -317,12 +198,47 @@ func can_place(
 ) -> bool:
 	return (check_area(cursor_position, grid_size) and 
 			check_ground(cursor_position, tilemap, grid_size))
-	
-func on_slot_hovered(index: int) -> void:
-	show_craft_info(index)
+			
+func place_object() -> void:
+	if preview_object:
+		# Check if object can be placed
+		# Checks if attempting to place on void or another object
+		if(!can_place(grid.get_cursor(), grass_tiles, 32)):
+			return
+		
+		# Remove the required items to craft the object
+		inventory.remove_items(items_to_remove)
+		items_to_remove.clear()
 
-func on_slot_exited(index: int) -> void:
-	hide_craft_info(index)
+		# Add the object to the world
+		main.add_child(preview_object)
+		preview_object.connect("interact", PlayerManager.state_machine._on_interact_signal)
+
+		# Set object position to the grid cursor position
+		preview_object.position = grid.get_cursor()
+
+		print("Object added to world.")
+
+		# Reset the preview object for the next action
+		preview_object = null
+
+		# Change mouse mode back to visible
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		grid.build_cursor.visible = false
+
+		# Deactivate grid and placement mode
+		grid_active = false
+		grid.visible = false
+		placement_mode = false
+	else:
+		print("There is no reference to the object!")
+
+func cancel_place_object() -> void:
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	grid.build_cursor.visible = false
+	grid_active = false
+	grid.visible = false
+	placement_mode = false
 
 func _on_stop_building() -> void:
 	cancel_place_object()

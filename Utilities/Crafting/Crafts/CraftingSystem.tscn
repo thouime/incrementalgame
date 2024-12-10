@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bbq438ddoi3y6"]
+
+[ext_resource type="Script" path="res://Utilities/Crafting/Crafts/crafting_system.gd" id="1_ktpsb"]
+
+[node name="CraftingSystem" type="Node"]
+script = ExtResource("1_ktpsb")

@@ -1,7 +1,9 @@
-[gd_scene load_steps=42 format=3 uid="uid://bgi5nv12xjmka"]
+[gd_scene load_steps=44 format=3 uid="uid://bgi5nv12xjmka"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_xtwid"]
+[ext_resource type="Script" path="res://game_systems.gd" id="2_3j3er"]
 [ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="2_h00hh"]
+[ext_resource type="PackedScene" uid="uid://bbq438ddoi3y6" path="res://Utilities/Crafting/Crafts/CraftingSystem.tscn" id="3_i2tv7"]
 [ext_resource type="Resource" uid="uid://bitwkfta0d2uu" path="res://Utilities/Inventory/test_inv.tres" id="3_nbs8y"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data_equip.gd" id="4_2dnpy"]
 [ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="5_b2i4h"]
@@ -348,6 +350,11 @@ inventory_data = SubResource("Resource_w4a1l")
 [node name="Composter" parent="." instance=ExtResource("28_6qef4")]
 material = SubResource("ShaderMaterial_wjxxi")
 position = Vector2(144, 348)
+
+[node name="GameSystems" type="Node" parent="."]
+script = ExtResource("2_3j3er")
+
+[node name="CraftingSystem" parent="GameSystems" instance=ExtResource("3_i2tv7")]
 
 [connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]
 [connection signal="gui_input" from="UI/InventoryInterface" to="UI/InventoryInterface" method="_on_gui_input"]
