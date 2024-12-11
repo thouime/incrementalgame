@@ -4,6 +4,7 @@ extends State
 @export var key_move_state : State
 @export var click_move_state: State
 @export var build_state : State
+var ready_to_build : bool = false
 
 func enter() -> void:
 	parent.velocity = Vector2(0, 0)
@@ -12,18 +13,18 @@ func enter() -> void:
 	gather_from_target()
 
 func exit() -> void:
-	pass
+	ready_to_build = false
 
 # Check for key movement
-func process_input(event: InputEvent) -> State:
+func process_input(_event: InputEvent) -> State:
 	# Check for movement inputs
-	for action in directions.keys():
+	for action : String in directions.keys():
 		if Input.is_action_just_pressed(action):
 			interrupt_state()
 			return key_move_state
 	return null
 	
-func process_physics(delta: float) -> State:
+func process_physics(_delta: float) -> State:
 	parent.move_and_slide()
 	
 	# Check if a target position is set and switch to click move state
@@ -31,8 +32,13 @@ func process_physics(delta: float) -> State:
 		return click_move_state
 	
 	return null
+
+func process_frame(_delta: float) -> State:
+	# Start the building operation
+	if ready_to_build:
+		return build_state
 	
-# Check for click movement of different object
+	return null
 
 # Srtart gathering
 func gather_from_target() -> void:
@@ -64,3 +70,6 @@ func _on_interact_signal(
 		parent.target_position = pos
 		# Target underneath the object so player is in the front
 		parent.target_position.y += offset
+
+func start_building() -> void:
+	ready_to_build = true

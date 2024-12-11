@@ -11,6 +11,7 @@ func enter() -> void:
 	print("Entered Building State")
 	
 func exit() -> void:
+	done_building = false
 	print("Exited Building State")
 
 func process_input(event: InputEvent) -> State:
@@ -21,17 +22,15 @@ func process_input(event: InputEvent) -> State:
 		return idle_state
 	return null
 
-func process_frame(delta: float) -> State:
+func process_frame(_delta: float) -> State:
 	# Change to build state
 	if done_building:
-		done_building = false
 		return idle_state
 	return null
 
-func set_signal(crafting_menu):
-	stop_building.connect(crafting_menu._on_stop_building)
-	crafting_menu.connect("stop_building", _on_stop_building)
+func stop_building_signal(crafting_system : Node) -> void:
+	stop_building.connect(crafting_system._on_stop_building)
+	crafting_system.connect("stop_building", _on_stop_building)
 
 func _on_stop_building() -> void:
 	done_building = true
-	print("Stop building")

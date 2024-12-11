@@ -6,15 +6,15 @@ var current_state : State
 var last_direction: Vector2 = Vector2.UP
 # Keep track of the current interacting object
 var interact_target: Node = null
-var crafting_menu: PanelContainer = null
+var crafting_system: Node = null
 
 # Initialize the state machine by giving each child state a reference to the
 # parent object it belongs to and enter the default initial_state
-func init(parent: Player, crafting_menu_ref: PanelContainer) -> void:
+func init(parent: Player, crafting_system_ref: Node) -> void:
 	for child in get_children():
 		child.parent = parent
 	
-	crafting_menu = crafting_menu_ref
+	crafting_system = crafting_system_ref
 	
 	# Initialize to the default state
 	change_state(initial_state)
@@ -28,23 +28,23 @@ func change_state(new_state: State) -> void:
 	
 	current_state = new_state
 	if current_state.has_signal("stop_building"):
-		current_state.set_signal(crafting_menu)
+		current_state.stop_building_signal(crafting_system)
 	current_state.enter()
 
 # Pass through functions for the Player to call,
 # handling state changes as needed.
 func process_physics(delta: float) -> void:
-	var new_state = current_state.process_physics(delta)
+	var new_state : State = current_state.process_physics(delta)
 	if new_state:
 		change_state(new_state)
 
 func process_input(event: InputEvent) -> void:
-	var new_state = current_state.process_input(event)
+	var new_state : State = current_state.process_input(event)
 	if new_state:
 		change_state(new_state)
 
 func process_frame(delta: float) -> void:
-	var new_state = current_state.process_frame(delta)
+	var new_state : State = current_state.process_frame(delta)
 	if new_state:
 		change_state(new_state)
 
@@ -58,8 +58,8 @@ func _on_interact_signal(pos: Vector2, offset: float, object: StaticBody2D) -> v
 		current_state._on_interact_signal(pos, offset, object)
 
 func _connect_crafting_signal() -> void:
-	if crafting_menu.has_signal("start_building"):
-		crafting_menu.connect("start_building", _on_building_signal)
+	if crafting_system.has_signal("start_building"):
+		crafting_system.connect("start_building", _on_building_signal)
 
 func _on_building_signal() -> void:
 	if current_state and current_state.has_method("start_building"):

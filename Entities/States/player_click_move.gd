@@ -5,22 +5,24 @@ extends State
 @export var gather_state : State
 @export var build_state : State
 @export var key_move_state : State
+var ready_to_build : bool = false
 
 func enter() -> void:
 	pass
 
 func exit() -> void:
 	parent.velocity = Vector2.ZERO
+	ready_to_build = false
 
-func process_input(event: InputEvent) -> State:
+func process_input(_event: InputEvent) -> State:
 	# Allow interruption to key movement
-	for action in directions.keys():
+	for action : String in directions.keys():
 		if Input.is_action_just_pressed(action):
 			return key_move_state
 	return null
 	
 func process_physics(delta: float) -> State:
-	var velocity = move_towards_target(delta, parent.target_position)
+	var velocity : Vector2  = move_towards_target(delta, parent.target_position)
 	parent.animated_sprite.animation = animations[parent.direction]
 	
 	# Flip the sprite if facing left
@@ -36,24 +38,31 @@ func process_physics(delta: float) -> State:
 	parent.move_and_slide()
 	return null
 
-func move_towards_target(delta: float, target_position: Vector2) -> Vector2:
+func process_frame(_delta: float) -> State:
+	# Start the building operation
+	if ready_to_build:
+		return build_state
+	
+	return null
+
+func move_towards_target(_delta: float, target_position: Vector2) -> Vector2:
 	# Calculate the direction vector to the target position
-	var direction = (target_position - parent.global_position).normalized()
+	var direction : Vector2 = (target_position - parent.global_position).normalized()
 	# Get the animation direction based on which is closest to the object
 	parent.direction = get_closest_direction(direction)
 	# Calculate the velocity
-	var velocity = direction * parent.player_speed
+	var velocity : Vector2 = direction * parent.player_speed
 	return velocity
 
 func get_closest_direction(direction: Vector2) -> Vector2:
 	# Calculate dot products with each main direction
-	var dot_right = direction.dot(Vector2.RIGHT)
-	var dot_left = direction.dot(Vector2.LEFT)
-	var dot_up = direction.dot(Vector2.UP)
-	var dot_down = direction.dot(Vector2.DOWN)
+	var dot_right: float = direction.dot(Vector2.RIGHT)
+	var dot_left: float = direction.dot(Vector2.LEFT)
+	var dot_up: float = direction.dot(Vector2.UP)
+	var dot_down: float = direction.dot(Vector2.DOWN)
 
 	# Determine which direction has the highest dot product (most aligned)
-	var max_dot = max(dot_right, dot_left, dot_up, dot_down)
+	var max_dot : float = max(dot_right, dot_left, dot_up, dot_down)
 
 	# Set default priority order for cases where directions are equally close
 	if max_dot == dot_right:
@@ -66,9 +75,12 @@ func get_closest_direction(direction: Vector2) -> Vector2:
 		return Vector2.DOWN
 
 func _on_interact_signal(
-	pos: Vector2, 
-	offset: float,
-	object: StaticBody2D
+	_pos: Vector2, 
+	_offset: float,
+	_object: StaticBody2D
 ) -> void:
 		
 	print("Interact Signal!")
+	
+func start_building() -> void:
+	ready_to_build = true

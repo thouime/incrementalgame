@@ -37,7 +37,6 @@ func _input(event: InputEvent) -> void:
 
 # Check if the player has the required materials in the player inventory
 func try_craft(craft_slot: CraftData) -> void:
-	print(inventory)
 	var material_slots: Dictionary = {}
 	var missing_materials: bool = false
 	
@@ -61,7 +60,7 @@ func try_craft(craft_slot: CraftData) -> void:
 
 func craft(material_slots: Dictionary, craft_slot: CraftData) -> void:
 	if craft_slot.type == craft_slot.Type.OBJECT:
-		emit_signal("start_building")
+		start_building.emit()
 		print("Preparing grid...")
 		var new_object: StaticBody2D = craft_slot.object_scene.instantiate()
 		var sprite: Sprite2D = new_object.get_node("Sprite1")
@@ -171,11 +170,14 @@ func check_ground(
 				
 				# Check for specific tiles (e.g., ground or grass)
 				if tile_id == 0:
-					print("Ground tile found at ", x, y)
+					#print("Ground tile found at ", x, y)
+					pass
 				elif tile_id == 1:
-					print("Grass tile found at ", x, y)
+					#print("Grass tile found at ", x, y)
+					pass
 				else:
-					print("Other tile found at ", x, y)
+					#print("Other tile found at ", x, y)
+					pass
 					
 		# If all cells are valid, return true after all checks
 		return true

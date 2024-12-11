@@ -5,22 +5,23 @@ extends State
 @export var click_move_state: State
 @export var gather_state : State
 @export var build_state : State
+var ready_to_build : bool = false
 
 func enter() -> void:
 	parent.velocity = Vector2(0, 0)
 	parent.animated_sprite.animation = idle_animations[parent.direction]
 
 func exit() -> void:
-	pass
+	ready_to_build = false
 
-func process_input(event: InputEvent) -> State:
+func process_input(_event: InputEvent) -> State:
 	# Check for movement inputs
-	for action in directions.keys():
+	for action : String in directions.keys():
 		if Input.is_action_just_pressed(action):
 			return key_move_state
 	return null
 	
-func process_physics(delta: float) -> State:
+func process_physics(_delta: float) -> State:
 	parent.move_and_slide()
 	
 	# Check if a target position is set and switch to click move state
@@ -29,10 +30,9 @@ func process_physics(delta: float) -> State:
 	
 	return null
 
-func process_frame(delta: float) -> State:
-	# Change to build state
+func process_frame(_delta: float) -> State:
+	# Start the building operation
 	if ready_to_build:
-		ready_to_build = false
 		return build_state
 	
 	return null
@@ -47,3 +47,6 @@ func _on_interact_signal(
 		parent.interact_target = object
 		parent.target_position = pos
 		parent.target_position.y += offset
+
+func start_building() -> void:
+	ready_to_build = true

@@ -4,17 +4,18 @@ extends State
 @export var idle_state : State
 @export var gather_state : State
 @export var build_state : State
+var ready_to_build : bool = false
 
 func enter() -> void:
 	parent.target_position = Vector2.ZERO
 	parent.interact_target = null
 	
 func exit() -> void:
-	pass
+	ready_to_build = false
 	
-func process_input(event: InputEvent) -> State:
+func process_input(_event: InputEvent) -> State:
 	# Check for movement inputs
-	for action in directions.keys():
+	for action : String in directions.keys():
 		# Remove target for clicking objects if an object is clicked while moving
 		# Should only click object to move if it's clicked just after movement
 		if Input.is_action_just_released(action):
@@ -22,7 +23,7 @@ func process_input(event: InputEvent) -> State:
 	return null
 	
 func process_physics(delta: float) -> State:
-	var velocity = handle_key_movement()
+	var velocity : Vector2 = handle_key_movement()
 	if velocity.length() > 0:
 		# Set movement animations
 		parent.animated_sprite.animation = animations[parent.direction]
@@ -40,24 +41,23 @@ func process_physics(delta: float) -> State:
 		
 	return null
 
-func handle_key_movement() -> Vector2:
-	var velocity = Vector2.ZERO
-	# Check for movement inputs
-	for action in directions.keys():
-		if Input.is_action_pressed(action):
-			# Get direction based on the key pressed
-			var direction = directions[action]
-			velocity += direction
-			parent.direction = direction
-	return velocity
-
-func process_frame(delta: float) -> State:
-	# Change to build state
+func process_frame(_delta: float) -> State:
+	# Start the building operation
 	if ready_to_build:
-		ready_to_build = false # Reset the flag
 		return build_state
 	
 	return null
+
+func handle_key_movement() -> Vector2:
+	var velocity : Vector2 = Vector2.ZERO
+	# Check for movement inputs
+	for action : String in directions.keys():
+		if Input.is_action_pressed(action):
+			# Get direction based on the key pressed
+			var direction : Vector2 = directions[action]
+			velocity += direction
+			parent.direction = direction
+	return velocity
 
 func _on_interact_signal(
 	pos: Vector2, 
@@ -69,3 +69,6 @@ func _on_interact_signal(
 		parent.interact_target = object
 		parent.target_position = pos
 		parent.target_position.y += offset
+
+func start_building() -> void:
+	ready_to_build = true
