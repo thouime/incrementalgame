@@ -1,3 +1,5 @@
+# Incremental Game
+
 extends Node
 
 const PICKUP = preload("res://Entities/Item/pickup.tscn")
