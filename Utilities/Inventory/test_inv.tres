@@ -1,51 +1,68 @@
-[gd_resource type="Resource" script_class="InventoryData" load_steps=16 format=3 uid="uid://bitwkfta0d2uu"]
+[gd_resource type="Resource" script_class="InventoryData" load_steps=19 format=3 uid="uid://bitwkfta0d2uu"]
 
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="1_8fppb"]
 [ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="2_r8gg3"]
-[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="3_b7qy8"]
 [ext_resource type="Resource" uid="uid://c4yne4f4cx1uw" path="res://Entities/Item/Items/healing/health_potion.tres" id="3_k4qdp"]
-[ext_resource type="Resource" uid="uid://bkbrdn41jos3k" path="res://Entities/Item/Items/battle/iron_helm_equip.tres" id="4_mnwoc"]
-[ext_resource type="Resource" uid="uid://bvd8gpu7r0l5c" path="res://Entities/Item/Items/basic/wood_item.tres" id="6_41vef"]
-[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="7_0u3m0"]
 
 [sub_resource type="Resource" id="Resource_v2cvc"]
 script = ExtResource("2_r8gg3")
 item_data = ExtResource("3_k4qdp")
 quantity = 4
 
+[sub_resource type="Resource" id="Resource_cjosr"]
+metadata/__load_path__ = "res://Entities/Item/Items/battle/iron_helm.tres"
+
 [sub_resource type="Resource" id="Resource_p3n4r"]
 script = ExtResource("2_r8gg3")
-item_data = ExtResource("4_mnwoc")
+item_data = SubResource("Resource_cjosr")
 quantity = 1
+
+[sub_resource type="Resource" id="Resource_ri6ne"]
+metadata/__load_path__ = "res://Entities/Item/Items/basic/stick.tres"
 
 [sub_resource type="Resource" id="Resource_0qqod"]
 script = ExtResource("2_r8gg3")
-item_data = ExtResource("3_b7qy8")
+item_data = SubResource("Resource_ri6ne")
 quantity = 97
+
+[sub_resource type="Resource" id="Resource_rpnwa"]
+metadata/__load_path__ = "res://Entities/Item/Items/basic/wood.tres"
 
 [sub_resource type="Resource" id="Resource_rnwhd"]
 script = ExtResource("2_r8gg3")
-item_data = ExtResource("6_41vef")
+item_data = SubResource("Resource_rpnwa")
 quantity = 1
+
+[sub_resource type="Resource" id="Resource_c4ekj"]
+metadata/__load_path__ = "res://Entities/Item/Items/basic/leaf.tres"
 
 [sub_resource type="Resource" id="Resource_tq131"]
 script = ExtResource("2_r8gg3")
-item_data = ExtResource("7_0u3m0")
+item_data = SubResource("Resource_c4ekj")
 quantity = 3
+
+[sub_resource type="Resource" id="Resource_3bnpm"]
+metadata/__load_path__ = "res://Entities/Item/Items/basic/stick.tres"
 
 [sub_resource type="Resource" id="Resource_fb4cn"]
 script = ExtResource("2_r8gg3")
-item_data = ExtResource("3_b7qy8")
+item_data = SubResource("Resource_3bnpm")
 quantity = 99
+
+[sub_resource type="Resource" id="Resource_hhuae"]
+metadata/__load_path__ = "res://Entities/Item/Items/basic/stick.tres"
 
 [sub_resource type="Resource" id="Resource_b8rjm"]
 script = ExtResource("2_r8gg3")
-item_data = ExtResource("3_b7qy8")
+item_data = SubResource("Resource_hhuae")
 quantity = 99
+
+[sub_resource type="Resource" id="Resource_uxc7p"]
+metadata/__load_path__ = "res://Entities/Item/Items/basic/stick.tres"
 
 [sub_resource type="Resource" id="Resource_divsr"]
 script = ExtResource("2_r8gg3")
-item_data = ExtResource("3_b7qy8")
+item_data = SubResource("Resource_uxc7p")
 quantity = 99
 
 [resource]

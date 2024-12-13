@@ -24,11 +24,6 @@ func _ready() -> void:
 	
 	for node in get_tree().get_nodes_in_group("external_inventory"):
 		node.toggle_inventory.connect(toggle_inventory_interface)
-	
-	# Initialize references in Singletons
-	GameSystems.crafting_menu = $UI/CraftingMenu
-	CraftingSystem.set_references(crafting_references)
-	GameSystems.connect_signals()
 
 func update_label(label: Label, material: int) -> void:
 	# Split the label text into prefix and current value
