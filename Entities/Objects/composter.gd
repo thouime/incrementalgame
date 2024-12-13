@@ -30,8 +30,10 @@ func interact_action(_player: CharacterBody2D) -> void:
 	print("Interacting with composter...")
 	#CraftingSystem.try_craft(composted_dirt)
 	if compost_ready:
-		# add dirt to inventory
-		inventory.pick_up_slot_data(composted_dirt.slot_data)
+		# Add dirt to inventory
+		# Duplicate so we don't modify the original
+		var new_slot_data: SlotData = composted_dirt.slot_data.duplicate() as SlotData
+		inventory.pick_up_slot_data(new_slot_data)
 		compost_ready = false
 	if not activity_timer.is_running():
 		add_compost()

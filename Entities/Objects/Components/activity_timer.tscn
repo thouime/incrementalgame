@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://Entities/Objects/Components/activity_timer.gd" id="1_tks2k"]
 [ext_resource type="Shader" path="res://Entities/Objects/Components/activity_timer.gdshader" id="2_phfpx"]
-[ext_resource type="Script" path="res://Entities/Objects/Components/color_rect.gd" id="3_2ioon"]
+[ext_resource type="Script" path="res://Entities/Objects/Components/timer_circle.gd" id="3_2ioon"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y7c47"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -28,27 +28,28 @@ anti_aliasing = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_svd8k"]
 shader = ExtResource("2_phfpx")
-shader_parameter/primary_color = Color(0.00559999, 0.56, 0.0610399, 1)
-shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/primary_color = Color(0.00205159, 0.329163, 0.0210897, 1)
+shader_parameter/outline_color = Color(0.00105691, 0.281555, 0.0158145, 1)
 shader_parameter/value = 1.0
 shader_parameter/smooth_ = 0.01
 shader_parameter/width_in = 0.5
 shader_parameter/width_out = 0.95
-shader_parameter/border_width = 0.05
+shader_parameter/border_width = 0.1
 
 [node name="ActivityTimer" type="Node"]
 script = ExtResource("1_tks2k")
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
+z_index = 3
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -153.0
-offset_top = -635.0
-offset_right = -127.0
-offset_bottom = -630.0
+offset_left = -240.0
+offset_top = -720.0
+offset_right = -214.0
+offset_bottom = -710.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_y7c47")
@@ -57,7 +58,7 @@ show_percentage = false
 
 [node name="Timer" type="Timer" parent="."]
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="TimerCircle" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_svd8k")
 anchors_preset = 8
 anchor_left = 0.5

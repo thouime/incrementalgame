@@ -1,70 +1,8 @@
-[gd_resource type="Resource" script_class="InventoryData" load_steps=19 format=3 uid="uid://bitwkfta0d2uu"]
+[gd_resource type="Resource" script_class="InventoryData" load_steps=3 format=3 uid="uid://bitwkfta0d2uu"]
 
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="1_8fppb"]
 [ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="2_r8gg3"]
-[ext_resource type="Resource" uid="uid://c4yne4f4cx1uw" path="res://Entities/Item/Items/healing/health_potion.tres" id="3_k4qdp"]
-
-[sub_resource type="Resource" id="Resource_v2cvc"]
-script = ExtResource("2_r8gg3")
-item_data = ExtResource("3_k4qdp")
-quantity = 4
-
-[sub_resource type="Resource" id="Resource_cjosr"]
-metadata/__load_path__ = "res://Entities/Item/Items/battle/iron_helm.tres"
-
-[sub_resource type="Resource" id="Resource_p3n4r"]
-script = ExtResource("2_r8gg3")
-item_data = SubResource("Resource_cjosr")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_ri6ne"]
-metadata/__load_path__ = "res://Entities/Item/Items/basic/stick.tres"
-
-[sub_resource type="Resource" id="Resource_0qqod"]
-script = ExtResource("2_r8gg3")
-item_data = SubResource("Resource_ri6ne")
-quantity = 97
-
-[sub_resource type="Resource" id="Resource_rpnwa"]
-metadata/__load_path__ = "res://Entities/Item/Items/basic/wood.tres"
-
-[sub_resource type="Resource" id="Resource_rnwhd"]
-script = ExtResource("2_r8gg3")
-item_data = SubResource("Resource_rpnwa")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_c4ekj"]
-metadata/__load_path__ = "res://Entities/Item/Items/basic/leaf.tres"
-
-[sub_resource type="Resource" id="Resource_tq131"]
-script = ExtResource("2_r8gg3")
-item_data = SubResource("Resource_c4ekj")
-quantity = 3
-
-[sub_resource type="Resource" id="Resource_3bnpm"]
-metadata/__load_path__ = "res://Entities/Item/Items/basic/stick.tres"
-
-[sub_resource type="Resource" id="Resource_fb4cn"]
-script = ExtResource("2_r8gg3")
-item_data = SubResource("Resource_3bnpm")
-quantity = 99
-
-[sub_resource type="Resource" id="Resource_hhuae"]
-metadata/__load_path__ = "res://Entities/Item/Items/basic/stick.tres"
-
-[sub_resource type="Resource" id="Resource_b8rjm"]
-script = ExtResource("2_r8gg3")
-item_data = SubResource("Resource_hhuae")
-quantity = 99
-
-[sub_resource type="Resource" id="Resource_uxc7p"]
-metadata/__load_path__ = "res://Entities/Item/Items/basic/stick.tres"
-
-[sub_resource type="Resource" id="Resource_divsr"]
-script = ExtResource("2_r8gg3")
-item_data = SubResource("Resource_uxc7p")
-quantity = 99
 
 [resource]
 script = ExtResource("1_8fppb")
-slot_datas = Array[ExtResource("2_r8gg3")]([SubResource("Resource_v2cvc"), SubResource("Resource_p3n4r"), SubResource("Resource_0qqod"), SubResource("Resource_rnwhd"), SubResource("Resource_tq131"), SubResource("Resource_fb4cn"), SubResource("Resource_b8rjm"), SubResource("Resource_divsr"), null, null])
+slot_datas = Array[ExtResource("2_r8gg3")]([null, null, null, null, null, null, null, null, null, null, null])

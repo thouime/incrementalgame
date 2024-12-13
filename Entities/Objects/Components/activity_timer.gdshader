@@ -42,7 +42,7 @@ void fragment()
     vec4 primary = vec4(primary_color, 1.0) * radial_progress(UV, value, smooth_, width_in, width_out);
     
     // Calculate the outline (only show the edges)
-    vec4 outline = vec4(outline_color, 1.0) * radial_progress(UV, 100.0, smooth_, width_in - border_width, width_out + border_width);
+    vec4 outline = vec4(outline_color, 1.0) * radial_progress(UV, value, smooth_, width_in - border_width, width_out + border_width);
 
     // Ensure that the unfilled area is fully transparent and only the outline and filled portion are visible
     if (value == 0.0)

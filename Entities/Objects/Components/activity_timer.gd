@@ -7,12 +7,17 @@ var timer_done : bool = false
 
 @onready var progress_bar: ProgressBar = $ProgressBar
 @onready var timer: Timer = $Timer
-@onready var color_rect: ColorRect = $ColorRect
+@onready var timer_circle: ColorRect = $TimerCircle
 
 func _ready() -> void:
 	progress_bar.hide()
 	setup_timer()
 	set_position()
+
+func _process(_delta: float) -> void:
+	if is_running():
+		var progress = (timer.wait_time - timer.time_left) / timer.wait_time
+		add_timer_value(progress)
 
 func snap_to_pixel(value: float) -> float:
 	return round(value)
@@ -24,15 +29,22 @@ func set_position() -> void:
 	var parent : Node = get_parent()
 	if parent is Node2D:
 		var parent_position : Vector2 = get_parent().global_position
-		var color_rect_size : Vector2 = color_rect.get_rect().size
+		var timer_circle_size : Vector2 = timer_circle.get_rect().size
+		var progress_bar_size : Vector2 = progress_bar.get_rect().size
+		var progress_bar_offset : int = 15
 		
 		# Center Horizontally and position above parent
-		var new_position : Vector2 = Vector2(
-			snap_to_pixel(parent_position.x - color_rect_size.x / 2),
-			snap_to_pixel(parent_position.y - color_rect_size.y - color_rect_size.y / 2)
+		var timer_circle_new_position : Vector2 = Vector2(
+			snap_to_pixel(parent_position.x - timer_circle_size.x / 2),
+			snap_to_pixel(parent_position.y - timer_circle_size.y - timer_circle_size.y / 2)
+		)		
+		var progress_bar_new_position : Vector2 = Vector2(
+			snap_to_pixel(parent_position.x - progress_bar_size.x / 2), # Centering progress bar
+			snap_to_pixel(parent_position.y - progress_bar_size.y - progress_bar_offset) # Adjusting its position
 		)
 		
-		color_rect.set_position(new_position)
+		timer_circle.set_position(timer_circle_new_position)
+		progress_bar.set_position(progress_bar_new_position)  # This should set the progress bar's position
 
 func set_value(value: float) -> void:
 	progress_bar.value = value
@@ -57,13 +69,18 @@ func set_time(duration: float) -> void:
 func start() -> void:
 	timer.start()
 	timer_done = false
+	timer_circle.show()
 
 func is_running() -> bool:
 	if timer.time_left > 0:
 		return true
 	return false
 
+func add_timer_value(value: float) -> void:
+	timer_circle.set_value(value)
+
 func _on_timer_timeout() -> void:
 	print("Timer is finished!")
 	timer_finished.emit()
 	timer_done = true
+	timer_circle.hide()

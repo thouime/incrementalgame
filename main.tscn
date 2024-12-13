@@ -1,8 +1,7 @@
-[gd_scene load_steps=41 format=3 uid="uid://bgi5nv12xjmka"]
+[gd_scene load_steps=42 format=3 uid="uid://bgi5nv12xjmka"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_xtwid"]
 [ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="2_h00hh"]
-[ext_resource type="Resource" uid="uid://bitwkfta0d2uu" path="res://Utilities/Inventory/test_inv.tres" id="3_nbs8y"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data_equip.gd" id="4_2dnpy"]
 [ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="5_b2i4h"]
 [ext_resource type="Script" path="res://Entities/Objects/tree.gd" id="6_ip07t"]
@@ -11,17 +10,29 @@
 [ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="9_4puhs"]
 [ext_resource type="Script" path="res://Entities/Objects/bush.gd" id="10_6vtjc"]
 [ext_resource type="Script" path="res://Entities/Item/Drop Table/common_drops.gd" id="11_v20go"]
+[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="13_4w014"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="14_5jodk"]
 [ext_resource type="Script" path="res://Entities/Item/Drop Table/drop_table.gd" id="14_yiqgm"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_interface.gd" id="15_4fcd7"]
 [ext_resource type="PackedScene" uid="uid://cjvrn7m4iia17" path="res://Utilities/Inventory/inventory.tscn" id="16_gmsb7"]
 [ext_resource type="PackedScene" uid="uid://dj0urcd0clvl4" path="res://Utilities/Inventory/slot.tscn" id="17_gq7v4"]
 [ext_resource type="PackedScene" uid="uid://c8wct85o6jfcu" path="res://Utilities/Inventory/hot_bar_inventory.tscn" id="18_ntxon"]
 [ext_resource type="PackedScene" uid="uid://bp0gw7kcfe8n3" path="res://Utilities/Crafting/crafting_menu.tscn" id="19_urs44"]
+[ext_resource type="Resource" uid="uid://c4yne4f4cx1uw" path="res://Entities/Item/Items/healing/health_potion.tres" id="20_ydott"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="23_rhjmk"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="24_xf1d2"]
 [ext_resource type="PackedScene" uid="uid://ciuy4rj4cpsvn" path="res://Entities/Item/pickup.tscn" id="26_eues2"]
 [ext_resource type="PackedScene" uid="uid://cefnc8f41wint" path="res://Entities/Objects/chest.tscn" id="27_l85p4"]
 [ext_resource type="PackedScene" uid="uid://by4s6muul7tdg" path="res://Entities/Objects/composter.tscn" id="28_6qef4"]
+
+[sub_resource type="Resource" id="Resource_nuvmb"]
+script = ExtResource("5_b2i4h")
+item_data = ExtResource("13_4w014")
+quantity = 99
+
+[sub_resource type="Resource" id="Resource_66drq"]
+script = ExtResource("24_xf1d2")
+slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_nuvmb"), null, null, null, null, null, null, null, null, null])
 
 [sub_resource type="Resource" id="Resource_0msbn"]
 script = ExtResource("4_2dnpy")
@@ -131,20 +142,14 @@ shader_parameter/add_margins = true
 shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
 
-[sub_resource type="Resource" id="Resource_u5ba1"]
-metadata/__load_path__ = "res://Entities/Item/Items/basic/stick.tres"
-
 [sub_resource type="Resource" id="Resource_fnq7y"]
 script = ExtResource("5_b2i4h")
-item_data = SubResource("Resource_u5ba1")
+item_data = ExtResource("13_4w014")
 quantity = 1
-
-[sub_resource type="Resource" id="Resource_65kml"]
-metadata/__load_path__ = "res://Entities/Item/Items/basic/leaf.tres"
 
 [sub_resource type="Resource" id="Resource_hckqj"]
 script = ExtResource("5_b2i4h")
-item_data = SubResource("Resource_65kml")
+item_data = ExtResource("14_5jodk")
 quantity = 1
 
 [sub_resource type="Resource" id="Resource_wphjt"]
@@ -162,19 +167,16 @@ common_drops = SubResource("Resource_wphjt")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s1rac"]
 size = Vector2(24, 10.75)
 
-[sub_resource type="Resource" id="Resource_wepqt"]
-metadata/__load_path__ = "res://Entities/Item/Items/basic/stick.tres"
-
 [sub_resource type="Resource" id="Resource_gmm5h"]
 script = ExtResource("5_b2i4h")
-item_data = SubResource("Resource_wepqt")
+item_data = ExtResource("20_ydott")
 quantity = 1
 
 [sub_resource type="Resource" id="Resource_w4a1l"]
 script = ExtResource("24_xf1d2")
 slot_datas = Array[ExtResource("5_b2i4h")]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
 
-[sub_resource type="Shader" id="Shader_gttd5"]
+[sub_resource type="Shader" id="Shader_m7i5f"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
@@ -251,9 +253,9 @@ void fragment() {
 	}
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_8sl14"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_uq0qr"]
 resource_local_to_scene = true
-shader = SubResource("Shader_gttd5")
+shader = SubResource("Shader_m7i5f")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
@@ -286,7 +288,7 @@ z_index = 2
 position = Vector2(266, 483)
 scale = Vector2(1, 1)
 collision_layer = 2
-inventory_data = ExtResource("3_nbs8y")
+inventory_data = SubResource("Resource_66drq")
 equip_inventory_data = SubResource("Resource_0msbn")
 
 [node name="Tree" type="StaticBody2D" parent="."]
@@ -418,7 +420,6 @@ offset_right = 429.0
 offset_bottom = 575.0
 
 [node name="Pickup" parent="." instance=ExtResource("26_eues2")]
-visible = false
 position = Vector2(260, 405)
 slot_data = SubResource("Resource_gmm5h")
 
@@ -427,7 +428,7 @@ position = Vector2(133, 488)
 inventory_data = SubResource("Resource_w4a1l")
 
 [node name="Composter" parent="." instance=ExtResource("28_6qef4")]
-material = SubResource("ShaderMaterial_8sl14")
+material = SubResource("ShaderMaterial_uq0qr")
 position = Vector2(211, 372)
 
 [connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]
