@@ -75,12 +75,16 @@ func get_closest_direction(direction: Vector2) -> Vector2:
 		return Vector2.DOWN
 
 func _on_interact_signal(
-	_pos: Vector2, 
-	_offset: float,
-	_object: StaticBody2D
+	pos: Vector2, 
+	offset: float,
+	object: StaticBody2D
 ) -> void:
 		
-	print("Interact Signal!")
+	# Check if they are already interacting with the same object
+	if object != parent.interact_target:
+		parent.interact_target = object
+		parent.target_position = pos
+		parent.target_position.y += offset
 	
 func start_building() -> void:
 	ready_to_build = true

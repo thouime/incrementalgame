@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" path="res://Utilities/Crafting/crafting_menu.gd" id="1_esne6"]
 [ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="2_jujmr"]
-[ext_resource type="Resource" uid="uid://blampwk84srx8" path="res://Utilities/Crafting/Crafts/composter.tres" id="3_cscr7"]
+[ext_resource type="Resource" uid="uid://blampwk84srx8" path="res://Utilities/Crafting/Crafts/composter_craft.tres" id="3_cscr7"]
 [ext_resource type="Script" path="res://Utilities/Crafting/material_slot_data.gd" id="4_hqy1a"]
-[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick.tres" id="5_68ekj"]
-[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf.tres" id="6_1gxn3"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="5_68ekj"]
+[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="6_1gxn3"]
 [ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="7_omde8"]
 [ext_resource type="PackedScene" uid="uid://by4s6muul7tdg" path="res://Entities/Objects/composter.tscn" id="8_whqcw"]
 

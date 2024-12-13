@@ -1,16 +1,17 @@
 extends StaticBody2D
 
-@onready var selection: Area2D = $Selection
+signal interact
 
 # Offset for the player to be distanced from the object
 var player_offset: float = 0.0
 
-signal interact
+@onready var selection: Area2D = $Selection
 
 func _ready() -> void:
 	add_to_group("interactables")
 	# Get player offset from object
 	_get_offset()
+	
 	# Add signals for detecting mouse interaction
 	selection.mouse_entered.connect(_on_selection_mouse_entered)
 	selection.mouse_exited.connect(_on_selection_mouse_entered)

@@ -58,8 +58,8 @@ func _on_interact_signal(pos: Vector2, offset: float, object: StaticBody2D) -> v
 		current_state._on_interact_signal(pos, offset, object)
 
 func _connect_crafting_signal() -> void:
-	if crafting_system.has_signal("start_building"):
-		crafting_system.connect("start_building", _on_building_signal)
+	if CraftingSystem.has_signal("start_building"):
+		CraftingSystem.connect("start_building", _on_building_signal)
 
 func _on_building_signal() -> void:
 	if current_state and current_state.has_method("start_building"):

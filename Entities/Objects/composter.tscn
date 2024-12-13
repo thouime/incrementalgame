@@ -1,88 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://by4s6muul7tdg"]
+[gd_scene load_steps=8 format=3 uid="uid://by4s6muul7tdg"]
 
-[ext_resource type="PackedScene" uid="uid://clxpt0o22wqni" path="res://Entities/Objects/object.tscn" id="1_b4dkm"]
+[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="1_j4gxs"]
 [ext_resource type="Script" path="res://Entities/Objects/composter.gd" id="1_wf30t"]
+[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="3_lywk7"]
+[ext_resource type="PackedScene" uid="uid://dlrmxq4bnsyvu" path="res://Entities/Objects/Components/activity_timer.tscn" id="4_s1rbm"]
 
-[sub_resource type="Shader" id="Shader_577k6"]
-resource_local_to_scene = true
-code = "shader_type canvas_item;
-
-uniform vec4 color : source_color = vec4(1.0);
-uniform float width : hint_range(0, 10) = 1.0;
-uniform int pattern : hint_range(0, 2) = 0; // diamond, circle, square
-uniform bool inside = true;
-uniform bool add_margins = true; // only useful when inside is false
-uniform vec2 number_of_images = vec2(1.0); // number of horizontal and vertical images in the sprite sheet
-uniform int focus = 0; // 0 for false, 1 for true
-
-void vertex() {
-    if (add_margins) {
-        VERTEX += sign(VERTEX) * width; // replace sign(VERTEX) by (sign(VERTEX) * 2.0 - 1.0) if not Centered
-    }
-}
-
-bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, vec2 image_top_left, vec2 image_bottom_right, sampler2D texture) {
-    for (float i = -ceil(width); i <= ceil(width); i++) {
-        float x = abs(i) > width ? width * sign(i) : i;
-        float offset;
-
-        if (pattern == 0) {
-            offset = width - abs(x);
-        } else if (pattern == 1) {
-            offset = floor(sqrt(pow(width + 0.5, 2) - x * x));
-        } else if (pattern == 2) {
-            offset = width;
-        }
-
-        for (float j = -ceil(offset); j <= ceil(offset); j++) {
-            float y = abs(j) > offset ? offset * sign(j) : j;
-            vec2 xy = uv + texture_pixel_size * vec2(x, y);
-
-            if ((xy != clamp(xy, image_top_left, image_bottom_right) || texture(texture, xy).a <= 0.0) == inside) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-void fragment() {
-    vec2 uv = UV;
-    vec2 image_top_left = floor(uv * number_of_images) / number_of_images;
-    vec2 image_bottom_right = image_top_left + vec2(1.0) / number_of_images;
-
-    if (add_margins) {
-        vec2 texture_pixel_size = vec2(1.0) / (vec2(1.0) / TEXTURE_PIXEL_SIZE + vec2(width * 2.0) * number_of_images);
-
-        // Calculate the UV coordinates while adding margins
-        uv = (uv - texture_pixel_size * width - image_top_left) * TEXTURE_PIXEL_SIZE / texture_pixel_size + image_top_left;
-
-        // Clamp UV to ensure we don't sample outside the intended area
-        uv = clamp(uv, image_top_left, image_bottom_right);
-        
-        // Only sample if the UV is within the bounds
-        if (uv == image_top_left || uv == image_bottom_right) {
-            COLOR.a = 0.0; // Make it fully transparent if clamped to edges
-        } else {
-            COLOR = texture(TEXTURE, uv);
-        }
-    } else {
-        COLOR = texture(TEXTURE, uv);
-    }
-
-	// Use shader if the object is being focused
-	if (focus == 1) {
-	    if ((COLOR.a > 0.0) == inside && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, image_top_left, image_bottom_right, TEXTURE)) {
-	        COLOR.rgb = inside ? mix(COLOR.rgb, color.rgb, color.a) : color.rgb;
-	        COLOR.a += (1.0 - COLOR.a) * color.a;
-	    }
-	}
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_em06c"]
-resource_local_to_scene = true
-shader = SubResource("Shader_577k6")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s3k23"]
+shader = ExtResource("1_j4gxs")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
@@ -91,10 +15,39 @@ shader_parameter/add_margins = true
 shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
 
-[node name="Composter" instance=ExtResource("1_b4dkm")]
-material = SubResource("ShaderMaterial_em06c")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4klis"]
+size = Vector2(8.5, 7.4375)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fk0x8"]
+size = Vector2(8.5, 8.25)
+
+[node name="Composter" type="StaticBody2D"]
+material = SubResource("ShaderMaterial_s3k23")
+position = Vector2(50, 50)
 scale = Vector2(2, 2)
 script = ExtResource("1_wf30t")
+compost_duration = 5
+metadata/_edit_group_ = true
 
-[node name="MouseArea" parent="Selection" index="0"]
-position = Vector2(0, 0.625)
+[node name="Sprite1" type="Sprite2D" parent="."]
+z_index = 3
+use_parent_material = true
+texture = ExtResource("3_lywk7")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 2
+position = Vector2(0, 0.5)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_4klis")
+
+[node name="Selection" type="Area2D" parent="."]
+scale = Vector2(2, 2)
+
+[node name="MouseArea" type="CollisionShape2D" parent="Selection"]
+z_index = 4
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_fk0x8")
+
+[node name="ActivityTimer" parent="." instance=ExtResource("4_s1rbm")]
