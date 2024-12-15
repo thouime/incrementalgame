@@ -16,7 +16,7 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if is_running():
-		var progress = (timer.wait_time - timer.time_left) / timer.wait_time
+		var progress: float = (timer.wait_time - timer.time_left) / timer.wait_time
 		add_timer_value(progress)
 
 func snap_to_pixel(value: float) -> float:

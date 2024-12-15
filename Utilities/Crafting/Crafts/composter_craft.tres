@@ -54,4 +54,4 @@ object_scene = SubResource("PackedScene_3m5lj")
 name = "Composter"
 description = "A wooden container that converts organic material into dirt."
 menu_texture = SubResource("AtlasTexture_oaa3q")
-material_slot_datas = Array[ExtResource("1_8kewf")]([SubResource("Resource_a5stn"), null])
+material_slot_datas = Array[ExtResource("1_8kewf")]([SubResource("Resource_a5stn")])
