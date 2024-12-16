@@ -215,6 +215,7 @@ func place_object() -> void:
 		inventory.remove_checked_items(items_to_remove)
 		items_to_remove.clear()
 
+
 		# Set object position to the grid cursor position
 		preview_object.position = grid.get_cursor()
 		# Add the object to the world
@@ -227,6 +228,9 @@ func place_object() -> void:
 		
 		# Object was successfully placed, so we are done building
 		stop_building.emit()
+		
+		# Shaders are disabled while building, this turns it back on
+		preview_object.draw_shader(true)
 		
 		print("Object added to world.")
 

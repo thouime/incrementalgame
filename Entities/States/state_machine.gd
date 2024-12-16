@@ -27,7 +27,7 @@ func change_state(new_state: State) -> void:
 		current_state.exit()
 	
 	current_state = new_state
-	GameManager.player_state = current_state
+	PlayerManager.player_state = current_state
 	if current_state.has_signal("stop_building"):
 		current_state.stop_building_signal(crafting_system)
 	current_state.enter()

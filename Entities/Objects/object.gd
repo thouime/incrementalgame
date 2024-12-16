@@ -14,7 +14,7 @@ func _ready() -> void:
 	
 	# Add signals for detecting mouse interaction
 	selection.mouse_entered.connect(_on_selection_mouse_entered)
-	selection.mouse_exited.connect(_on_selection_mouse_entered)
+	selection.mouse_exited.connect(_on_selection_mouse_exited)
 	selection.input_event.connect(_on_selection_input_event)
 
 # Get an offset for the player to be distanced from the object
@@ -24,23 +24,23 @@ func _get_offset() -> void:
 			player_offset += child.get_rect().size.x
 	player_offset = player_offset / 2 + 10
 
-func focus_object() -> void:
-
+func focus_shader(focus_state: int) -> void:
+	# Prevent hover shaders while in building state
+	if PlayerManager.player_state is PlayerBuilding:
+		return
+	
+	draw_shader(focus_state)
+	
+func draw_shader(focus_state: int) -> void:
 	var object_material: Material = self.material
 	if object_material and object_material is ShaderMaterial:
-		object_material.set_shader_parameter("focus", 
-		not object_material.get_shader_parameter("focus"))
+		object_material.set_shader_parameter("focus", focus_state)
 
 func _on_selection_mouse_entered() -> void:
-	# Prevent hover shaders while in building state
-	if GameManager.player_state is PlayerBuilding:
-		return
-	focus_object()
+	focus_shader(true)
 
 func _on_selection_mouse_exited() -> void:
-	if GameManager.player_state is PlayerBuilding:
-		return
-	focus_object()
+	focus_shader(false)
 
 func _on_selection_input_event(
 	_viewport: Node, 

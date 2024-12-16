@@ -224,7 +224,7 @@ quantity = 1
 script = ExtResource("24_xf1d2")
 slot_datas = Array[ExtResource("5_b2i4h")]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
 
-[sub_resource type="Shader" id="Shader_lnff2"]
+[sub_resource type="Shader" id="Shader_rbk65"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
@@ -301,9 +301,9 @@ void fragment() {
 	}
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fbjte"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_h23jg"]
 resource_local_to_scene = true
-shader = SubResource("Shader_lnff2")
+shader = SubResource("Shader_rbk65")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
@@ -477,7 +477,7 @@ position = Vector2(133, 488)
 inventory_data = SubResource("Resource_xwj4b")
 
 [node name="Composter" parent="." instance=ExtResource("28_6qef4")]
-material = SubResource("ShaderMaterial_fbjte")
+material = SubResource("ShaderMaterial_h23jg")
 position = Vector2(192, 352)
 
 [connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]
