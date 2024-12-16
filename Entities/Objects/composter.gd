@@ -49,7 +49,7 @@ func add_compost() -> void:
 		 * 100.0
 	)
 	activity_timer.add_progress_value(percent)
-	var progress = activity_timer.get_progress_value()
+	var progress: float = activity_timer.get_progress_value()
 	if progress >= 100.0:
 		print("Composter is full, starting timer.")
 		activity_timer.reset_value()
