@@ -216,12 +216,11 @@ func place_object() -> void:
 		inventory.remove_checked_items(items_to_remove)
 		items_to_remove.clear()
 
+		# Set object position to the grid cursor position
+		preview_object.position = grid.get_cursor()
 		# Add the object to the world
 		main.add_child(preview_object)
 		preview_object.connect("interact", PlayerManager.state_machine._on_interact_signal)
-
-		# Set object position to the grid cursor position
-		preview_object.position = grid.get_cursor()
 
 		print("Object added to world.")
 

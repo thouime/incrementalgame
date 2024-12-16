@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="3_lywk7"]
 [ext_resource type="PackedScene" uid="uid://dlrmxq4bnsyvu" path="res://Entities/Objects/Components/activity_timer.tscn" id="4_s1rbm"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_0d7nr"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d6u4q"]
 shader = ExtResource("1_j4gxs")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/width = 0.8
@@ -22,7 +22,7 @@ size = Vector2(8.5, 7.4375)
 size = Vector2(8.5, 8.25)
 
 [node name="Composter" type="StaticBody2D"]
-material = SubResource("ShaderMaterial_0d7nr")
+material = SubResource("ShaderMaterial_d6u4q")
 scale = Vector2(2, 2)
 script = ExtResource("1_wf30t")
 compost_duration = 5

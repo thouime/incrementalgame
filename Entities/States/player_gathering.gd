@@ -62,7 +62,8 @@ func _on_interact_signal(
 	object: StaticBody2D
 ) -> void:
 	# Check if they are already interacting with the same object
-	if object != parent.interact_target:
+	if object != parent.interact_target or not object.is_gathering():
+
 		# Interrupt player if they are already gathering
 		if parent.interact_target:
 			parent.interact_target.stop_interact_action(parent)

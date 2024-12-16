@@ -29,24 +29,14 @@ func _ready() -> void:
 func interact_action(_player: CharacterBody2D) -> void:
 	print("Interacting with composter...")
 	#CraftingSystem.try_craft(composted_dirt)
+	if not activity_timer.is_running() and not compost_ready:
+		add_compost()
 	if compost_ready:
 		# Add dirt to inventory
 		# Duplicate so we don't modify the original
 		var new_slot_data: SlotData = composted_dirt.slot_data.duplicate() as SlotData
 		inventory.pick_up_slot_data(new_slot_data)
 		compost_ready = false
-	if not activity_timer.is_running():
-		add_compost()
-
-	# if any compsting is finished, give player items
-	# if no composting is finished, take player items and continue
-	# show fill bar of composter when
-	# start composting when full
-	# add to compost after timer, subtract craft_data.quantity from compostables
-	# when player clicks again, add compost to inventory (if possible)
-	# start timer to compost items
-	# show that the composter is done
-	# if composter is done, receive items when interacted with
 
 func add_compost() -> void:
 	var leaves_needed: int = inventory.remove_up_to(
@@ -58,9 +48,9 @@ func add_compost() -> void:
 		(float(compostable_amount - leaves_needed) / float(compostable_amount))
 		 * 100.0
 	)
-	# If there's none left to add the composter it is full
-	activity_timer.add_value(percent)
-	if percent >= 100.0:
+	activity_timer.add_progress_value(percent)
+	var progress = activity_timer.get_progress_value()
+	if progress >= 100.0:
 		print("Composter is full, starting timer.")
 		activity_timer.reset_value()
 		activity_timer.start()

@@ -23,6 +23,9 @@ func stop_interact_action(_player: CharacterBody2D) -> void:
 		timer.queue_free()
 		timer = null
 		print("Stopped gathering.")
-	
+
+func is_gathering() -> bool:
+	return timer.time_left > 0
+
 func _on_timer_timeout(_player: CharacterBody2D) -> void:
 	print("Timer timeout sent")

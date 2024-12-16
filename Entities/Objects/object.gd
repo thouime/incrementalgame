@@ -44,7 +44,11 @@ func _on_selection_input_event(
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			interact.emit(global_position, player_offset, self)
-			
+
+# Function to be overriden for objects that have gathering
+func is_gathering() -> bool:
+	return false
+
 # Method to be overriden
 func interact_action(_player: CharacterBody2D) -> void:
 	print("Interacting with object at:", global_position)
