@@ -6,6 +6,7 @@ var composted_dirt : CraftData = load(
 )
 var compostable_item : ItemData
 var compostable_amount : int
+var leaves_needed : int # Leaves needed to fill the compost bin
 
 var compost_ready : bool = false
 @onready var inventory : InventoryData = PlayerManager.player_inventory
@@ -18,6 +19,7 @@ func _ready() -> void:
 	if composted_dirt.material_slot_datas.size() > 0:
 		compostable_item = composted_dirt.material_slot_datas[0].item_data
 		compostable_amount = composted_dirt.material_slot_datas[0].quantity
+		leaves_needed = compostable_amount
 	else:
 		print("Error : No material data available!")
 	
@@ -39,10 +41,12 @@ func interact_action(_player: CharacterBody2D) -> void:
 		compost_ready = false
 
 func add_compost() -> void:
-	var leaves_needed: int = inventory.remove_up_to(
+
+	leaves_needed = inventory.remove_up_to(
 		compostable_item, 
-		compostable_amount
+		leaves_needed
 	)
+	
 	# Calculate the percentage that the compost bin is filled
 	var percent: float = (
 		(float(compostable_amount - leaves_needed) / float(compostable_amount))
@@ -57,3 +61,4 @@ func add_compost() -> void:
 	
 func _on_compost_ready() -> void:
 	compost_ready = true
+	leaves_needed = compostable_amount

@@ -25,15 +25,21 @@ func _get_offset() -> void:
 	player_offset = player_offset / 2 + 10
 
 func focus_object() -> void:
+
 	var object_material: Material = self.material
 	if object_material and object_material is ShaderMaterial:
 		object_material.set_shader_parameter("focus", 
 		not object_material.get_shader_parameter("focus"))
 
 func _on_selection_mouse_entered() -> void:
+	# Prevent hover shaders while in building state
+	if GameManager.player_state is PlayerBuilding:
+		return
 	focus_object()
 
 func _on_selection_mouse_exited() -> void:
+	if GameManager.player_state is PlayerBuilding:
+		return
 	focus_object()
 
 func _on_selection_input_event(

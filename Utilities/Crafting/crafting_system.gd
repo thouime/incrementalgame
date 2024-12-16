@@ -27,7 +27,6 @@ func _input(event: InputEvent) -> void:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if grid_active and placement_mode:
 				place_object()
-				stop_building.emit()
 		# Handle cancel action (e.g., pressing the "cancel" action key)
 		elif event.is_action_pressed("cancel"):
 			if grid_active:
@@ -221,7 +220,14 @@ func place_object() -> void:
 		# Add the object to the world
 		main.add_child(preview_object)
 		preview_object.connect("interact", PlayerManager.state_machine._on_interact_signal)
-
+		
+		# Any external inventories need to be connected to inventory signal
+		if preview_object.is_in_group("external_inventory"):
+			preview_object.toggle_inventory.connect(main.toggle_inventory_interface)
+		
+		# Object was successfully placed, so we are done building
+		stop_building.emit()
+		
 		print("Object added to world.")
 
 		# Reset the preview object for the next action

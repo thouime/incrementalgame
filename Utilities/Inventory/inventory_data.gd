@@ -6,6 +6,11 @@ class_name InventoryData
 signal inventory_interact(inventory_data: InventoryData, index: int, button: int)
 signal inventory_updated(inventory_data: InventoryData)
 
+func initialize_slots(size: int, default_value: Variant = null) -> void:
+	slot_datas = []
+	for i in range(size):
+		slot_datas.append(default_value)
+
 func grab_slot_data(index: int) -> SlotData:
 	var slot_data: SlotData = slot_datas[index]
 	
