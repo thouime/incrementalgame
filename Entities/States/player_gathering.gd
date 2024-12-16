@@ -14,6 +14,7 @@ func enter() -> void:
 
 func exit() -> void:
 	ready_to_build = false
+	interrupt_state()
 
 # Check for key movement
 func process_input(_event: InputEvent) -> State:
@@ -51,8 +52,9 @@ func gather_from_target() -> void:
 # Anything that interrupts gathering such as key movement should clear the
 # reference to the interact object
 func interrupt_state() -> void:
-	parent.interact_target.stop_interact_action(parent)
-	parent.interact_target = null
+	if parent.interact_target:
+		parent.interact_target.stop_interact_action(parent)
+		#parent.interact_target = null
 
 func _on_interact_signal(
 	pos: Vector2, 
@@ -60,7 +62,8 @@ func _on_interact_signal(
 	object: StaticBody2D
 ) -> void:
 	# Check if they are already interacting with the same object
-	if object != parent.interact_target:
+	if object != parent.interact_target or not object.is_gathering():
+
 		# Interrupt player if they are already gathering
 		if parent.interact_target:
 			parent.interact_target.stop_interact_action(parent)

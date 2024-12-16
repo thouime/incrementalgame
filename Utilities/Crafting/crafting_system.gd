@@ -3,20 +3,18 @@ extends Node
 signal start_building
 signal stop_building
 
-var preview_object: Node = null # Temporary "ghost" object that follos the mouse.
-var items_to_remove: Dictionary
+var preview_object : Node = null # Temporary "ghost" object that follos the mouse.
+var items_to_remove : Dictionary
 # Check if the grid is active
-var grid_active: bool = false
-var placement_mode: bool = false
+var grid_active : bool = false
+var placement_mode : bool = false
 
-@onready var main: Node = $"../.."
-# Reference to the tilemap
-@onready var world: Node2D = $"../../World"
-@onready var grass_tiles: TileMapLayer = world.get_node("Grass")
-# Reference to player inventory
-@onready var inventory: InventoryData = PlayerManager.player_inventory
-# For displaying where to build crafted objects
-@onready var grid: Control = $"../../Grid"
+# Necessary references to be initialized at runtime
+var main : Node
+var world : Node2D
+var grass_tiles : TileMapLayer
+var inventory : InventoryData
+var grid : Control
 
 func _process(_delta: float) -> void:
 	# Get the cursor's global position
@@ -35,11 +33,17 @@ func _input(event: InputEvent) -> void:
 			if grid_active:
 				cancel_place_object()
 
+func set_references(references : Dictionary) -> void:
+	main = references["main"]
+	world = references["world"]
+	grass_tiles = references["grass_tiles"]
+	inventory = references["inventory"]
+	grid = references["grid"]
+
 # Check if the player has the required materials in the player inventory
 func try_craft(craft_slot: CraftData) -> void:
 	var material_slots: Dictionary = {}
 	var missing_materials: bool = false
-	
 	# Check for materials and quantities
 	for craft_material in craft_slot.material_slot_datas:
 		if craft_material:
@@ -82,7 +86,7 @@ func craft(material_slots: Dictionary, craft_slot: CraftData) -> void:
 		var new_item: SlotData = craft_slot.slot_data.duplicate()
 		# Try to add item to inventory, otherwise set it to null
 		if inventory.pick_up_slot_data(new_item):
-			inventory.remove_items(material_slots)
+			inventory.remove_checked_items(material_slots)
 			print("Item added to inventory.")
 		else:
 			new_item = null
@@ -209,15 +213,14 @@ func place_object() -> void:
 			return
 		
 		# Remove the required items to craft the object
-		inventory.remove_items(items_to_remove)
+		inventory.remove_checked_items(items_to_remove)
 		items_to_remove.clear()
-
-		# Add the object to the world
-		main.add_child(preview_object)
-		preview_object.connect("interact", PlayerManager.state_machine._on_interact_signal)
 
 		# Set object position to the grid cursor position
 		preview_object.position = grid.get_cursor()
+		# Add the object to the world
+		main.add_child(preview_object)
+		preview_object.connect("interact", PlayerManager.state_machine._on_interact_signal)
 
 		print("Object added to world.")
 

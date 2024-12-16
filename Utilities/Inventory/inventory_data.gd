@@ -90,6 +90,26 @@ func reduce_slot_amount(index: int, amount: int) -> void:
 		
 	inventory_updated.emit(self)
 
+# Remove all items up to a given quantity and return remainder not removed
+func remove_up_to(material: ItemData, quantity: int) -> int:
+	var to_remove: int = quantity
+	var inventory_items: Array[SlotData] = slot_datas
+	for index in inventory_items.size():
+		var slot: SlotData = inventory_items[index]
+		if slot and slot.item_data == material:
+			var available_quantity: int = slot.quantity
+			if available_quantity >= to_remove:
+				# remove quantity from item slot
+				reduce_slot_amount(index, to_remove)
+				to_remove = 0
+				return to_remove
+			else:
+				reduce_slot_amount(index, available_quantity)
+				to_remove -= available_quantity
+	if to_remove == quantity:
+		print("There are no leaves to compost!")
+	return to_remove
+
 # Check if there is enough materials available
 func check_materials(material: ItemData, quantity: int) -> Dictionary:
 	# Keeps track of the materials, inventory index, and missing amount
@@ -118,7 +138,7 @@ func check_materials(material: ItemData, quantity: int) -> Dictionary:
 	materials[material]["missing"] = remaining_quantity
 	return materials
 
-func remove_items(materials: Dictionary) -> void:
+func remove_checked_items(materials: Dictionary) -> void:
 	#var materials = check_total_materials(material, quantity)
 	for material: ItemData in materials.keys():
 		var inventory_items: Array = slot_datas

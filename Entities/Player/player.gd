@@ -18,7 +18,6 @@ var interact_target : Node = null
 @onready var camera : Camera2D = $Camera2D
 @onready var interact_ray : RayCast2D = $Camera2D/InteractRay
 @onready var state_machine : Node = $StateMachine
-@onready var crafting_system: Node = $"../GameSystems/CraftingSystem"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -27,7 +26,7 @@ func _ready() -> void:
 	PlayerManager.state_machine = state_machine
 	screen_size = get_viewport_rect().size
 	set_animation()
-	state_machine.init(self, crafting_system)
+	state_machine.init(self, CraftingSystem)
 	
 # Sprite and Animations
 func set_animation() -> void:
