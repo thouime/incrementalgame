@@ -1,0 +1,22 @@
+[gd_scene load_steps=2 format=3 uid="uid://bxeoaa7gwg4w"]
+
+[ext_resource type="Script" path="res://Utilities/Menus/generic_menu.gd" id="1_3gjng"]
+
+[node name="GenericMenu" type="CenterContainer"]
+custom_minimum_size = Vector2(332, 56)
+offset_right = 332.0
+offset_bottom = 56.0
+script = ExtResource("1_3gjng")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="SlotGrid" type="GridContainer" parent="MarginContainer"]
+layout_mode = 2
+columns = 5
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]

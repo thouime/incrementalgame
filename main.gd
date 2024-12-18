@@ -4,6 +4,8 @@ extends Node
 
 const PICKUP = preload("res://Entities/Item/pickup.tscn")
 
+@export var show_crafting_menu = true
+
 @onready var player: CharacterBody2D = $Player
 @onready var inventory_interface: Control = $UI/InventoryInterface
 @onready var hot_bar_inventory: PanelContainer = $UI/HotBarInventory
@@ -32,6 +34,12 @@ func _ready() -> void:
 	# Initialize references in Singletons
 	CraftingSystem.set_references(crafting_references)
 	crafting_menu.craft_item_request.connect(CraftingSystem.try_craft)
+	
+	# Menu debugging for showing and hiding various menus:
+	show_menus()
+
+func show_menus():
+	crafting_menu.visible = show_crafting_menu
 
 func update_label(label: Label, material: int) -> void:
 	# Split the label text into prefix and current value

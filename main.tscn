@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://bgi5nv12xjmka"]
+[gd_scene load_steps=56 format=3 uid="uid://bgi5nv12xjmka"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_xtwid"]
 [ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="2_h00hh"]
@@ -28,6 +28,7 @@
 [ext_resource type="Resource" uid="uid://dcqj765a50tqf" path="res://Utilities/Crafting/Crafts/chest_craft.tres" id="26_2pr82"]
 [ext_resource type="PackedScene" uid="uid://ciuy4rj4cpsvn" path="res://Entities/Item/pickup.tscn" id="26_eues2"]
 [ext_resource type="PackedScene" uid="uid://cefnc8f41wint" path="res://Entities/Objects/chest.tscn" id="27_l85p4"]
+[ext_resource type="PackedScene" uid="uid://ckycnx3mj57po" path="res://Utilities/Building/BuildingMenu.tscn" id="27_rirn1"]
 [ext_resource type="PackedScene" uid="uid://by4s6muul7tdg" path="res://Entities/Objects/composter.tscn" id="28_6qef4"]
 
 [sub_resource type="Resource" id="Resource_nuvmb"]
@@ -224,7 +225,7 @@ quantity = 1
 script = ExtResource("24_xf1d2")
 slot_datas = Array[ExtResource("5_b2i4h")]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
 
-[sub_resource type="Shader" id="Shader_yykeq"]
+[sub_resource type="Shader" id="Shader_qu2pa"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
@@ -301,9 +302,9 @@ void fragment() {
 	}
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_2huvt"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1lw5q"]
 resource_local_to_scene = true
-shader = SubResource("Shader_yykeq")
+shader = SubResource("Shader_qu2pa")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
@@ -314,6 +315,7 @@ shader_parameter/focus = 0
 
 [node name="Main" type="Node"]
 script = ExtResource("1_xtwid")
+show_crafting_menu = false
 
 [node name="Grid" type="Control" parent="."]
 light_mask = 0
@@ -468,6 +470,9 @@ offset_right = 429.0
 offset_bottom = 575.0
 craft_datas = Array[ExtResource("21_2rjjw")]([ExtResource("22_21q6l"), SubResource("Resource_bt3ln"), ExtResource("26_2pr82")])
 
+[node name="BuildingMenu" parent="UI" instance=ExtResource("27_rirn1")]
+visible = false
+
 [node name="Pickup" parent="." instance=ExtResource("26_eues2")]
 position = Vector2(260, 405)
 slot_data = SubResource("Resource_gmm5h")
@@ -477,7 +482,7 @@ position = Vector2(133, 488)
 inventory_data = SubResource("Resource_xwj4b")
 
 [node name="Composter" parent="." instance=ExtResource("28_6qef4")]
-material = SubResource("ShaderMaterial_2huvt")
+material = SubResource("ShaderMaterial_1lw5q")
 position = Vector2(192, 352)
 
 [connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]
