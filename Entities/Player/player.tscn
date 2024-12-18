@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://Entities/Player/player.gd" id="1_87i8y"]
 [ext_resource type="Texture2D" uid="uid://c4ifn1fjbi2ye" path="res://Assets/Art/characters/player.png" id="2_qrrvf"]
-[ext_resource type="Script" path="res://Entities/States/state_machine.gd" id="3_677he"]
-[ext_resource type="Script" path="res://Entities/States/player_idle.gd" id="4_26u2a"]
-[ext_resource type="Script" path="res://Entities/States/player_key_move.gd" id="5_kcpsp"]
-[ext_resource type="Script" path="res://Entities/States/player_click_move.gd" id="6_doxm0"]
-[ext_resource type="Script" path="res://Entities/States/player_gathering.gd" id="7_5ajlj"]
-[ext_resource type="Script" path="res://Entities/States/player_building.gd" id="8_gbgay"]
+[ext_resource type="Script" path="res://Entities/Player/States/state_machine.gd" id="3_677he"]
+[ext_resource type="Script" path="res://Entities/Player/States/player_idle.gd" id="4_26u2a"]
+[ext_resource type="Script" path="res://Entities/Player/States/player_key_move.gd" id="5_kcpsp"]
+[ext_resource type="Script" path="res://Entities/Player/States/player_click_move.gd" id="6_doxm0"]
+[ext_resource type="Script" path="res://Entities/Player/States/player_gathering.gd" id="7_5ajlj"]
+[ext_resource type="Script" path="res://Entities/Player/States/player_building.gd" id="8_gbgay"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ojwf"]
 atlas = ExtResource("2_qrrvf")
