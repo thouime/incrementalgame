@@ -29,7 +29,6 @@ compost_duration = 5
 metadata/_edit_group_ = true
 
 [node name="Sprite1" type="Sprite2D" parent="."]
-visible = false
 z_index = 3
 use_parent_material = true
 texture = ExtResource("3_lywk7")
