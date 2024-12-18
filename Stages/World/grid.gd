@@ -1,28 +1,37 @@
 extends Control
 
-@export var tile_size: Vector2 = Vector2(16, 16)
-@export var grid_size: Vector2 = Vector2(32, 32)
-@export var world_grid_width: int = 100
-@export var world_grid_height: int = 100
+@export var tile_size : Vector2 = Vector2(16, 16)
+@export var grid_size : Vector2 = Vector2(32, 32)
+@export var world_grid_width : int = 100
+@export var world_grid_height : int = 100
+
+var show_grid_lines : bool = false
+var world_grid_visible : bool = false
 
 # Temporary variable for the cursor during grid view
 @onready var build_cursor: Sprite2D = $Cursor
 
-var world_grid_visible: bool = false
+func _draw():
+	if show_grid_lines:
+		draw_grid_lines()
 
-#func _draw():
-	#for row in range(world_grid_height):
-		#for col in range(world_grid_width):
-			#var x = col * tile_size.x
-			#var y = row * tile_size.y
-			#
-			## Draw the top and bottom horizontal lines for each tile
-			#draw_line(Vector2(x, y), Vector2(x + tile_size.x, y), Color(1, 1, 1), 1)  # Top
-			#draw_line(Vector2(x, y + tile_size.y), Vector2(x + tile_size.x, y + tile_size.y), Color(1, 1, 1), 1)  # Bottom
-			#
-			## Draw the left and right vertical lines for each tile
-			#draw_line(Vector2(x, y), Vector2(x, y + tile_size.y), Color(1, 1, 1), 1)  # Left
-			#draw_line(Vector2(x + tile_size.x, y), Vector2(x + tile_size.x, y + tile_size.y), Color(1, 1, 1), 1)  # Right
+# Debugging function for seeing the gridlines of the tilemap
+func draw_grid_lines():
+	for row in range(world_grid_height):
+		for col in range(world_grid_width):
+			var x = col * tile_size.x
+			var y = row * tile_size.y
+			
+			# Draw the top and bottom horizontal lines for each tile
+			draw_line(Vector2(x, y), Vector2(x + tile_size.x, y), Color(1, 1, 1), 1)  # Top
+			draw_line(Vector2(x, y + tile_size.y), Vector2(x + tile_size.x, y + tile_size.y), Color(1, 1, 1), 1)  # Bottom
+			
+			# Draw the left and right vertical lines for each tile
+			draw_line(Vector2(x, y), Vector2(x, y + tile_size.y), Color(1, 1, 1), 1)  # Left
+			draw_line(Vector2(x + tile_size.x, y), Vector2(x + tile_size.x, y + tile_size.y), Color(1, 1, 1), 1)  # Right
+
+func is_active() -> bool:
+	return world_grid_visible
 
 func set_cursor(sprite: Sprite2D) -> void:
 	# Texture is a default
