@@ -6,7 +6,7 @@ signal slot_hovered(index: int)
 signal slot_exited(index: int)
 
 # Slot data
-var slot_data
+var slot_info : Resource
 
 # UI elements
 @onready var icon: TextureRect = $MarginContainer/HBoxContainer/Craftable
@@ -19,12 +19,10 @@ func _ready() -> void:
 	reset_slot()
 
 # Set the slot's data and update visuals
-func set_slot_data(data):
-	slot_data = data
-	if slot_data.has("texture"):
-		icon.texture = slot_data.texture
-	if slot_data.has("quantity"):
-		set_quantity(slot_data.quantity)
+func set_slot_info(data: Resource) -> void:
+	slot_info = data
+	if slot_info.texture:
+		icon.texture = slot_info.texture
 
 # Set the quantity and adjust visuals
 func set_quantity(quantity: int) -> void:
@@ -48,3 +46,12 @@ func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index in [MOUSE_BUTTON_LEFT, MOUSE_BUTTON_RIGHT]:
 			slot_clicked.emit(get_index(), event.button_index)
+
+# Checking if mouse hovers to show crafting information
+func _on_mouse_entered() -> void:
+	modulate = Color(1, 1, 1, 0.3)
+	slot_hovered.emit(get_index())
+	
+func _on_mouse_exited() -> void:
+	modulate = Color(1, 1, 1, 1)
+	slot_exited.emit(get_index())
