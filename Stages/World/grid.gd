@@ -26,8 +26,8 @@ var world_grid_visible: bool = false
 
 func center_cursor() -> void:
 	# Get the size of the window
-	var window_size = get_viewport().get_visible_rect().size
-	var center_position = window_size / 2
+	var window_size: Vector2 = get_viewport().get_visible_rect().size
+	var center_position: Vector2 = window_size / 2
 	
 	# Move the cursor to the center
 	Input.warp_mouse(center_position)

@@ -1,6 +1,7 @@
-[gd_resource type="Resource" script_class="TileInfo" load_steps=6 format=3 uid="uid://dech0h7erilx5"]
+[gd_resource type="Resource" script_class="TileInfo" load_steps=7 format=3 uid="uid://dech0h7erilx5"]
 
 [ext_resource type="Script" path="res://Utilities/Building/Tiles/tile_info.gd" id="1_0mkke"]
+[ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="2_0nimt"]
 [ext_resource type="Texture2D" uid="uid://dcymbv1v6ockq" path="res://Assets/Art/tilesets/plains.png" id="2_2baj5"]
 [ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="2_hguid"]
 
@@ -20,3 +21,4 @@ icon_texture = SubResource("AtlasTexture_w0vc7")
 tile_id = 0
 tile_map_coordinates = Vector2(2, 1)
 tile_texture = SubResource("AtlasTexture_3p7lk")
+item = ExtResource("2_0nimt")
