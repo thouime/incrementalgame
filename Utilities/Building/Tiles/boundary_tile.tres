@@ -18,5 +18,5 @@ name = "Boundary"
 description = "A tile that prevents the player from hovering over the void. Not buildable by the player."
 icon_texture = SubResource("AtlasTexture_mdwxd")
 tile_id = 0
-tile_map_coordinates = Vector2(2, 1)
+tile_map_coordinates = Vector2(0, 1)
 tile_texture = SubResource("AtlasTexture_7n6y7")

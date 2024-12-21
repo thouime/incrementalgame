@@ -93,6 +93,8 @@ func build_tile() -> void:
 	)
 	var boundary_tile: TileInfo = tile_info.tile_boundary
 	
+
+	
 	for x in range(2):
 		for y in range(2):
 			var position: Vector2 = tilemap_coordinates + Vector2(x, y)
@@ -101,6 +103,9 @@ func build_tile() -> void:
 				0, 
 				tile_info.tile_map_coordinates
 			)
+			
+	add_boundary(tilemap_coordinates, boundary_tiles)
+	check_and_remove_boundary(grid.get_global_mouse_position(), boundary_tiles)
 	inventory.reduce_slot_amount(tile_info.item, 1)
 	# Remove total materials from dictionary
 	material_slots[tile_info.item]["total"] -= 1
@@ -117,18 +122,15 @@ func check_ground(
 	
 	# Convert to map coordinates
 	var clicked_cell: Vector2 = tile_map_layer.local_to_map(local_position)
-
 	if grid_size > 16:
 		# For larger grid sizes (e.g., 32x32), check a 2x2 area
 		var cells_to_check: Vector2 = Vector2(2, 2)
-		
 		# Loop through the affected cells
 		for x in range(clicked_cell.x, clicked_cell.x + cells_to_check.x):
 			for y in range(clicked_cell.y, clicked_cell.y + cells_to_check.y):
 				var data: TileData = tile_map_layer.get_cell_tile_data(Vector2i(x, y))
 
 				if !data:  # If no tile data exists at this position
-					print("There's no land to place on.")
 					return false
 	else:
 		# For smaller grid sizes (e.g., <= 16), check a single tile
@@ -139,6 +141,57 @@ func check_ground(
 
 	# If all cells are valid
 	return true
+
+# Place 1x1 boundary tiles around each of the newly placed grass tiles individually
+func add_boundary(
+	tilemap_coordinates: Vector2,
+	tiles: TileMapLayer
+) -> void:
+	# Check the adjacent cells outside the 2x2 area of the placed tiles
+	for x in range(-1, 3):  # From -1 to 2 to check all adjacent positions
+		for y in range(-1, 3):  # From -1 to 2 to check all adjacent positions
+			# Skip the 2x2 area that was just placed
+			if x >= 0 and x < 2 and y >= 0 and y < 2:
+				continue
+			
+			# Calculate the adjacent position
+			var adjacent_position: Vector2 = tilemap_coordinates + Vector2(x, y)
+			var adjacent_data: TileData = grass_tiles.get_cell_tile_data(adjacent_position)
+			
+			# If there's no tile in the adjacent cell, place a boundary tile
+			if !adjacent_data:
+				# Place a 1x1 boundary tile here (boundary tiles will be placed individually)
+				tiles.set_cell(
+					adjacent_position, 
+					0,  # Use the correct boundary tile ID here
+					tile_info.tile_boundary.tile_map_coordinates
+				)
+
+func check_and_remove_boundary(
+	position: Vector2, 
+	tiles: TileMapLayer
+) -> void:
+	# Convert the position to local coordinates in the boundary_tiles layer
+	var local_position: Vector2 = tiles.to_local(position)
+	
+	# Convert local coordinates to map coordinates (tile grid positions)
+	var clicked_cell: Vector2 = tiles.local_to_map(local_position)
+	
+	# Define the size of the area to check (2x2 grid)
+	var cells_to_check: Vector2 = Vector2(2, 2)
+	
+	# Loop through the 2x2 grid area and check each tile
+	for x in range(clicked_cell.x, clicked_cell.x + cells_to_check.x):
+		for y in range(clicked_cell.y, clicked_cell.y + cells_to_check.y):
+			# Get the tile data for the current position
+			var data: TileData = tiles.get_cell_tile_data(Vector2i(x, y))
+			
+			if data:
+				# If a boundary tile is found, remove it by setting it to an invalid tile ID (e.g., -1)
+				print("Removing boundary tile at position: ", x, y)
+				tiles.set_cell(Vector2(x, y), -1)  # Set the tile to empty
+			else:
+				print("No boundary tile found at position: ", x, y)
 
 func draw_grid() -> void:
 	grid.draw_grid()
