@@ -91,19 +91,7 @@ func build_tile() -> void:
 	var tilemap_coordinates: Vector2 = grass_tiles.local_to_map(
 		global_mouse_position - tilemap_global_position
 	)
-	var boundary_tile: TileInfo = tile_info.tile_boundary
-	
-
-	
-	for x in range(2):
-		for y in range(2):
-			var position: Vector2 = tilemap_coordinates + Vector2(x, y)
-			grass_tiles.set_cell(
-				position, 
-				0, 
-				tile_info.tile_map_coordinates
-			)
-			
+	add_tile(tilemap_coordinates, grass_tiles)
 	add_boundary(tilemap_coordinates, boundary_tiles)
 	check_and_remove_boundary(grid.get_global_mouse_position(), boundary_tiles)
 	inventory.reduce_slot_amount(tile_info.item, 1)
@@ -141,6 +129,19 @@ func check_ground(
 
 	# If all cells are valid
 	return true
+
+func add_tile(
+	tilemap_coordinates: Vector2,
+	tiles: TileMapLayer
+) -> void:
+	for x in range(2):
+		for y in range(2):
+			var position: Vector2 = tilemap_coordinates + Vector2(x, y)
+			tiles.set_cell(
+				position, 
+				0, 
+				tile_info.tile_map_coordinates
+			)
 
 # Place 1x1 boundary tiles around each of the newly placed grass tiles individually
 func add_boundary(
