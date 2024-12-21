@@ -21,8 +21,8 @@ func _ready() -> void:
 # Set the slot's data and update visuals
 func set_slot_info(data: Resource) -> void:
 	slot_info = data
-	if slot_info.texture:
-		icon.texture = slot_info.texture
+	if slot_info.icon_texture:
+		icon.texture = slot_info.icon_texture
 
 # Set the quantity and adjust visuals
 func set_quantity(quantity: int) -> void:

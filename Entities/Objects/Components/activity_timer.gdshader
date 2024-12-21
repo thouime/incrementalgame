@@ -26,7 +26,7 @@ vec4 radial_progress(vec2 UV_, float VAL, float SMOOTH, float IR, float OR)
     float or = OR;
     float d = length(uv);
     float ring = smoothstep(or + SMOOTH, or - SMOOTH, d) - smoothstep(ir + SMOOTH, ir - SMOOTH, d);
-    float a = atan(uv.y - origin.y, uv.x - origin.x);  
+    float a = atan(uv.y - origin.y, uv.x - origin.x);
     float theta = (a < -TWO_PI / 4.0) ? (a + TWO_PI + TWO_PI / 4.0) / TWO_PI : (a + TWO_PI / 4.0) / TWO_PI;
     float bar = step(theta, VAL);
     float ui = ring * bar;
@@ -40,7 +40,7 @@ void fragment()
 {
     // Calculate the primary color (filled portion)
     vec4 primary = vec4(primary_color, 1.0) * radial_progress(UV, value, smooth_, width_in, width_out);
-    
+
     // Calculate the outline (only show the edges)
     vec4 outline = vec4(outline_color, 1.0) * radial_progress(UV, value, smooth_, width_in - border_width, width_out + border_width);
 
