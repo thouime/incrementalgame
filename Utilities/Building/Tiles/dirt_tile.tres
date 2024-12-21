@@ -12,3 +12,5 @@ script = ExtResource("1_0mkke")
 name = "Dirt"
 description = "A basic tile of dirt that can be placed to extend the world."
 texture = SubResource("AtlasTexture_y44jf")
+tile_id = 0
+tile_map_coordinates = Vector2(2, 1)

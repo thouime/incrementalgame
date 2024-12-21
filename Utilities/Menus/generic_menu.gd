@@ -1,5 +1,7 @@
 extends PanelContainer
 
+signal slot_clicked
+
 const SLOT = preload("res://Utilities/Menus/generic_slot.tscn")
 const SLOT_INFO = preload("res://Utilities/Menus/slot_info.tscn")
 
@@ -55,8 +57,9 @@ func hide_slot_info(slot_index: int) -> void:
 		if slot_info:
 			slot_info.hide()
 
-func on_slot_clicked(_index: int, _button: int) -> void:
+func on_slot_clicked(index: int, _button: int) -> void:
 	print("Generic Slot Clicked!")
+	slot_clicked.emit(slot_datas[index])
 
 func on_slot_hovered(index: int) -> void:
 	show_slot_info(index)

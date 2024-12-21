@@ -15,6 +15,7 @@ offset_right = 166.0
 grow_horizontal = 2
 grow_vertical = 0
 script = ExtResource("1_3gjng")
+slot_datas = Array[Resource]([null])
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2

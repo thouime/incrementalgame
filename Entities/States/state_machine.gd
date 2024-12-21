@@ -1,12 +1,16 @@
 extends Node
 
+signal state_changed(state: State)
+
 @export var initial_state : State
 var current_state : State
 # Keep track of the last direction the player was facing for animations
-var last_direction: Vector2 = Vector2.UP
+var last_direction : Vector2 = Vector2.UP
 # Keep track of the current interacting object
-var interact_target: Node = null
-var crafting_system: Node = null
+var interact_target : Node = null
+var crafting_system : Node = null
+# For passing the tile to the building state
+var building_tile : TileInfo = null
 
 # Initialize the state machine by giving each child state a reference to the
 # parent object it belongs to and enter the default initial_state
@@ -31,6 +35,8 @@ func change_state(new_state: State) -> void:
 	if current_state.has_signal("stop_building"):
 		current_state.stop_building_signal(crafting_system)
 	current_state.enter()
+	
+	state_changed.emit()
 
 # Pass through functions for the Player to call,
 # handling state changes as needed.
@@ -65,3 +71,18 @@ func _connect_crafting_signal() -> void:
 func _on_building_signal() -> void:
 	if current_state and current_state.has_method("start_building"):
 		current_state.start_building()
+		
+func _handle_building_tile(tile: TileInfo) -> void:
+	if current_state and current_state.has_method("start_building"):
+		current_state.start_building()
+		building_tile = tile
+		# Connect to state change signal to call place_tile after transition
+		if not state_changed.is_connected(_on_state_changed):
+			state_changed.connect(_on_state_changed)
+			
+func _on_state_changed() -> void:
+	if current_state and building_tile:
+		current_state.place_tile(building_tile)
+		building_tile = null
+		state_changed.disconnect(_on_state_changed)
+		
