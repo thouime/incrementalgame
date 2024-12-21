@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="TileInfo" load_steps=6 format=3 uid="uid://b2lxbd7ntp5qk"]
+
+[ext_resource type="Script" path="res://Utilities/Building/Tiles/tile_info.gd" id="1_ks3sg"]
+[ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="1_rodyh"]
+[ext_resource type="Texture2D" uid="uid://bvvg2wlc68jns" path="res://Assets/Art/tilesets/walls/walls.png" id="3_r5sku"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mdwxd"]
+atlas = ExtResource("1_rodyh")
+region = Rect2(160, 32, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7n6y7"]
+atlas = ExtResource("3_r5sku")
+region = Rect2(0, 16, 16, 16)
+
+[resource]
+script = ExtResource("1_ks3sg")
+name = "Boundary"
+description = "A tile that prevents the player from hovering over the void. Not buildable by the player."
+icon_texture = SubResource("AtlasTexture_mdwxd")
+tile_id = 0
+tile_map_coordinates = Vector2(2, 1)
+tile_texture = SubResource("AtlasTexture_7n6y7")

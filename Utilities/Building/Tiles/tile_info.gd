@@ -10,3 +10,4 @@ class_name TileInfo
 @export var tile_map_coordinates : Vector2 = Vector2(2, 1)
 @export var tile_texture : AtlasTexture
 @export var item : ItemData
+@export var tile_boundary : TileInfo

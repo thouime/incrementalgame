@@ -9,8 +9,8 @@ var crafting_system : Node = null
 var grid_active : bool = false
 var placement_mode : bool = false
 var tile_info : TileInfo = null
-var num_tiles : int
 var grass_tiles : TileMapLayer = null
+var boundary_tiles : TileMapLayer = null
 var inventory : InventoryData
 # Keep track of the materials needed for placing tiles
 var material_slots : Dictionary = {}
@@ -27,13 +27,23 @@ func exit() -> void:
 	if crafting_system.is_connected("stop_building", self._on_stop_building):
 		crafting_system.disconnect("stop_building", self._on_stop_building)
 	crafting_system = null # Clear the reference to avoid stale data
+	inventory = null
+	grass_tiles = null
+	boundary_tiles = null
+	tile_info = null
+	material_slots.clear()
 	print("Exited Building State")
 
 func process_input(event: InputEvent) -> State:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if grid_active and placement_mode:
-				build_tile()
+				if not check_ground(
+					grid.get_global_mouse_position(),
+					grass_tiles,
+					32
+				):
+					build_tile()
 	# Handle cancel action (e.g., pressing the "cancel" action key)
 	if event.is_action_pressed("cancel"):
 		cancel_place_tile()
@@ -53,6 +63,7 @@ func place_tile(tile: TileInfo) -> void:
 	
 	print("Now placing tile!")
 	grass_tiles = CraftingSystem.grass_tiles
+	boundary_tiles = CraftingSystem.boundary_tiles
 	tile_info = tile
 	
 	# Check if there is dirt in the inventory
@@ -61,7 +72,6 @@ func place_tile(tile: TileInfo) -> void:
 		tile_info.item
 	)
 	material_slots.merge(inventory_slots)
-	print(material_slots)
 	if material_slots[tile_info.item]["total"] > 0:
 		print("Preparing grid...")
 		grid.center_cursor()
@@ -75,29 +85,60 @@ func build_tile() -> void:
 	# When finishing building check if there's more dirt
 	# If no more dirt stop placing tiles
 	# Cancel/esc to stop building
-	
 
-	var tilemap_global_position = grass_tiles.global_position
-	var global_mouse_position = grid.get_global_mouse_position()
+	var tilemap_global_position: Vector2 = grass_tiles.global_position
+	var global_mouse_position: Vector2 = grid.get_global_mouse_position()
 	var tilemap_coordinates: Vector2 = grass_tiles.local_to_map(
 		global_mouse_position - tilemap_global_position
 	)
-	
+	var boundary_tile: TileInfo = tile_info.tile_boundary
 	
 	for x in range(2):
 		for y in range(2):
-			var position = tilemap_coordinates + Vector2(x, y)
+			var position: Vector2 = tilemap_coordinates + Vector2(x, y)
 			grass_tiles.set_cell(
 				position, 
 				0, 
 				tile_info.tile_map_coordinates
 			)
+	inventory.reduce_slot_amount(tile_info.item, 1)
+	# Remove total materials from dictionary
+	material_slots[tile_info.item]["total"] -= 1
+	if material_slots[tile_info.item]["total"] <= 0:
+		cancel_place_tile()
+
+func check_ground(
+	cursor_position: Vector2, 
+	tile_map_layer: TileMapLayer, 
+	grid_size: int
+) -> bool:
+	# Convert the world position to the local position relative to the tilemap
+	var local_position: Vector2 = tile_map_layer.to_local(cursor_position)
 	
-	#inventory.reduce_slot_amount()
-	
-	#items_to_remove = remove the resource for the tile
-	
-	#if material_slots[tile_info][]
+	# Convert to map coordinates
+	var clicked_cell: Vector2 = tile_map_layer.local_to_map(local_position)
+
+	if grid_size > 16:
+		# For larger grid sizes (e.g., 32x32), check a 2x2 area
+		var cells_to_check: Vector2 = Vector2(2, 2)
+		
+		# Loop through the affected cells
+		for x in range(clicked_cell.x, clicked_cell.x + cells_to_check.x):
+			for y in range(clicked_cell.y, clicked_cell.y + cells_to_check.y):
+				var data: TileData = tile_map_layer.get_cell_tile_data(Vector2i(x, y))
+
+				if !data:  # If no tile data exists at this position
+					print("There's no land to place on.")
+					return false
+	else:
+		# For smaller grid sizes (e.g., <= 16), check a single tile
+		var data: TileData = tile_map_layer.get_cell_tile_data(clicked_cell)
+		if !data:
+			print("There's no land to place on.")
+			return false
+
+	# If all cells are valid
+	return true
 
 func draw_grid() -> void:
 	grid.draw_grid()
@@ -114,8 +155,7 @@ func cancel_place_tile() -> void:
 	grid_active = false
 	grid.visible = false
 	placement_mode = false
-	# empty dictionary
-	# clean up tile stuff
+	done_building = true
 
 func stop_building_signal(crafting_system_node : Node) -> void:
 	crafting_system = crafting_system_node

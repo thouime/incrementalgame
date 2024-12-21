@@ -86,7 +86,7 @@ func pick_up_slot_data(slot_data: SlotData) -> bool:
 	print("Inventory is full!")
 	return false
 
-func reduce_slot_amount(index: int, amount: int) -> void:
+func reduce_slot_amount_index(index: int, amount: int) -> void:
 	var slot_data: SlotData = slot_datas[index]
 	if slot_data:
 		slot_data.quantity -= amount
@@ -94,6 +94,17 @@ func reduce_slot_amount(index: int, amount: int) -> void:
 			slot_datas[index] = null
 		
 	inventory_updated.emit(self)
+
+func reduce_slot_amount(item: ItemData, amount: int) -> void:
+	var amount_removed: int = 0
+	for index in slot_datas.size():
+		# If we have removed the total amount necessary, stop searching
+		if amount_removed == amount:
+			return
+		if slot_datas[index]:
+			if item == slot_datas[index].item_data:
+				amount_removed = slot_datas[index].quantity
+				reduce_slot_amount_index(index, amount)
 
 # Remove all items up to a given quantity and return remainder not removed
 func remove_up_to(material: ItemData, quantity: int) -> int:
@@ -105,11 +116,11 @@ func remove_up_to(material: ItemData, quantity: int) -> int:
 			var available_quantity: int = slot.quantity
 			if available_quantity >= to_remove:
 				# remove quantity from item slot
-				reduce_slot_amount(index, to_remove)
+				reduce_slot_amount_index(index, to_remove)
 				to_remove = 0
 				return to_remove
 			else:
-				reduce_slot_amount(index, available_quantity)
+				reduce_slot_amount_index(index, available_quantity)
 				to_remove -= available_quantity
 	if to_remove == quantity:
 		print("There are no leaves to compost!")
@@ -154,9 +165,9 @@ func remove_checked_items(materials: Dictionary) -> void:
 			var slot: SlotData = inventory_items[inv_slot]
 			if slot and slot.quantity <= current_quantity:
 				current_quantity = current_quantity - slot.quantity
-				reduce_slot_amount(inv_slot, slot.quantity)
+				reduce_slot_amount_index(inv_slot, slot.quantity)
 			else:
-				reduce_slot_amount(inv_slot, current_quantity)
+				reduce_slot_amount_index(inv_slot, current_quantity)
 
 # Check how many of a specific material are available and which inventory slots contain them
 func check_materials_available(material: ItemData) -> Dictionary:
