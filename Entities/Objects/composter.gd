@@ -46,13 +46,12 @@ func add_compost() -> void:
 		compostable_item, 
 		leaves_needed
 	)
-	
 	# Calculate the percentage that the compost bin is filled
 	var percent: float = (
 		(float(compostable_amount - leaves_needed) / float(compostable_amount))
 		 * 100.0
 	)
-	activity_timer.add_progress_value(percent)
+	activity_timer.set_progress_value(percent)
 	var progress: float = activity_timer.get_progress_value()
 	if progress >= 100.0:
 		print("Composter is full, starting timer.")
