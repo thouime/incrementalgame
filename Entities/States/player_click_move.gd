@@ -12,7 +12,9 @@ func enter() -> void:
 
 func exit() -> void:
 	parent.velocity = Vector2.ZERO
+	parent.target_position = Vector2.ZERO
 	ready_to_build = false
+	
 
 func process_input(_event: InputEvent) -> State:
 	# Allow interruption to key movement
