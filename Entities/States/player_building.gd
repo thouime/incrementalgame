@@ -142,6 +142,7 @@ func add_tile(
 				0, 
 				tile_info.tile_map_coordinates
 			)
+	print("Tilemap Coordinates: ", tilemap_coordinates)
 
 # Place 1x1 boundary tiles around each of the newly placed grass tiles individually
 func add_boundary(
@@ -195,8 +196,8 @@ func check_and_remove_boundary(
 				print("No boundary tile found at position: ", x, y)
 
 func draw_grid() -> void:
-	grid.draw_grid()
-	grid.update_cursor()
+	grid.draw_grid(true)
+	grid.update_cursor(true)
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	grid.build_cursor.visible = true
 	grid_active = true

@@ -44,7 +44,11 @@ func set_cursor(sprite: Sprite2D) -> void:
 			build_cursor.region_enabled = false  # If no region, use the full texture
 			build_cursor.region_rect = Rect2()  # Reset region rectangle
 
-func set_cursor_texture(texture: Texture2D, region_enabled: bool = false, region_rect: Rect2 = Rect2()) -> void:
+func set_cursor_texture(
+	texture: Texture2D,
+	 region_enabled: bool = false, 
+	region_rect: Rect2 = Rect2()
+) -> void:
 	# Set the texture directly
 	if texture:
 		build_cursor.texture = texture
@@ -83,6 +87,7 @@ func update_cursor(use_grid_size: bool = false) -> void:
 		offset + 
 		Vector2(int(float(padding) / 2), int(float(padding) / 2))
 	)
+	print("Build Cursor Position: ", build_cursor.position)
 
 func get_cursor(use_grid_size: bool = false) -> Vector2:
 	var cursor_pos: Vector2 = get_global_mouse_position()
@@ -151,6 +156,7 @@ func draw_grid(use_grid_size: bool = false) -> void:
 	# Align grid to center
 	var start_x: int = int(snapped_cursor_x - int(total_grid_width / 2.0))  # Make sure to use float for division
 	var start_y: int = int(snapped_cursor_y - int(total_grid_height / 2.0))  # Make sure to use float for division
+	print("Grid Start Position: ", Vector2(start_x, start_y))
 
 
 	# Clear previous ColorRect nodes
