@@ -8,6 +8,10 @@ var last_direction: Vector2 = Vector2.UP
 var interact_target: Node = null
 var crafting_system: Node = null
 
+func _ready() -> void:
+	# Connect signals for state changes outside the scope of each state
+	_connect_signals()
+
 # Initialize the state machine by giving each child state a reference to the
 # parent object it belongs to and enter the default initial_state
 func init(parent: Player, crafting_system_ref: Node) -> void:
@@ -18,10 +22,6 @@ func init(parent: Player, crafting_system_ref: Node) -> void:
 	
 	# Initialize to the default state
 	change_state(initial_state)
-	
-	# Connect signals after everything has loaded
-	call_deferred("_connect_interact_signals")
-	call_deferred("_connect_crafting_signal")
 
 func change_state(new_state: State) -> void:
 	if current_state:
@@ -49,6 +49,10 @@ func process_frame(delta: float) -> void:
 	var new_state : State = current_state.process_frame(delta)
 	if new_state:
 		change_state(new_state)
+
+func _connect_signals() -> void:
+	_connect_interact_signals()
+	_connect_crafting_signal()
 
 func _connect_interact_signals() -> void:
 	for node in get_tree().get_nodes_in_group("interactables"):
