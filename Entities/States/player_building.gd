@@ -38,10 +38,9 @@ func process_input(event: InputEvent) -> State:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if grid_active and placement_mode:
-				var tiles_to_build = search_tiles(
+				var tiles_to_build: Array = search_tiles(
 					grid.get_global_mouse_position(),
-					grass_tiles,
-					32
+					grass_tiles
 				)
 				build_tile(tiles_to_build)
 	# Handle cancel action (e.g., pressing the "cancel" action key)
@@ -92,7 +91,7 @@ func build_tile(tiles_to_build: Array) -> void:
 	var tilemap_coordinates: Vector2 = grass_tiles.local_to_map(
 		global_mouse_position - tilemap_global_position
 	)
-	add_tile(tiles_to_build, tilemap_coordinates, grass_tiles)
+	add_tile(tiles_to_build, grass_tiles)
 	add_boundary(tilemap_coordinates, boundary_tiles)
 	check_and_remove_boundary(grid.get_global_mouse_position(), boundary_tiles)
 	inventory.reduce_slot_amount(tile_info.item, 1)
@@ -103,8 +102,7 @@ func build_tile(tiles_to_build: Array) -> void:
 
 func search_tiles(
 	cursor_position: Vector2, 
-	tile_map_layer: TileMapLayer, 
-	grid_size: int
+	tile_map_layer: TileMapLayer
 ) -> Array:
 	# Convert the world position to the local position relative to the tilemap
 	var local_position: Vector2 = tile_map_layer.to_local(cursor_position)
@@ -121,7 +119,7 @@ func search_tiles(
 	# Loop through the affected tiles
 	for x in range(clicked_tile.x, clicked_tile.x + tiles_to_check.x):
 		for y in range(clicked_tile.y, clicked_tile.y + tiles_to_check.y):
-			var tile_position = Vector2i(x, y)
+			var tile_position: Vector2i = Vector2i(x, y)
 			var data: TileData = tile_map_layer.get_cell_tile_data(Vector2i(x, y))
 	
 			if not data: # If there is a tile data at this position
@@ -134,10 +132,9 @@ func search_tiles(
 
 func add_tile(
 	empty_tiles: Array,
-	tilemap_coordinates: Vector2,
 	tiles: TileMapLayer
 ) -> void:
-	for tile_position in empty_tiles:
+	for tile_position: Vector2 in empty_tiles:
 		# Add a tile at the position
 		tiles.set_cell(
 			tile_position,
