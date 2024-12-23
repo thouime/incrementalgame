@@ -87,7 +87,6 @@ func update_cursor(use_grid_size: bool = false) -> void:
 		offset + 
 		Vector2(int(float(padding) / 2), int(float(padding) / 2))
 	)
-	print("Build Cursor Position: ", build_cursor.position)
 
 func get_cursor(use_grid_size: bool = false) -> Vector2:
 	var cursor_pos: Vector2 = get_global_mouse_position()
@@ -156,8 +155,6 @@ func draw_grid(use_grid_size: bool = false) -> void:
 	# Align grid to center
 	var start_x: int = int(snapped_cursor_x - int(total_grid_width / 2.0))  # Make sure to use float for division
 	var start_y: int = int(snapped_cursor_y - int(total_grid_height / 2.0))  # Make sure to use float for division
-	print("Grid Start Position: ", Vector2(start_x, start_y))
-
 
 	# Clear previous ColorRect nodes
 	for child in self.get_children():

@@ -38,12 +38,12 @@ func process_input(event: InputEvent) -> State:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if grid_active and placement_mode:
-				if not check_ground(
+				var tiles_to_build = search_tiles(
 					grid.get_global_mouse_position(),
 					grass_tiles,
 					32
-				):
-					build_tile()
+				)
+				build_tile(tiles_to_build)
 	# Handle cancel action (e.g., pressing the "cancel" action key)
 	if event.is_action_pressed("cancel"):
 		cancel_place_tile()
@@ -81,17 +81,18 @@ func place_tile(tile: TileInfo) -> void:
 	else:
 		print("You need at least ", 1, " ", tile_info.name, " to build!")
 		
-func build_tile() -> void:
-	# When finishing building check if there's more dirt
-	# If no more dirt stop placing tiles
-	# Cancel/esc to stop building
-
+func build_tile(tiles_to_build: Array) -> void:
+	# Check if there are empty tiles to add tiles to
+	if tiles_to_build.is_empty():
+		print("There are already tiles there!")
+		return
+		
 	var tilemap_global_position: Vector2 = grass_tiles.global_position
 	var global_mouse_position: Vector2 = grid.get_global_mouse_position()
 	var tilemap_coordinates: Vector2 = grass_tiles.local_to_map(
 		global_mouse_position - tilemap_global_position
 	)
-	add_tile(tilemap_coordinates, grass_tiles)
+	add_tile(tiles_to_build, tilemap_coordinates, grass_tiles)
 	add_boundary(tilemap_coordinates, boundary_tiles)
 	check_and_remove_boundary(grid.get_global_mouse_position(), boundary_tiles)
 	inventory.reduce_slot_amount(tile_info.item, 1)
@@ -100,49 +101,49 @@ func build_tile() -> void:
 	if material_slots[tile_info.item]["total"] <= 0:
 		cancel_place_tile()
 
-func check_ground(
+func search_tiles(
 	cursor_position: Vector2, 
 	tile_map_layer: TileMapLayer, 
 	grid_size: int
-) -> bool:
+) -> Array:
 	# Convert the world position to the local position relative to the tilemap
 	var local_position: Vector2 = tile_map_layer.to_local(cursor_position)
 	
 	# Convert to map coordinates
-	var clicked_cell: Vector2 = tile_map_layer.local_to_map(local_position)
-	if grid_size > 16:
-		# For larger grid sizes (e.g., 32x32), check a 2x2 area
-		var cells_to_check: Vector2 = Vector2(2, 2)
-		# Loop through the affected cells
-		for x in range(clicked_cell.x, clicked_cell.x + cells_to_check.x):
-			for y in range(clicked_cell.y, clicked_cell.y + cells_to_check.y):
-				var data: TileData = tile_map_layer.get_cell_tile_data(Vector2i(x, y))
+	var clicked_tile: Vector2 = tile_map_layer.local_to_map(local_position)
+	
+	# Check a 2x2 area
+	var tiles_to_check: Vector2 = Vector2(2, 2)
+	
+	# Store empty tiles
+	var empty_tiles: Array = []
+	
+	# Loop through the affected tiles
+	for x in range(clicked_tile.x, clicked_tile.x + tiles_to_check.x):
+		for y in range(clicked_tile.y, clicked_tile.y + tiles_to_check.y):
+			var tile_position = Vector2i(x, y)
+			var data: TileData = tile_map_layer.get_cell_tile_data(Vector2i(x, y))
+	
+			if not data: # If there is a tile data at this position
+				empty_tiles.append(tile_position)
+			else:
+				print("There is already a tile placed there!")
 
-				if !data:  # If no tile data exists at this position
-					return false
-	else:
-		# For smaller grid sizes (e.g., <= 16), check a single tile
-		var data: TileData = tile_map_layer.get_cell_tile_data(clicked_cell)
-		if !data:
-			print("There's no land to place on.")
-			return false
-
-	# If all cells are valid
-	return true
+	# If there are tiles in the given area
+	return empty_tiles
 
 func add_tile(
+	empty_tiles: Array,
 	tilemap_coordinates: Vector2,
 	tiles: TileMapLayer
 ) -> void:
-	for x in range(2):
-		for y in range(2):
-			var position: Vector2 = tilemap_coordinates + Vector2(x, y)
-			tiles.set_cell(
-				position, 
-				0, 
-				tile_info.tile_map_coordinates
-			)
-	print("Tilemap Coordinates: ", tilemap_coordinates)
+	for tile_position in empty_tiles:
+		# Add a tile at the position
+		tiles.set_cell(
+			tile_position,
+			0,
+			tile_info.tile_map_coordinates
+		)
 
 # Place 1x1 boundary tiles around each of the newly placed grass tiles individually
 func add_boundary(
@@ -192,12 +193,10 @@ func check_and_remove_boundary(
 				# If a boundary tile is found, remove it by setting it to an invalid tile ID (e.g., -1)
 				print("Removing boundary tile at position: ", x, y)
 				tiles.set_cell(Vector2(x, y), -1)  # Set the tile to empty
-			else:
-				print("No boundary tile found at position: ", x, y)
 
 func draw_grid() -> void:
-	grid.draw_grid(true)
-	grid.update_cursor(true)
+	grid.draw_grid()
+	grid.update_cursor()
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	grid.build_cursor.visible = true
 	grid_active = true

@@ -53,7 +53,7 @@ void fragment() {
 
         // Clamp UV to ensure we don't sample outside the intended area
         uv = clamp(uv, image_top_left, image_bottom_right);
-        
+
         // Only sample if the UV is within the bounds
         if (uv == image_top_left || uv == image_bottom_right) {
             COLOR.a = 0.0; // Make it fully transparent if clamped to edges
