@@ -13,6 +13,7 @@ var placement_mode : bool = false
 var main : Node
 var world : Node2D
 var grass_tiles : TileMapLayer
+var boundary_tiles : TileMapLayer
 var inventory : InventoryData
 var grid : Control
 
@@ -36,6 +37,7 @@ func set_references(references : Dictionary) -> void:
 	main = references["main"]
 	world = references["world"]
 	grass_tiles = references["grass_tiles"]
+	boundary_tiles = references["boundary_tiles"]
 	inventory = references["inventory"]
 	grid = references["grid"]
 

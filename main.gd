@@ -12,6 +12,7 @@ const PICKUP = preload("res://Entities/Item/pickup.tscn")
 	"main" : self,
 	"world" : $World,
 	"grass_tiles" : $World.get_node("Grass"),
+	"boundary_tiles" : $World.get_node("Boundary"),
 	"inventory" : PlayerManager.player_inventory,
 	"grid" : $Grid
 }

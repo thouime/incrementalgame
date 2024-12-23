@@ -24,6 +24,14 @@ var world_grid_visible: bool = false
 			#draw_line(Vector2(x, y), Vector2(x, y + tile_size.y), Color(1, 1, 1), 1)  # Left
 			#draw_line(Vector2(x + tile_size.x, y), Vector2(x + tile_size.x, y + tile_size.y), Color(1, 1, 1), 1)  # Right
 
+func center_cursor() -> void:
+	# Get the size of the window
+	var window_size: Vector2 = get_viewport().get_visible_rect().size
+	var center_position: Vector2 = window_size / 2
+	
+	# Move the cursor to the center
+	Input.warp_mouse(center_position)
+
 func set_cursor(sprite: Sprite2D) -> void:
 	# Texture is a default
 	if sprite:
@@ -34,6 +42,22 @@ func set_cursor(sprite: Sprite2D) -> void:
 			build_cursor.region_rect = sprite.region_rect  # Set the same region
 		else:
 			build_cursor.region_enabled = false  # If no region, use the full texture
+			build_cursor.region_rect = Rect2()  # Reset region rectangle
+
+func set_cursor_texture(
+	texture: Texture2D,
+	 region_enabled: bool = false, 
+	region_rect: Rect2 = Rect2()
+) -> void:
+	# Set the texture directly
+	if texture:
+		build_cursor.texture = texture
+		# If a region is provided, set it
+		if region_enabled:
+			build_cursor.region_enabled = true
+			build_cursor.region_rect = region_rect
+		else:
+			build_cursor.region_enabled = false  # Use the full texture
 			build_cursor.region_rect = Rect2()  # Reset region rectangle
 
 # Optional parameter that forces cursor snapping to grid size
@@ -131,7 +155,6 @@ func draw_grid(use_grid_size: bool = false) -> void:
 	# Align grid to center
 	var start_x: int = int(snapped_cursor_x - int(total_grid_width / 2.0))  # Make sure to use float for division
 	var start_y: int = int(snapped_cursor_y - int(total_grid_height / 2.0))  # Make sure to use float for division
-
 
 	# Clear previous ColorRect nodes
 	for child in self.get_children():

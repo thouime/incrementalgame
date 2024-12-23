@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://dn215u4niu0ji"]
+[gd_scene load_steps=58 format=3 uid="uid://dn215u4niu0ji"]
 
 [ext_resource type="Script" path="res://Entities/Player/player.gd" id="1_87i8y"]
 [ext_resource type="Texture2D" uid="uid://c4ifn1fjbi2ye" path="res://Assets/Art/characters/player.png" id="2_qrrvf"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://Entities/States/player_click_move.gd" id="6_doxm0"]
 [ext_resource type="Script" path="res://Entities/States/player_gathering.gd" id="7_5ajlj"]
 [ext_resource type="Script" path="res://Entities/States/player_building.gd" id="8_gbgay"]
+[ext_resource type="Script" path="res://Stages/World/grid.gd" id="9_2som8"]
+[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="10_n6sx7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ojwf"]
 atlas = ExtResource("2_qrrvf")
@@ -450,3 +452,19 @@ build_state = NodePath("../PlayerBuilding")
 [node name="PlayerBuilding" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state")]
 script = ExtResource("8_gbgay")
 idle_state = NodePath("../PlayerIdle")
+
+[node name="Grid" type="Control" parent="StateMachine/PlayerBuilding"]
+light_mask = 0
+visibility_layer = 512
+z_index = 100
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("9_2som8")
+
+[node name="Cursor" type="Sprite2D" parent="StateMachine/PlayerBuilding/Grid"]
+visible = false
+z_index = 1
+scale = Vector2(2, 2)
+texture = ExtResource("10_n6sx7")
+region_enabled = true
+region_rect = Rect2(80, 0, 16, 16)
