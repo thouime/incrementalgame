@@ -1,6 +1,6 @@
 extends Node
 
-signal start_building
+signal build_object
 signal stop_building
 
 var preview_object : Node = null # Temporary "ghost" object that follos the mouse.
@@ -63,7 +63,7 @@ func try_craft(craft_slot: CraftData) -> void:
 
 func craft(material_slots: Dictionary, craft_slot: CraftData) -> void:
 	if craft_slot.type == craft_slot.Type.OBJECT:
-		start_building.emit()
+		build_object.emit()
 		print("Preparing grid...")
 		var new_object: StaticBody2D = craft_slot.object_scene.instantiate()
 		var sprite: Sprite2D = new_object.get_node("Sprite1")
@@ -78,8 +78,8 @@ func craft(material_slots: Dictionary, craft_slot: CraftData) -> void:
 		preview_object = new_object
 		items_to_remove = material_slots
 		# Change the cursor to the sprite of the craft
-		grid.set_cursor(sprite)
-		draw_grid()
+		#grid.set_cursor(sprite)
+		#draw_grid()
 
 	elif craft_slot.type == craft_slot.Type.ITEM:
 		var new_item: SlotData = craft_slot.slot_data.duplicate()

@@ -2,6 +2,8 @@ extends Node
 
 @export var initial_state : State
 var current_state : State
+# Keep track of events for transitioning between states
+var event_queue : Array = []
 # Keep track of the last direction the player was facing for animations
 var last_direction: Vector2 = Vector2.UP
 # Keep track of the current interacting object
@@ -32,6 +34,23 @@ func change_state(new_state: State) -> void:
 	if current_state.has_signal("stop_building"):
 		current_state.stop_building_signal(crafting_system)
 	current_state.enter()
+	
+	print("Processing queue...")
+	# Process any queued events after the state has transitioned
+	process_queue()
+
+func enqueue_event(event_data):
+	event_queue.append(event_data)
+
+# Handle and remove the next event added to the queue
+func process_queue():
+	while event_queue.size() > 0:
+		var event_data = event_queue.pop_front()
+		handle_event(event_data)
+
+func handle_event(event_data):
+	if current_state:
+		current_state.handle_event(event_data)
 
 # Pass through functions for the Player to call,
 # handling state changes as needed.
@@ -64,9 +83,11 @@ func _on_interact_signal(pos: Vector2, offset: float, object: StaticBody2D) -> v
 		current_state._on_interact_signal(pos, offset, object)
 
 func _connect_crafting_signal() -> void:
-	if CraftingSystem.has_signal("start_building"):
-		CraftingSystem.connect("start_building", _on_building_signal)
+	if CraftingSystem.has_signal("build_object"):
+		CraftingSystem.connect("build_object", _on_build_object)
 
-func _on_building_signal() -> void:
+func _on_build_object() -> void:
+	#enqueue_event({"type": "craft", "data": data})
+	enqueue_event({"type": "craft", "data": null})
 	if current_state and current_state.has_method("start_building"):
 		current_state.start_building()

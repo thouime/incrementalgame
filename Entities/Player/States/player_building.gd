@@ -23,6 +23,10 @@ func exit() -> void:
 	clear_references()
 	print("Exited Building State")
 
+func handle_event(event_data):
+	if event_data.type == "craft":
+		process_craft_event(event_data.data)
+
 func process_input(event: InputEvent) -> State:
 	# Check for movement inputs
 	# Handle cancel action (e.g., pressing the "cancel" action key)
@@ -61,3 +65,6 @@ func stop_building_signal(crafting_system_node : Node) -> void:
 
 func _on_stop_building() -> void:
 	done_building = true
+	
+func process_craft_event(data) -> void:
+	print("Process craft event started!")
