@@ -1,5 +1,6 @@
 extends Node
 
+# Default initial state is the idle state
 @export var initial_state : State
 var current_state : State
 # Keep track of events for transitioning between states
@@ -30,27 +31,30 @@ func change_state(new_state: State) -> void:
 		current_state.exit()
 	
 	current_state = new_state
-	PlayerManager.player_state = current_state
-	if current_state.has_signal("stop_building"):
-		current_state.stop_building_signal(crafting_system)
 	current_state.enter()
 	
 	print("Processing queue...")
 	# Process any queued events after the state has transitioned
 	process_queue()
 
-func enqueue_event(event_data):
+func enqueue_event(event_data: Dictionary) -> void:
 	event_queue.append(event_data)
 
 # Handle and remove the next event added to the queue
-func process_queue():
+func process_queue() -> void:
 	while event_queue.size() > 0:
-		var event_data = event_queue.pop_front()
+		print("Event Queue size: ", event_queue.size())
+		var event_data: Dictionary = event_queue.pop_front()
 		handle_event(event_data)
 
-func handle_event(event_data):
-	if current_state:
-		current_state.handle_event(event_data)
+func handle_event(event_data: Dictionary) -> void:
+	match event_data.type:
+		"craft":
+			current_state.handle_event(event_data)
+		"connect_signal":
+			print("Connecting signal to ", current_state)
+			if current_state:
+				current_state.connect(event_data.signal, event_data.method)
 
 # Pass through functions for the Player to call,
 # handling state changes as needed.
@@ -86,8 +90,17 @@ func _connect_crafting_signal() -> void:
 	if CraftingSystem.has_signal("build_object"):
 		CraftingSystem.connect("build_object", _on_build_object)
 
+# Signal activated via crafting menu, queues events after state change
 func _on_build_object() -> void:
 	#enqueue_event({"type": "craft", "data": data})
 	enqueue_event({"type": "craft", "data": null})
+	enqueue_event({
+		"type": "connect_signal",
+		"signal": "stop_building",
+		"method": _on_stop_building
+	})
 	if current_state and current_state.has_method("start_building"):
 		current_state.start_building()
+
+func _on_stop_building() -> void:
+	change_state(initial_state)

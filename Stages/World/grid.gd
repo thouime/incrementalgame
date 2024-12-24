@@ -11,12 +11,12 @@ var world_grid_visible : bool = false
 # Temporary variable for the cursor during grid view
 @onready var build_cursor: Sprite2D = $Cursor
 
-func _draw():
+func _draw() -> void:
 	if show_grid_lines:
 		draw_grid_lines()
 
 # Debugging function for seeing the gridlines of the tilemap
-func draw_grid_lines():
+func draw_grid_lines() -> void:
 	for row in range(world_grid_height):
 		for col in range(world_grid_width):
 			var x = col * tile_size.x

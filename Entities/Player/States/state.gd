@@ -33,7 +33,7 @@ func enter() -> void:
 func exit() -> void:
 	pass
 
-func handle_event(event_data):
+func handle_event(event_data) -> void:
 	print("Handling event: %s" % event_data)
 
 func process_input(_event: InputEvent) -> State:
