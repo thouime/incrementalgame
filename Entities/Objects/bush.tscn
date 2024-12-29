@@ -1,0 +1,89 @@
+[gd_scene load_steps=17 format=3 uid="uid://byoflltw01rq5"]
+
+[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="1_o1h30"]
+[ext_resource type="Script" path="res://Entities/Objects/bush.gd" id="2_m1yxg"]
+[ext_resource type="Script" path="res://Entities/Item/Drop Table/common_drops.gd" id="3_6px1t"]
+[ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="4_tdnk0"]
+[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="5_c1xyq"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="6_rgu2s"]
+[ext_resource type="Script" path="res://Entities/Item/Drop Table/drop_table.gd" id="7_x7esn"]
+[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="8_lqk3r"]
+[ext_resource type="PackedScene" uid="uid://dlrmxq4bnsyvu" path="res://Entities/Objects/Components/activity_timer.tscn" id="9_co7uq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_51lhn"]
+resource_local_to_scene = true
+shader = ExtResource("1_o1h30")
+shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[sub_resource type="Resource" id="Resource_fnq7y"]
+script = ExtResource("4_tdnk0")
+item_data = ExtResource("5_c1xyq")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_hckqj"]
+script = ExtResource("4_tdnk0")
+item_data = ExtResource("6_rgu2s")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_wphjt"]
+script = ExtResource("3_6px1t")
+slot_datas = Array[ExtResource("4_tdnk0")]([SubResource("Resource_fnq7y"), SubResource("Resource_hckqj")])
+
+[sub_resource type="Resource" id="Resource_57j8k"]
+script = ExtResource("7_x7esn")
+common_chance = 0.25
+rare_chance = 0.25
+ultra_rare_chance = 0.25
+unique_chance = 0.25
+common_drops = SubResource("Resource_wphjt")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s1rac"]
+size = Vector2(24, 10.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2edif"]
+size = Vector2(41.5, 55)
+
+[node name="Bush" type="StaticBody2D"]
+material = SubResource("ShaderMaterial_51lhn")
+position = Vector2(370, 398)
+scale = Vector2(2, 2)
+script = ExtResource("2_m1yxg")
+drop_table = SubResource("Resource_57j8k")
+gather_time = 1.5
+metadata/_edit_group_ = true
+
+[node name="Sprite1" type="Sprite2D" parent="."]
+z_index = 3
+use_parent_material = true
+texture = ExtResource("8_lqk3r")
+region_enabled = true
+region_rect = Rect2(96, 112, 32, 21)
+
+[node name="Sprite2" type="Sprite2D" parent="."]
+z_index = 1
+use_parent_material = true
+position = Vector2(0, 17)
+texture = ExtResource("8_lqk3r")
+region_enabled = true
+region_rect = Rect2(96, 133, 32, 11)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 3
+position = Vector2(0, 7)
+shape = SubResource("RectangleShape2D_s1rac")
+
+[node name="Selection" type="Area2D" parent="."]
+
+[node name="MouseArea" type="CollisionShape2D" parent="Selection"]
+visible = false
+z_index = 4
+position = Vector2(-0.25, 5)
+shape = SubResource("RectangleShape2D_2edif")
+
+[node name="ActivityTimer" parent="." instance=ExtResource("9_co7uq")]

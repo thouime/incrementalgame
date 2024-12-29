@@ -4,16 +4,24 @@ extends "res://Entities/Objects/gathering_interact.gd"
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
+@onready var activity_timer: ActivityTimer = $ActivityTimer
+
 func _ready() -> void:
 	super._ready()
 	# Initialize all the drops added from the editor
 	drop_table.setup()
+	
+	activity_timer.timer_finished.connect(_on_gather_timeout)
+	activity_timer.set_time(gather_time)
 
 # Override
-func interact_action(player: CharacterBody2D) -> void:
-	super(player)
+func interact_action(_player: CharacterBody2D) -> void:
 	# Specific bush logic
+	activity_timer.start()
 	print("Gathering from bush...")
+
+func stop_interact_action(_player: CharacterBody2D) -> void:
+	activity_timer.stop()
 
 func get_drop(player: CharacterBody2D) -> void:
 	# Attempt to get a random drop from the drop table
@@ -28,3 +36,7 @@ func get_drop(player: CharacterBody2D) -> void:
 
 func _on_timer_timeout(player: CharacterBody2D) -> void:
 	get_drop(player)
+	
+func _on_gather_timeout() -> void:
+	get_drop(PlayerManager.player)
+	activity_timer.start()

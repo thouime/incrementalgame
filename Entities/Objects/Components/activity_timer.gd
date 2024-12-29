@@ -1,4 +1,4 @@
-extends Node
+extends Node 
 class_name ActivityTimer
 
 signal timer_finished
@@ -21,25 +21,37 @@ func _process(_delta: float) -> void:
 
 func set_position() -> void:
 	var parent : Node = get_parent()
+	var object_position := Vector2(parent.position)
 	if parent is Node2D:
-		var parent_position : Vector2 = get_parent().global_position
+		# Calculate the combined height of each sprite
+		var combined_height : float
+		for child in parent.get_children():
+			if child is Sprite2D:
+				var sprite_height := float(child.get_rect().size.y)
+				combined_height = combined_height + sprite_height
+		
+		# Calculate new positions
 		var timer_circle_size : Vector2 = timer_circle.get_rect().size
 		var progress_bar_size : Vector2 = progress_bar.get_rect().size
-		var progress_bar_offset : int = 15
+		var padding : float = 12
 		
-		# Center Horizontally and position above parent
-		var timer_circle_new_position : Vector2 = Vector2(
-			parent_position.x - timer_circle_size.x / 2,
-			parent_position.y - timer_circle_size.y - timer_circle_size.y / 2
-		)		
-		var progress_bar_new_position : Vector2 = Vector2(
-			parent_position.x - progress_bar_size.x / 2, # Centering progress bar
-			parent_position.y - progress_bar_size.y - progress_bar_offset# Adjusting its position
+		var timer_circle_new_position := Vector2(
+			object_position.x - timer_circle_size.x / 2,
+			object_position.y - combined_height / 2  
+				- timer_circle_size.y 
+				- padding
 		)
 		
-		timer_circle.set_position(timer_circle_new_position)
-		progress_bar.set_position(progress_bar_new_position)  # This should set the progress bar's position
+		var progress_bar_new_position : Vector2 = Vector2(
+			object_position.x - progress_bar_size.x / 2,
+			object_position.y - combined_height / 2 
+				- progress_bar_size.y 
+				- padding
+		)
 
+		timer_circle.set_position(timer_circle_new_position)
+		progress_bar.set_position(progress_bar_new_position)
+		
 func set_progress_value(value: float) -> void:
 	progress_bar.value = value
 	progress_bar.show()
@@ -68,6 +80,16 @@ func start() -> void:
 	timer_done = false
 	timer_circle.show()
 
+func stop() -> void:
+	timer_done = true
+	timer_circle.hide()
+	timer.stop()
+
+func end() -> void:
+	timer_done = true
+	timer_circle.hide()
+	timer_finished.emit()
+
 func is_running() -> bool:
 	return timer.time_left > 0
 
@@ -75,7 +97,5 @@ func add_timer_value(value: float) -> void:
 	timer_circle.set_value(value)
 
 func _on_timer_timeout() -> void:
+	end()
 	print("Timer is finished!")
-	timer_finished.emit()
-	timer_done = true
-	timer_circle.hide()

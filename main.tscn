@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://bgi5nv12xjmka"]
+[gd_scene load_steps=54 format=3 uid="uid://bgi5nv12xjmka"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_xtwid"]
 [ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="2_h00hh"]
@@ -9,12 +9,10 @@
 [ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://Stages/World/world.tscn" id="8_8lnwa"]
 [ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="9_4puhs"]
 [ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="9_rip21"]
-[ext_resource type="Script" path="res://Entities/Objects/bush.gd" id="10_6vtjc"]
 [ext_resource type="Resource" uid="uid://bkbrdn41jos3k" path="res://Entities/Item/Items/battle/iron_helm_equip.tres" id="10_7mrtg"]
-[ext_resource type="Script" path="res://Entities/Item/Drop Table/common_drops.gd" id="11_v20go"]
 [ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="13_4w014"]
 [ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="14_5jodk"]
-[ext_resource type="Script" path="res://Entities/Item/Drop Table/drop_table.gd" id="14_yiqgm"]
+[ext_resource type="PackedScene" uid="uid://byoflltw01rq5" path="res://Entities/Objects/bush.tscn" id="14_h5qyt"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_interface.gd" id="15_4fcd7"]
 [ext_resource type="PackedScene" uid="uid://cjvrn7m4iia17" path="res://Utilities/Inventory/inventory.tscn" id="16_gmsb7"]
 [ext_resource type="PackedScene" uid="uid://dj0urcd0clvl4" path="res://Utilities/Inventory/slot.tscn" id="17_gq7v4"]
@@ -159,7 +157,7 @@ size = Vector2(13.5, 5.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2edif"]
 size = Vector2(41.5, 55)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_51lhn"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5k06o"]
 resource_local_to_scene = true
 shader = ExtResource("9_4puhs")
 shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
@@ -169,31 +167,6 @@ shader_parameter/inside = true
 shader_parameter/add_margins = true
 shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
-
-[sub_resource type="Resource" id="Resource_fnq7y"]
-script = ExtResource("5_b2i4h")
-item_data = ExtResource("13_4w014")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_hckqj"]
-script = ExtResource("5_b2i4h")
-item_data = ExtResource("14_5jodk")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_wphjt"]
-script = ExtResource("11_v20go")
-slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_fnq7y"), SubResource("Resource_hckqj")])
-
-[sub_resource type="Resource" id="Resource_57j8k"]
-script = ExtResource("14_yiqgm")
-common_chance = 0.25
-rare_chance = 0.25
-ultra_rare_chance = 0.25
-unique_chance = 0.25
-common_drops = SubResource("Resource_wphjt")
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_s1rac"]
-size = Vector2(24, 10.75)
 
 [sub_resource type="Resource" id="Resource_a5stn"]
 script = ExtResource("23_ir4q4")
@@ -242,7 +215,7 @@ quantity = 1
 script = ExtResource("24_xf1d2")
 slot_datas = Array[ExtResource("5_b2i4h")]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
 
-[sub_resource type="Shader" id="Shader_ce0at"]
+[sub_resource type="Shader" id="Shader_nrmp2"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
@@ -319,9 +292,9 @@ void fragment() {
 	}
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_u5qfw"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ad1rs"]
 resource_local_to_scene = true
-shader = SubResource("Shader_ce0at")
+shader = SubResource("Shader_nrmp2")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
@@ -396,41 +369,8 @@ shape = SubResource("RectangleShape2D_2edif")
 position = Vector2(64, 160)
 metadata/_edit_lock_ = true
 
-[node name="Bush" type="StaticBody2D" parent="."]
-material = SubResource("ShaderMaterial_51lhn")
-position = Vector2(370, 398)
-scale = Vector2(2, 2)
-script = ExtResource("10_6vtjc")
-drop_table = SubResource("Resource_57j8k")
-gather_time = 1.5
-metadata/_edit_group_ = true
-
-[node name="Sprite1" type="Sprite2D" parent="Bush"]
-z_index = 3
-use_parent_material = true
-texture = ExtResource("7_8rb2x")
-region_enabled = true
-region_rect = Rect2(96, 112, 32, 21)
-
-[node name="Sprite2" type="Sprite2D" parent="Bush"]
-z_index = 1
-use_parent_material = true
-position = Vector2(0, 17)
-texture = ExtResource("7_8rb2x")
-region_enabled = true
-region_rect = Rect2(96, 133, 32, 11)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bush"]
-z_index = 3
-position = Vector2(0, 7)
-shape = SubResource("RectangleShape2D_s1rac")
-
-[node name="Selection" type="Area2D" parent="Bush"]
-
-[node name="MouseArea" type="CollisionShape2D" parent="Bush/Selection"]
-z_index = 4
-position = Vector2(-0.25, 5)
-shape = SubResource("RectangleShape2D_2edif")
+[node name="Bush" parent="." instance=ExtResource("14_h5qyt")]
+material = SubResource("ShaderMaterial_5k06o")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -497,7 +437,7 @@ position = Vector2(133, 488)
 inventory_data = SubResource("Resource_xwj4b")
 
 [node name="Composter" parent="." instance=ExtResource("28_6qef4")]
-material = SubResource("ShaderMaterial_u5qfw")
+material = SubResource("ShaderMaterial_ad1rs")
 position = Vector2(192, 352)
 
 [connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]
