@@ -1,5 +1,7 @@
 extends "object.gd"
 
+const ITEM_FEEDBACK_EFFECT = preload("res://Entities/Objects/Components/ItemFeedbackEffect.tscn")
+
 @export var compost_duration : int
 var composted_dirt : CraftData = load(
 	"res://Utilities/Crafting/Crafts/dirt_craft.tres"
@@ -37,27 +39,44 @@ func interact_action(_player: CharacterBody2D) -> void:
 		# Add dirt to inventory
 		# Duplicate so we don't modify the original
 		var new_slot_data: SlotData = composted_dirt.slot_data.duplicate() as SlotData
+		add_item_effect(new_slot_data.item_data.texture, 1, true)
 		inventory.pick_up_slot_data(new_slot_data)
 		compost_ready = false
 
 func add_compost() -> void:
-
+	# If there's nothing to compost, no need to check anything else
+	if inventory.check_total(compostable_item) <= 0:
+		return
+	
+	# Check how many leaves are needed to fill the compost bin
 	leaves_needed = inventory.remove_up_to(
 		compostable_item, 
 		leaves_needed
 	)
+	var leaves_removed = compostable_amount - leaves_needed
+	add_item_effect(compostable_item.texture, leaves_removed, false)
 	# Calculate the percentage that the compost bin is filled
 	var percent: float = (
-		(float(compostable_amount - leaves_needed) / float(compostable_amount))
+		(float(leaves_removed) / float(compostable_amount))
 		 * 100.0
 	)
+	
 	activity_timer.set_progress_value(percent)
 	var progress: float = activity_timer.get_progress_value()
 	if progress >= 100.0:
 		print("Composter is full, starting timer.")
 		activity_timer.reset_value()
 		activity_timer.start()
-	
+
+func add_item_effect(icon: Texture, quantity: int, is_gain: bool) -> void:
+	var feedback_effect: Node2D = ITEM_FEEDBACK_EFFECT.instantiate()
+	self.add_child(feedback_effect)
+	feedback_effect.setup(
+		icon,
+		quantity,
+		is_gain
+	)
+
 func _on_compost_ready() -> void:
 	compost_ready = true
 	leaves_needed = compostable_amount

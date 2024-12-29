@@ -64,7 +64,8 @@ func use_slot_data(index: int) -> void:
 	PlayerManager.use_slot_data(slot_data)
 	
 	inventory_updated.emit(self)
-
+	
+# Add slot data to inventory
 func pick_up_slot_data(slot_data: SlotData) -> bool:
 	
 	for index in slot_datas.size():
@@ -125,6 +126,16 @@ func remove_up_to(material: ItemData, quantity: int) -> int:
 	if to_remove == quantity:
 		print("There are no leaves to compost!")
 	return to_remove
+
+func check_total(material: ItemData) -> int:
+	var inventory_items: Array[SlotData] = slot_datas
+	var total_quantity: int = 0
+	for index in inventory_items.size():
+		var slot: SlotData = inventory_items[index]
+		if slot and slot.item_data == material:
+			total_quantity += slot.quantity
+	return total_quantity
+
 
 # Check if there is enough materials available
 func check_materials(material: ItemData, quantity: int) -> Dictionary:
@@ -188,7 +199,6 @@ func check_materials_available(material: ItemData) -> Dictionary:
 			materials[material]["inv_slots"].append(index)  # Record the index of the slot containing the item
 
 	return materials
-
 
 func on_slot_clicked(index: int, button: int) -> void:
 	inventory_interact.emit(self, index, button)
