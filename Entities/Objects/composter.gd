@@ -53,7 +53,7 @@ func add_compost() -> void:
 		compostable_item, 
 		leaves_needed
 	)
-	var leaves_removed = compostable_amount - leaves_needed
+	var leaves_removed: int = compostable_amount - leaves_needed
 	add_item_effect(compostable_item.texture, leaves_removed, false)
 	# Calculate the percentage that the compost bin is filled
 	var percent: float = (
