@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://bgi5nv12xjmka"]
+[gd_scene load_steps=42 format=3 uid="uid://bgi5nv12xjmka"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_xtwid"]
 [ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="2_h00hh"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="7_8rb2x"]
 [ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://Stages/World/world.tscn" id="8_8lnwa"]
 [ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="9_4puhs"]
-[ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="9_rip21"]
 [ext_resource type="Resource" uid="uid://bkbrdn41jos3k" path="res://Entities/Item/Items/battle/iron_helm_equip.tres" id="10_7mrtg"]
 [ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="13_4w014"]
 [ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="14_5jodk"]
@@ -21,10 +20,8 @@
 [ext_resource type="Resource" uid="uid://c4yne4f4cx1uw" path="res://Entities/Item/Items/healing/health_potion.tres" id="20_ydott"]
 [ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="21_2rjjw"]
 [ext_resource type="Resource" uid="uid://blampwk84srx8" path="res://Utilities/Crafting/Crafts/composter_craft.tres" id="22_21q6l"]
-[ext_resource type="Script" path="res://Utilities/Crafting/material_slot_data.gd" id="23_ir4q4"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="23_rhjmk"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="24_xf1d2"]
-[ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="24_yqwri"]
 [ext_resource type="Resource" uid="uid://dcqj765a50tqf" path="res://Utilities/Crafting/Crafts/chest_craft.tres" id="26_2pr82"]
 [ext_resource type="PackedScene" uid="uid://ciuy4rj4cpsvn" path="res://Entities/Item/pickup.tscn" id="26_eues2"]
 [ext_resource type="PackedScene" uid="uid://cefnc8f41wint" path="res://Entities/Objects/chest.tscn" id="27_l85p4"]
@@ -41,16 +38,6 @@ script = ExtResource("5_b2i4h")
 item_data = ExtResource("14_5jodk")
 quantity = 99
 
-[sub_resource type="Resource" id="Resource_nrylw"]
-script = ExtResource("5_b2i4h")
-item_data = ExtResource("9_rip21")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_usfxl"]
-script = ExtResource("5_b2i4h")
-item_data = ExtResource("9_rip21")
-quantity = 99
-
 [sub_resource type="Resource" id="Resource_d7irm"]
 script = ExtResource("5_b2i4h")
 item_data = ExtResource("10_7mrtg")
@@ -58,7 +45,7 @@ quantity = 1
 
 [sub_resource type="Resource" id="Resource_66drq"]
 script = ExtResource("24_xf1d2")
-slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_nuvmb"), SubResource("Resource_w6n71"), SubResource("Resource_nrylw"), SubResource("Resource_usfxl"), SubResource("Resource_d7irm"), null, null, null, null, null])
+slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_nuvmb"), SubResource("Resource_w6n71"), SubResource("Resource_d7irm"), null, null, null, null, null])
 
 [sub_resource type="Resource" id="Resource_0msbn"]
 script = ExtResource("4_2dnpy")
@@ -168,44 +155,6 @@ shader_parameter/add_margins = true
 shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
 
-[sub_resource type="Resource" id="Resource_a5stn"]
-script = ExtResource("23_ir4q4")
-quantity = 30
-item_data = ExtResource("14_5jodk")
-
-[sub_resource type="Resource" id="Resource_8qsce"]
-script = ExtResource("23_ir4q4")
-quantity = 10
-item_data = ExtResource("13_4w014")
-
-[sub_resource type="Resource" id="Resource_s8m5e"]
-script = ExtResource("23_ir4q4")
-quantity = 1
-item_data = ExtResource("13_4w014")
-
-[sub_resource type="Resource" id="Resource_0uq21"]
-script = ExtResource("23_ir4q4")
-quantity = 50
-item_data = ExtResource("14_5jodk")
-
-[sub_resource type="Resource" id="Resource_kj2nx"]
-script = ExtResource("23_ir4q4")
-quantity = 10
-item_data = ExtResource("14_5jodk")
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_oaa3q"]
-atlas = ExtResource("24_yqwri")
-region = Rect2(448, 352, 32, 32)
-
-[sub_resource type="Resource" id="Resource_bt3ln"]
-script = ExtResource("21_2rjjw")
-type = 1
-object_scene = ExtResource("28_6qef4")
-name = "Composter"
-description = "A wooden container that converts organic material into dirt."
-menu_texture = SubResource("AtlasTexture_oaa3q")
-material_slot_datas = Array[ExtResource("23_ir4q4")]([SubResource("Resource_a5stn"), SubResource("Resource_8qsce"), SubResource("Resource_s8m5e"), SubResource("Resource_0uq21"), SubResource("Resource_kj2nx")])
-
 [sub_resource type="Resource" id="Resource_gmm5h"]
 script = ExtResource("5_b2i4h")
 item_data = ExtResource("20_ydott")
@@ -215,7 +164,7 @@ quantity = 1
 script = ExtResource("24_xf1d2")
 slot_datas = Array[ExtResource("5_b2i4h")]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
 
-[sub_resource type="Shader" id="Shader_cnvmp"]
+[sub_resource type="Shader" id="Shader_370v7"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
@@ -292,9 +241,9 @@ void fragment() {
 	}
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hbnvk"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n7k75"]
 resource_local_to_scene = true
-shader = SubResource("Shader_cnvmp")
+shader = SubResource("Shader_370v7")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
@@ -424,7 +373,7 @@ offset_left = 97.0
 offset_top = 519.0
 offset_right = 429.0
 offset_bottom = 575.0
-craft_datas = Array[ExtResource("21_2rjjw")]([ExtResource("22_21q6l"), SubResource("Resource_bt3ln"), ExtResource("26_2pr82")])
+craft_datas = Array[ExtResource("21_2rjjw")]([ExtResource("22_21q6l"), ExtResource("26_2pr82")])
 
 [node name="BuildingMenu" parent="UI" instance=ExtResource("27_rirn1")]
 
@@ -437,7 +386,7 @@ position = Vector2(133, 488)
 inventory_data = SubResource("Resource_xwj4b")
 
 [node name="Composter" parent="." instance=ExtResource("28_6qef4")]
-material = SubResource("ShaderMaterial_hbnvk")
+material = SubResource("ShaderMaterial_n7k75")
 position = Vector2(192, 352)
 
 [connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]

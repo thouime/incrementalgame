@@ -1,14 +1,26 @@
-[gd_resource type="Resource" script_class="TileInfo" load_steps=8 format=3 uid="uid://dech0h7erilx5"]
+[gd_resource type="Resource" script_class="TileInfo" load_steps=11 format=3 uid="uid://dech0h7erilx5"]
 
 [ext_resource type="Script" path="res://Utilities/Building/Tiles/tile_info.gd" id="1_0mkke"]
-[ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="2_0nimt"]
 [ext_resource type="Texture2D" uid="uid://dcymbv1v6ockq" path="res://Assets/Art/tilesets/plains.png" id="2_2baj5"]
 [ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="2_hguid"]
+[ext_resource type="Script" path="res://Entities/Item/item_data.gd" id="2_sj4nt"]
+[ext_resource type="Texture2D" uid="uid://bulp7tkpnj8vn" path="res://Entities/Item/#1 - Transparent Icons.png" id="3_u3b7v"]
 [ext_resource type="Resource" uid="uid://b2lxbd7ntp5qk" path="res://Utilities/Building/Tiles/boundary_tile.tres" id="4_3lb88"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w0vc7"]
 atlas = ExtResource("2_hguid")
 region = Rect2(32, 640, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v43ck"]
+atlas = ExtResource("3_u3b7v")
+region = Rect2(32, 640, 32, 32)
+
+[sub_resource type="Resource" id="Resource_vv6q8"]
+script = ExtResource("2_sj4nt")
+name = "Dirt"
+description = "Dirt is a placeable item that can be used to expand your world."
+stackable = true
+texture = SubResource("AtlasTexture_v43ck")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3p7lk"]
 atlas = ExtResource("2_2baj5")
@@ -22,5 +34,5 @@ icon_texture = SubResource("AtlasTexture_w0vc7")
 tile_id = 0
 tile_map_coordinates = Vector2(2, 1)
 tile_texture = SubResource("AtlasTexture_3p7lk")
-item = ExtResource("2_0nimt")
+item = SubResource("Resource_vv6q8")
 tile_boundary = ExtResource("4_3lb88")

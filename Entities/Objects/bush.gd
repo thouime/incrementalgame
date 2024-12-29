@@ -43,7 +43,7 @@ func get_drop(player: CharacterBody2D) -> Dictionary:
 			"duration" : item_feedback_duration
 		}
 		
-		new_slot_data.set_quantity(quantity)  
+		new_slot_data.set_quantity(quantity)
 		player.inventory_data.pick_up_slot_data(new_slot_data)
 		print("Collected item: ", selected_drop.item_data.name, " x", new_slot_data.quantity)
 		return drop_data

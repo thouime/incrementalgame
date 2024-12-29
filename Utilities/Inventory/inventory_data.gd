@@ -103,7 +103,7 @@ func reduce_slot_amount(item: ItemData, amount: int) -> void:
 		if amount_removed == amount:
 			return
 		if slot_datas[index]:
-			if item == slot_datas[index].item_data:
+			if item.name == slot_datas[index].item_data.name:
 				amount_removed = slot_datas[index].quantity
 				reduce_slot_amount_index(index, amount)
 
@@ -132,10 +132,9 @@ func check_total(material: ItemData) -> int:
 	var total_quantity: int = 0
 	for index in inventory_items.size():
 		var slot: SlotData = inventory_items[index]
-		if slot and slot.item_data == material:
+		if slot and slot.item_data.name == material.name:
 			total_quantity += slot.quantity
 	return total_quantity
-
 
 # Check if there is enough materials available
 func check_materials(material: ItemData, quantity: int) -> Dictionary:
@@ -153,7 +152,7 @@ func check_materials(material: ItemData, quantity: int) -> Dictionary:
 	# Check each inventory slot for the material, adding info to dictionary
 	for index in inventory_items.size():
 		var slot: SlotData = inventory_items[index]
-		if slot and slot.item_data == material:
+		if slot and slot.item_data.name == material.name:
 			var available_quantity: int = slot.quantity
 			if available_quantity >= remaining_quantity:
 				remaining_quantity = 0
@@ -194,7 +193,7 @@ func check_materials_available(material: ItemData) -> Dictionary:
 	# Check each inventory slot for the material, adding info to dictionary
 	for index in range(inventory_items.size()):
 		var slot: SlotData = inventory_items[index]
-		if slot and slot.item_data == material:
+		if slot and slot.item_data.name == material.name:
 			materials[material]["total"] += slot.quantity  # Add the quantity of the item in this slot
 			materials[material]["inv_slots"].append(index)  # Record the index of the slot containing the item
 

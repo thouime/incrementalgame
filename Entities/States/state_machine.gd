@@ -74,6 +74,10 @@ func _on_building_signal() -> void:
 		
 func _handle_building_tile(tile: TileInfo) -> void:
 	if current_state and current_state.has_method("start_building"):
+		var inventory: InventoryData = PlayerManager.player.inventory_data
+		if inventory.check_total(tile.item) <= 0:
+			print("Player does not have the resources to create the tile!")
+			return
 		current_state.start_building()
 		building_tile = tile
 		# Connect to state change signal to call place_tile after transition

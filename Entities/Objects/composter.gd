@@ -3,7 +3,8 @@ extends "object.gd"
 const ITEM_FEEDBACK_EFFECT = preload("res://Entities/Objects/Components/ItemFeedbackEffect.tscn")
 
 @export var compost_duration : int
-var composted_dirt : CraftData = load(
+@export var dirt_received : int = 1
+var composted_dirt : CraftData = preload(
 	"res://Utilities/Crafting/Crafts/dirt_craft.tres"
 )
 var compostable_item : ItemData
@@ -38,9 +39,9 @@ func interact_action(_player: CharacterBody2D) -> void:
 	if compost_ready:
 		# Add dirt to inventory
 		# Duplicate so we don't modify the original
-		var new_slot_data: SlotData = composted_dirt.slot_data.duplicate() as SlotData
-		add_item_effect(new_slot_data.item_data.texture, 1, true)
+		var new_slot_data = composted_dirt.slot_data.duplicate() as SlotData
 		inventory.pick_up_slot_data(new_slot_data)
+		add_item_effect(new_slot_data.item_data.texture, dirt_received, true)
 		compost_ready = false
 
 func add_compost() -> void:

@@ -20,7 +20,7 @@ region = Rect2(32, 640, 32, 32)
 atlas = ExtResource("2_ggc7p")
 region = Rect2(32, 640, 32, 32)
 
-[sub_resource type="Resource" id="Resource_ctgcr"]
+[sub_resource type="Resource" id="Resource_rp73c"]
 script = ExtResource("5_430qt")
 name = "Dirt"
 description = "Dirt is a placeable item that can be used to expand your world."
@@ -29,14 +29,14 @@ texture = SubResource("AtlasTexture_v43ck")
 
 [sub_resource type="Resource" id="Resource_ofctb"]
 script = ExtResource("5_gj0ak")
-item_data = SubResource("Resource_ctgcr")
+item_data = SubResource("Resource_rp73c")
 quantity = 1
 
 [resource]
 script = ExtResource("2_o3a8x")
 type = 0
 slot_data = SubResource("Resource_ofctb")
-name = ""
+name = "Dirt"
 description = "Dirt that has been createdy converting compostable materials."
 menu_texture = SubResource("AtlasTexture_6nroq")
 material_slot_datas = Array[ExtResource("1_pknj4")]([SubResource("Resource_y14ew")])

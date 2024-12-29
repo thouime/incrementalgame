@@ -21,8 +21,6 @@ func setup(
 	set_duration(duration)
 	set_sprite_position()
 	set_label_position()
-	print("Effect Position: ", sprite_2d.position)
-	print("Label Position : ", label.position)
 	self.show()
 	
 	var animation_name : String = "gain" if is_gain else "consume"
