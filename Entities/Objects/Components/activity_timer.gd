@@ -98,4 +98,3 @@ func add_timer_value(value: float) -> void:
 
 func _on_timer_timeout() -> void:
 	end()
-	print("Timer is finished!")
