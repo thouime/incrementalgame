@@ -87,8 +87,7 @@ func _on_interact_signal(pos: Vector2, offset: float, object: StaticBody2D) -> v
 		current_state._on_interact_signal(pos, offset, object)
 
 func _connect_crafting_signal() -> void:
-	if CraftingSystem.has_signal("build_object"):
-		CraftingSystem.connect("build_object", _on_build_object)
+	MenuManager.crafting_menu.craft_item_request.connect(_on_build_object)
 
 # Signal activated via crafting menu, queues events after state change
 func _on_build_object() -> void:
@@ -99,8 +98,6 @@ func _on_build_object() -> void:
 		"signal": "stop_building",
 		"method": _on_stop_building
 	})
-	if current_state and current_state.has_method("start_building"):
-		current_state.start_building()
 
 func _on_stop_building() -> void:
 	change_state(initial_state)

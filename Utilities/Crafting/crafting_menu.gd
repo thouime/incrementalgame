@@ -19,7 +19,9 @@ var craft_hovering: bool = false
 
 func _ready() -> void:
 	populate_crafting_grid()
-
+	var state_machine: Node = PlayerManager.state_machine
+	self.craft_item_request.connect(state_machine._on_build_object)
+	
 # Create the crafting grid for each craftable item
 func populate_crafting_grid() -> void:
 	for craft_data in craft_datas:
