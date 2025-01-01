@@ -8,13 +8,6 @@ const PICKUP = preload("res://Entities/Item/pickup.tscn")
 @onready var inventory_interface: Control = $UI/InventoryInterface
 @onready var hot_bar_inventory: PanelContainer = $UI/HotBarInventory
 @onready var crafting_menu: PanelContainer = $UI/CraftingMenu
-@onready var crafting_references : Dictionary = {
-	"main" : self,
-	"world" : $World,
-	"grass_tiles" : $World.get_node("Grass"),
-	"inventory" : PlayerManager.player_inventory,
-	"grid" : $Grid
-}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -23,10 +16,6 @@ func _ready() -> void:
 	
 	# Initialize menu information
 	setup_menus()
-	
-	# Initialize references in Singletons
-	CraftingSystem.set_references(crafting_references)
-	crafting_menu.craft_item_request.connect(CraftingSystem.try_craft)
 
 func setup_inventory() -> void:
 	inventory_interface.mouse_filter = Control.MOUSE_FILTER_IGNORE

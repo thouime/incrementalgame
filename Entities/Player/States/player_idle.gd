@@ -29,6 +29,13 @@ func process_physics(_delta: float) -> State:
 	
 	return null
 
+func get_next_state(event_data: Dictionary) -> State:
+	match event_data.type:
+		"craft":
+			return build_state
+		_:
+			return null
+
 func _on_interact_signal(
 	pos: Vector2, 
 	offset: float,

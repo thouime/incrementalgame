@@ -1,15 +1,15 @@
 extends PanelContainer
 
 # Let the state machine know that it can enter the building state
-signal craft_item_request
+signal craft_request
 
 const Slot = preload("res://Utilities/Crafting/crafting_slot.tscn")
 
 # Small interface element that displays info about each craftable
 const CRAFT_INFO = preload("res://Utilities/Crafting/craft_info.tscn")
 
-# All the different craftable items/objects 
-@export var craft_datas: Array[CraftData]
+# All the crafting slots in the menu
+@export var craft_slots: Array[CraftData]
 
 # Flag to check if mouse is hovering over Craftables for more info
 var craft_hovering: bool = false
@@ -19,17 +19,15 @@ var craft_hovering: bool = false
 
 func _ready() -> void:
 	populate_crafting_grid()
-	var state_machine: Node = PlayerManager.state_machine
-	self.craft_item_request.connect(state_machine._on_build_object)
 	
 # Create the crafting grid for each craftable item
 func populate_crafting_grid() -> void:
-	for craft_data in craft_datas:
+	for craft_slot in craft_slots:
 		var slot: PanelContainer = Slot.instantiate()
 		crafting_grid.add_child(slot)
-		if craft_data:
-			slot.set_craft_data(craft_data)
-			add_info(craft_data)
+		if craft_slot:
+			slot.set_craft_data(craft_slot)
+			add_info(craft_slot)
 		slot.craft_slot_clicked.connect(self.on_slot_clicked)
 		slot.craft_slot_hovered.connect(self.on_slot_hovered)
 		slot.craft_slot_exited.connect(self.on_slot_exited)
@@ -72,7 +70,7 @@ func hide_craft_info(craft_slot: int) -> void:
 			craft_info.hide()
 			
 func on_slot_clicked(craft_slot: int, _button: int) -> void:
-	craft_item_request.emit(craft_datas[craft_slot])
+	craft_request.emit(craft_slots[craft_slot])
 
 func on_slot_hovered(index: int) -> void:
 	show_craft_info(index)

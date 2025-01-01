@@ -6,7 +6,6 @@ signal stop_building
 @export var idle_state : State
 @onready var grid: Control = $Grid
 
-
 func enter() -> void:
 	parent.animated_sprite.animation = idle_animations[parent.direction]
 	print("Entered Building State")
@@ -49,3 +48,7 @@ func complete_building() -> void:
 	
 func process_craft_event(data) -> void:
 	print("Process craft event started!")
+	print("Data: ", data)
+
+func _on_stop_building() -> void:
+	print("Stopping building...")

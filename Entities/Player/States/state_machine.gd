@@ -8,8 +8,8 @@ var event_queue : Array = []
 # Keep track of the last direction the player was facing for animations
 var last_direction: Vector2 = Vector2.UP
 # Keep track of the current interacting object
-var interact_target: Node = null
-var crafting_system: Node = null
+var interact_target : Node = null
+var crafting_system : Node = null
 
 func _ready() -> void:
 	# Connect signals for state changes outside the scope of each state
@@ -48,13 +48,33 @@ func process_queue() -> void:
 		handle_event(event_data)
 
 func handle_event(event_data: Dictionary) -> void:
+	if not current_state:
+		print("Current State is not set.")
+		return
+
 	match event_data.type:
 		"craft":
 			current_state.handle_event(event_data)
+		"build":
+			current_state.handle_event(event_data)
 		"connect_signal":
-			print("Connecting signal to ", current_state)
-			if current_state:
-				current_state.connect(event_data.signal, event_data.method)
+			connect_signal(event_data["signal"], event_data["func"])
+
+func connect_signal(
+	signal_name: StringName, 
+	func_name: StringName
+) -> void:
+	if not current_state:
+		print("Current State is not set.")
+		return
+		
+	var func_callable := Callable(current_state, func_name)
+	
+	if current_state.is_connected(signal_name, func_callable):
+		print("Signal is already connected.")
+		return
+		
+	current_state.connect(signal_name, func_callable)
 
 # Pass through functions for the Player to call,
 # handling state changes as needed.
@@ -73,9 +93,16 @@ func process_frame(delta: float) -> void:
 	if new_state:
 		change_state(new_state)
 
+# Process state event from external inputs (such as crafting menu)
+func process_state_event(event_data: Dictionary) -> void:
+	var new_state : State = current_state.get_next_state(event_data)
+	if new_state:
+		change_state(new_state)
+
 func _connect_signals() -> void:
-	_connect_interact_signals()
-	_connect_crafting_signal()
+	# Connect signals after the scene tree is loaded
+	call_deferred("_connect_interact_signals")
+	call_deferred("_connect_crafting_signal")
 
 func _connect_interact_signals() -> void:
 	for node in get_tree().get_nodes_in_group("interactables"):
@@ -87,17 +114,21 @@ func _on_interact_signal(pos: Vector2, offset: float, object: StaticBody2D) -> v
 		current_state._on_interact_signal(pos, offset, object)
 
 func _connect_crafting_signal() -> void:
-	MenuManager.crafting_menu.craft_item_request.connect(_on_build_object)
+	MenuManager.crafting_menu.craft_request.connect(_on_craft_request)
 
 # Signal activated via crafting menu, queues events after state change
-func _on_build_object() -> void:
-	#enqueue_event({"type": "craft", "data": data})
-	enqueue_event({"type": "craft", "data": null})
+func _on_craft_request(craft_slot: CraftData) -> void:
+	print("queuing events...")
+
+	var craft_event: Dictionary = {
+		"type": "craft",
+		"data": craft_slot
+	}
 	enqueue_event({
 		"type": "connect_signal",
 		"signal": "stop_building",
-		"method": _on_stop_building
+		"func": "_on_stop_building"
 	})
-
-func _on_stop_building() -> void:
-	change_state(initial_state)
+	enqueue_event(craft_event)
+	process_state_event(craft_event)
+	

@@ -33,7 +33,7 @@ func enter() -> void:
 func exit() -> void:
 	pass
 
-func handle_event(event_data) -> void:
+func handle_event(event_data: Dictionary) -> void:
 	print("Handling event: %s" % event_data)
 
 func process_input(_event: InputEvent) -> State:
@@ -43,4 +43,8 @@ func process_frame(_delta: float) -> State:
 	return null
 
 func process_physics(_delta: float) -> State:
+	return null
+
+func get_next_state(_event_data: Dictionary) -> State:
+	print("This state doesn't have a get_next_event method!")
 	return null
