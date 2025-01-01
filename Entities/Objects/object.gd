@@ -16,6 +16,9 @@ func _ready() -> void:
 	selection.mouse_entered.connect(_on_selection_mouse_entered)
 	selection.mouse_exited.connect(_on_selection_mouse_exited)
 	selection.input_event.connect(_on_selection_input_event)
+	
+	# Add to persist group for saving
+	add_to_group("Persist")
 
 # Get an offset for the player to be distanced from the object
 func _get_offset() -> void:

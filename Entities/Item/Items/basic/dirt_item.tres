@@ -11,5 +11,5 @@ region = Rect2(32, 640, 32, 32)
 script = ExtResource("1_54cax")
 name = "Dirt"
 description = "Dirt is a placeable item that can be used to expand your world."
-stackable = true
+_stackable = true
 texture = SubResource("AtlasTexture_v43ck")

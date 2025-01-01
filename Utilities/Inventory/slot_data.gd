@@ -8,17 +8,17 @@ const MAX_STACK_SIZE: int = 99
 
 func can_merge_with(other_slot_data: SlotData) -> bool:
 	return item_data == other_slot_data.item_data \
-			and item_data.stackable \
+			and item_data.get_stackable() \
 			and quantity < MAX_STACK_SIZE
 
 func can_fully_merge_with(other_slot_data: SlotData) -> bool:
 	return item_data == other_slot_data.item_data \
-			and item_data.stackable \
+			and item_data.get_stackable() \
 			and quantity + other_slot_data.quantity <= MAX_STACK_SIZE
 
 func can_partially_merge_with(other_slot_data: SlotData) -> bool:
 	return 	item_data == other_slot_data.item_data \
-			and item_data.stackable \
+			and item_data.get_stackable() \
 			and MAX_STACK_SIZE - quantity > 0
 		
 func partially_merge_with() -> void:
@@ -34,8 +34,12 @@ func create_single_slot_data() -> SlotData:
 	quantity -= 1
 	return new_slot_data
 
+func set_item(item: ItemData) -> void:
+	item_data = item
+
 func set_quantity(value: int) -> void:
 	quantity = value
-	if quantity > 1 and not item_data.stackable:
+	var stackable := item_data.get_stackable()
+	if quantity > 1 and not stackable:
 		quantity = 1
 		push_error("%s is not stackable, setting quantity to 1." % item_data.name)

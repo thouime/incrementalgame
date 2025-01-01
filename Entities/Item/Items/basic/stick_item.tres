@@ -11,5 +11,5 @@ region = Rect2(352, 544, 32, 32)
 script = ExtResource("1_bftsd")
 name = "Stick"
 description = "A thin piece of wood that has fallen from a bush or tree. Can be used for crafting basic tools and objects."
-stackable = true
+_stackable = true
 texture = SubResource("AtlasTexture_wjt34")

@@ -39,7 +39,7 @@ func interact_action(_player: CharacterBody2D) -> void:
 	if compost_ready:
 		# Add dirt to inventory
 		# Duplicate so we don't modify the original
-		var new_slot_data = composted_dirt.slot_data.duplicate() as SlotData
+		var new_slot_data := composted_dirt.slot_data.duplicate() as SlotData
 		inventory.pick_up_slot_data(new_slot_data)
 		add_item_effect(new_slot_data.item_data.texture, dirt_received, true)
 		compost_ready = false

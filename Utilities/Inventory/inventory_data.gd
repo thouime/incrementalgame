@@ -1,7 +1,8 @@
 extends Resource
 class_name InventoryData
 
-@export var slot_datas: Array[SlotData]
+@export var slot_datas : Array[SlotData]
+@export var inventory_size : int = 10
 
 signal inventory_interact(inventory_data: InventoryData, index: int, button: int)
 signal inventory_updated(inventory_data: InventoryData)
@@ -10,6 +11,13 @@ func initialize_slots(size: int, default_value: Variant = null) -> void:
 	slot_datas = []
 	for i in range(size):
 		slot_datas.append(default_value)
+
+func get_inventory_slots() -> Array[SlotData]:
+	return slot_datas
+
+func set_inventory_slots(new_slot_datas: Array[SlotData]) -> void:
+	slot_datas = new_slot_datas
+	inventory_updated.emit(self)
 
 func grab_slot_data(index: int) -> SlotData:
 	var slot_data: SlotData = slot_datas[index]

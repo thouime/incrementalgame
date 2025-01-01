@@ -11,5 +11,5 @@ region = Rect2(480, 352, 32, 32)
 script = ExtResource("1_fsj73")
 name = "Leaf"
 description = "Just a regular leaf. Maybe it's compostable?"
-stackable = true
+_stackable = true
 texture = SubResource("AtlasTexture_2cxfo")
