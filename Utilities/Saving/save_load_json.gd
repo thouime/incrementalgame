@@ -14,6 +14,7 @@ func _ready() -> void:
 	main = get_tree().current_scene
 	load_all_items()
 
+	
 func save_game() -> void:
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 
@@ -33,7 +34,7 @@ func save_game() -> void:
 		world = {
 			# Save all placed objects in the game
 			objects = save_objects(),
-			tiles = player.placed_tiles
+			tiles = save_tiles(player.placed_tiles)
 		}
 	}
 	# Save chest inventories
@@ -75,16 +76,13 @@ func save_objects() -> Array:
 			"position": var_to_str(object.position),
 			"scale": var_to_str(object.scale)
 		}
-		print(object_data)
 		
 		# Save specific data for unique objects 
 		save_type_data(object, object_data)
 		
 		serialized_objects.append(object_data)
-		# Gather time
-		# if it has a drop table (like bush or tree)
-		# External inventory if it has it
-		# Fill status
+		
+		save_tiles(PlayerManager.player.placed_tiles)
 	return serialized_objects
 
 func save_type_data(object: StaticBody2D, object_data: Dictionary) -> void:
@@ -95,6 +93,24 @@ func save_type_data(object: StaticBody2D, object_data: Dictionary) -> void:
 			object_data["inventory"] = serialized_inventory
 		"Processing":
 			object_data["fill_status"] = object.current_amount
+
+func save_tiles(tiles: Dictionary) -> Dictionary:
+	var serialized_tiles = {}
+	for tile_map in tiles.keys():
+		var atlas_coords_dict = {}
+		for atlas_coords in tiles[tile_map].keys():
+			var coordinates = tiles[tile_map][atlas_coords]
+			
+			# Convert each Vector2 into json friendly string
+			var json_coordinates = []
+			for coord in coordinates:
+				json_coordinates.append(str(coord))
+			
+			atlas_coords_dict[str(atlas_coords)] = json_coordinates
+			
+		serialized_tiles[tile_map.name] = atlas_coords_dict
+			
+	return serialized_tiles
 
 func load_game() -> void:
 	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
@@ -125,6 +141,8 @@ func load_game() -> void:
 	player_inventory.set_inventory_slots(inventory_data)
 	
 	load_objects(save_dict.world.objects)
+	
+	load_tiles(save_dict.world.tiles)
 	
 	print("Game loaded successfully!")
 
@@ -217,6 +235,29 @@ func add_shaders(new_object: StaticBody2D) -> void:
 		if new_material.shader:
 			new_material.shader = new_material.shader.duplicate()
 		new_object.material = new_material
+
+func load_tiles(placed_tiles: Dictionary) -> void:
+	var deserialized_tiles = {}
+	var world = get_node("/root/Main/World")
+	for tile_map_name in placed_tiles.keys():
+		var atlas_coords = placed_tiles[tile_map_name].keys()
+		var tile_map = world.get_node(tile_map_name)
+		for atlas_coord in atlas_coords:
+			# Array of all tile coordinates
+			var atlas_tile = str_to_vector2i(atlas_coord)
+			for tile in placed_tiles[tile_map_name][atlas_coord]:
+				var coord = str_to_vector2i(tile)
+				tile_map.set_cell(
+					coord,
+					0,
+					atlas_tile
+				)
+
+func str_to_vector2i(vector_str: String) -> Vector2i:
+	var cleaned_str = vector_str.replace("(", "").replace(")", "")
+	var coords = cleaned_str.split(",")
+	var restored_vector = Vector2i(coords[0].to_int(), coords[1].to_int())
+	return restored_vector
 
 # Get references to item resourcef files
 func load_all_items() -> void:

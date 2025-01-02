@@ -93,9 +93,9 @@ func build_tile(tiles_to_build: Array) -> void:
 	)
 	add_tile(tiles_to_build, grass_tiles)
 	# Add the tiles to a dictionary for saving/loading
-	store_placed_tiles(tiles_to_build, grass_tiles)
-	
-	add_boundary(tilemap_coordinates, boundary_tiles)
+	var placed_boundary = add_boundary(tilemap_coordinates, boundary_tiles)
+	store_placed_tiles(tiles_to_build, grass_tiles, placed_boundary)
+	#store_placed_tiles(boundary_to_build, boundary_tiles)
 	check_and_remove_boundary(grid.get_global_mouse_position(), boundary_tiles)
 	inventory.reduce_slot_amount(tile_info.item, 1)
 	# Remove total materials from dictionary
@@ -105,21 +105,57 @@ func build_tile(tiles_to_build: Array) -> void:
 
 func store_placed_tiles(
 	tiles_to_build: Array, 
-	grass_tiles: TileMapLayer
+	tile_map: TileMapLayer,
+	placed_boundary_tiles: Array
 ) -> void:
 	var placed_tiles = PlayerManager.player.placed_tiles
 	var atlas_coords = tile_info.tile_map_coordinates
-	if not placed_tiles.has(grass_tiles):
-		placed_tiles[grass_tiles] = {}
 	
-	if not placed_tiles[grass_tiles].has(atlas_coords):
-		placed_tiles[grass_tiles][atlas_coords] = {
-			"coordinates" : tiles_to_build,
-			"source_id": 0
+	# Dictionary will look like this
+	#var placed_tiles_dict = {
+		#tile_map_1: { # The tilemap will be the key
+			## Key for position of tile in tilemap atlas
+			#atlas_coords_1: [Vector(1, 1), Vector(2, 2)], 
+			#atlas_coords_2: [Vector[3, 3]]
+		#}
+		#tile_map_2: {
+			#atlas_coords_1: [Vector(1, 1), Vector(2, 2)], 
+			#atlas_coords_2: [Vector[3, 3]]
+		#}
+	#}
+	
+	# Add dictionary key if it doesn't exist
+	if not placed_tiles.has(tile_map):
+		placed_tiles[tile_map] = {}
+	
+	# Add key for atlas_coords if it doesn't exist
+	if not placed_tiles[tile_map].has(atlas_coords):
+		placed_tiles[tile_map][atlas_coords] = {
+			"tiles": tiles_to_build.duplicate(),
+			"boundary": placed_boundary_tiles.duplicate()
 		}
 	else:
-		placed_tiles[grass_tiles][atlas_coords]["coordinates"] += tiles_to_build
+		# Merge existing arrays
+		var existing_data = placed_tiles[tile_map][atlas_coords]
+		
+		# Merge main tiles
+		var existing_tiles = existing_data["tiles"]
+		existing_data["tiles"] = merge_array(tiles_to_build, existing_tiles)
+		
+		# Merge boundary tiles (store coordinates instead of TileMapLayer reference)
+		var existing_boundaries = existing_data["boundary"]
+		existing_data["boundary"] += placed_boundary_tiles  # Add new boundary coordinates
+		
+		# Update the dictionary
+		placed_tiles[tile_map][atlas_coords] = existing_data
 
+func merge_array(array_one: Array, array_two: Array) -> Array:
+	var new_array = array_one.duplicate()
+	for item in array_two:
+		if not array_one.has(item):
+			new_array.append(item)
+	return new_array
+	
 func search_tiles(
 	cursor_position: Vector2, 
 	tile_map_layer: TileMapLayer
@@ -166,7 +202,10 @@ func add_tile(
 func add_boundary(
 	tilemap_coordinates: Vector2,
 	tiles: TileMapLayer
-) -> void:
+) -> Array:
+	# Keep track of boundary tiles that were placed for saving
+	var placed_boundary_tiles := []
+	
 	# Check the adjacent cells outside the 2x2 area of the placed tiles
 	for x in range(-1, 3):  # From -1 to 2 to check all adjacent positions
 		for y in range(-1, 3):  # From -1 to 2 to check all adjacent positions
@@ -180,12 +219,14 @@ func add_boundary(
 			
 			# If there's no tile in the adjacent cell, place a boundary tile
 			if !adjacent_data:
+				placed_boundary_tiles.append(adjacent_position)
 				# Place a 1x1 boundary tile here (boundary tiles will be placed individually)
 				tiles.set_cell(
 					adjacent_position, 
 					0,  # Use the correct boundary tile ID here
 					tile_info.tile_boundary.tile_map_coordinates
 				)
+	return placed_boundary_tiles
 
 func check_and_remove_boundary(
 	position: Vector2, 
