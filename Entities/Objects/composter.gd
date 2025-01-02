@@ -7,6 +7,7 @@ const ITEM_FEEDBACK_EFFECT = preload("res://Entities/Objects/Components/ItemFeed
 var composted_dirt : CraftData = preload(
 	"res://Utilities/Crafting/Crafts/dirt_craft.tres"
 )
+var current_amount : int = 0
 var compostable_item : ItemData
 var compostable_amount : int
 var leaves_needed : int # Leaves needed to fill the compost bin
@@ -17,7 +18,9 @@ var compost_ready : bool = false
 
 func _ready() -> void:
 	super._ready()
+	# For saving the type of object
 	object_type = "Processing"
+	object_name = "composter"
 	# Set the compostable item to the first item in the material slot datas
 	# This is just the required items needed for a craft, in this case only 1
 	if composted_dirt.material_slot_datas.size() > 0:
@@ -62,8 +65,7 @@ func add_compost() -> void:
 		(float(leaves_removed) / float(compostable_amount))
 		 * 100.0
 	)
-	
-	activity_timer.set_progress_value(percent)
+	set_current_amount(percent)
 	var progress: float = activity_timer.get_progress_value()
 	if progress >= 100.0:
 		print("Composter is full, starting timer.")
@@ -79,6 +81,11 @@ func add_item_effect(icon: Texture, quantity: int, is_gain: bool) -> void:
 		is_gain
 	)
 
+func set_current_amount(percent: float) -> void:
+	current_amount = percent
+	activity_timer.set_progress_value(percent)
+
 func _on_compost_ready() -> void:
 	compost_ready = true
 	leaves_needed = compostable_amount
+	current_amount = 0

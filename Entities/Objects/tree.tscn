@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Entities/Objects/tree.gd" id="1_pwwmb"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="2_ftg84"]
 
-[sub_resource type="Shader" id="Shader_pv86w"]
+[sub_resource type="Shader" id="Shader_tr10c"]
 code = "shader_type canvas_item;
 
 uniform vec4 color : source_color = vec4(1.0);
@@ -81,7 +81,7 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wdyxv"]
 resource_local_to_scene = true
-shader = SubResource("Shader_pv86w")
+shader = SubResource("Shader_tr10c")
 shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0

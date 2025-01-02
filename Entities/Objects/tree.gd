@@ -1,6 +1,7 @@
 extends "res://Entities/Objects/gathering_interact.gd"
 	
 func _ready() -> void:
+	super._ready()
 	set_object_name("tree")
 	
 func interact_action(player: CharacterBody2D) -> void:

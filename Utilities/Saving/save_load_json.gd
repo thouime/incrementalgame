@@ -6,6 +6,8 @@ var player_node: NodePath
 # Keep a dictionary of all resource items to load them in the game
 var items_by_name: Dictionary = {}
 var main: Node
+# Keep track of any objects that were already loaded when loading again
+var loaded_objects: Array = []
 
 func _ready() -> void:
 	player_node = PlayerManager.player.get_path()
@@ -66,17 +68,16 @@ func save_objects() -> Array:
 			continue
 		var object_name = object.get_object_name()
 		var object_data := {
+			"id": object.object_id,
 			"name": object_name,
 			"type": object.get_object_type(),
 			"position": var_to_str(object.position),
 			"scale": var_to_str(object.scale)
 		}
+		print(object_data)
 		
-		# CHeck if the object has an inventory to serialize
-		if object_data["type"] == "External Inventory":
-			var inventory = object.inventory_data.get_inventory_slots()
-			var serialized_inventory = serialize_inventory(inventory)
-			object_data["inventory"] = serialized_inventory
+		# Save specific data for unique objects 
+		save_type_data(object, object_data)
 		
 		serialized_objects.append(object_data)
 		# Gather time
@@ -84,6 +85,15 @@ func save_objects() -> Array:
 		# External inventory if it has it
 		# Fill status
 	return serialized_objects
+
+func save_type_data(object: StaticBody2D, object_data: Dictionary) -> void:
+	match object_data["type"]:
+		"External Inventory":
+			var inventory = object.inventory_data.get_inventory_slots()
+			var serialized_inventory = serialize_inventory(inventory)
+			object_data["inventory"] = serialized_inventory
+		"Processing":
+			object_data["fill_status"] = object.current_amount
 
 func load_game() -> void:
 	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
@@ -135,13 +145,26 @@ func deserialize_inventory(
 
 # Load all the objects in the game
 func load_objects(serialized_objects: Array) -> void:
-	var load_objects = serialized_objects
-	for object_data in load_objects:
+	clear_loaded_objects()
+	for object_data in serialized_objects:
 		create_object(object_data)
-	print("Object added to world.")
+			
+# Clear all player made objects before loading them in
+func clear_loaded_objects() -> void:
+	for child in main.get_children():
+		if not child.has_method("get_player_generated"):
+			continue
+		if child.get_player_generated():
+			print("Queueing Free Object...")
+			child.queue_free()
+
+func find_object_by_id(object_id: int) -> Node:
+	for object in loaded_objects:
+		if object.object_id == object_id:
+			return object
+	return null
 
 func create_object(object_data: Dictionary) -> void:
-	
 	# Get object scene from objects folder
 	var objects_path = "res://Entities/Objects/"
 	var object_path: String = objects_path + object_data.name + ".tscn"
@@ -161,23 +184,32 @@ func create_object(object_data: Dictionary) -> void:
 	new_object.player_generated = true
 	new_object.connect("interact", PlayerManager.state_machine._on_interact_signal)
 	
+	# Add to scene and initialize
 	main.add_child(new_object)
 	
+	# Need the objects to run _ready initialization before running this
+	load_type_data(new_object, object_data)
+	
+	loaded_objects.append(new_object)
+	
+	print("Object added to world.")
+
+func load_type_data(object: StaticBody2D, object_data: Dictionary) -> void:
 	match object_data.type:
 		"External Inventory":
 			# Load inventory
 			var inventory_array : Array = object_data.inventory
 			var inventory_data := deserialize_inventory(inventory_array)
-			new_object.inventory_data.set_inventory_slots(inventory_data)
-			new_object.toggle_inventory.connect(
+			object.inventory_data.set_inventory_slots(inventory_data)
+			object.toggle_inventory.connect(
 				main.toggle_inventory_interface
 			)
 			print("External Inventory connected")
-		# load inventory of object
 		"Processing":
 			# Load fill status
-			pass
-	
+			if object_data.fill_status > 0:
+				object.set_current_amount(object_data.fill_status)
+
 func add_shaders(new_object: StaticBody2D) -> void:
 	if new_object.material:
 		var new_material: ShaderMaterial = new_object.material.duplicate()

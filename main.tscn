@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bgi5nv12xjmka"]
+[gd_scene load_steps=30 format=3 uid="uid://bgi5nv12xjmka"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_xtwid"]
 [ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="2_h00hh"]
@@ -8,7 +8,6 @@
 [ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="7_jfsv6"]
 [ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://Stages/World/world.tscn" id="8_8lnwa"]
 [ext_resource type="PackedScene" uid="uid://cednyx6i43tlg" path="res://Entities/Objects/tree.tscn" id="8_73jjx"]
-[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="9_4puhs"]
 [ext_resource type="PackedScene" uid="uid://byoflltw01rq5" path="res://Entities/Objects/bush.tscn" id="14_h5qyt"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_interface.gd" id="15_4fcd7"]
 [ext_resource type="PackedScene" uid="uid://cjvrn7m4iia17" path="res://Utilities/Inventory/inventory.tscn" id="16_gmsb7"]
@@ -48,7 +47,7 @@ script = ExtResource("4_2dnpy")
 slot_datas = Array[ExtResource("5_b2i4h")]([null])
 inventory_size = 10
 
-[sub_resource type="Shader" id="Shader_pv86w"]
+[sub_resource type="Shader" id="Shader_htk2q"]
 code = "shader_type canvas_item;
 
 uniform vec4 color : source_color = vec4(1.0);
@@ -104,7 +103,7 @@ void fragment() {
 
         // Clamp UV to ensure we don't sample outside the intended area
         uv = clamp(uv, image_top_left, image_bottom_right);
-        
+
         // Only sample if the UV is within the bounds
         if (uv == image_top_left || uv == image_bottom_right) {
             COLOR.a = 0.0; // Make it fully transparent if clamped to edges
@@ -124,9 +123,9 @@ void fragment() {
 	}
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pr1xd"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5c6pj"]
 resource_local_to_scene = true
-shader = SubResource("Shader_pv86w")
+shader = SubResource("Shader_htk2q")
 shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
@@ -137,7 +136,7 @@ shader_parameter/focus = 0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5k06o"]
 resource_local_to_scene = true
-shader = ExtResource("9_4puhs")
+shader = SubResource("Shader_htk2q")
 shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
@@ -174,7 +173,7 @@ inventory_data = SubResource("Resource_66drq")
 equip_inventory_data = SubResource("Resource_0msbn")
 
 [node name="Tree" parent="." instance=ExtResource("8_73jjx")]
-material = SubResource("ShaderMaterial_pr1xd")
+material = SubResource("ShaderMaterial_5c6pj")
 
 [node name="World" parent="." instance=ExtResource("8_8lnwa")]
 position = Vector2(64, 160)

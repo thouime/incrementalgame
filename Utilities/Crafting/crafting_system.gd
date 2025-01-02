@@ -224,6 +224,8 @@ func place_object() -> void:
 		preview_object.player_generated = true
 		# Add the object to the world
 		main.add_child(preview_object)
+		# Set unique identifier for the object instance (for saving/loading)
+		preview_object.object_id = preview_object.get_instance_id()
 		preview_object.connect("interact", PlayerManager.state_machine._on_interact_signal)
 		
 		# Any external inventories need to be connected to inventory signal

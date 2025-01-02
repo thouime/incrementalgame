@@ -7,6 +7,8 @@ var player_offset: float = 0.0
 var player_generated: bool = false
 var object_type: String
 var object_name: String
+# Unique identifier for the instance of the object (for saving/loading)
+var object_id: int
 
 @onready var selection: Area2D = $Selection
 
@@ -30,6 +32,9 @@ func _get_offset() -> void:
 			player_offset += child.get_rect().size.x
 	player_offset = player_offset / 2 + 10
 
+func get_player_generated() -> bool:
+	return player_generated
+
 func get_object_type() -> String:
 	return object_type
 
@@ -39,8 +44,8 @@ func set_object_type(type: String) -> void:
 func get_object_name() -> String:
 	return object_name
 
-func set_object_name(name: String) -> void:
-	object_name = name
+func set_object_name(new_name: String) -> void:
+	object_name = new_name
 
 func focus_shader(focus_state: int) -> void:
 	# Prevent hover shaders while in building state
