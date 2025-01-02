@@ -64,13 +64,20 @@ func save_objects() -> Array:
 		# Objects that are placed by the editor do not need to be saved/loaded
 		if not object.player_generated:
 			continue
-		var object_name = object.get_name()
+		var object_name = object.get_object_name()
 		var object_data := {
 			"name": object_name,
 			"type": object.get_object_type(),
 			"position": var_to_str(object.position),
 			"scale": var_to_str(object.scale)
 		}
+		
+		# CHeck if the object has an inventory to serialize
+		if object_data["type"] == "External Inventory":
+			var inventory = object.inventory_data.get_inventory_slots()
+			var serialized_inventory = serialize_inventory(inventory)
+			object_data["inventory"] = serialized_inventory
+		
 		serialized_objects.append(object_data)
 		# Gather time
 		# if it has a drop table (like bush or tree)
@@ -148,23 +155,35 @@ func create_object(object_data: Dictionary) -> void:
 	var new_object: StaticBody2D = packed_scene.instantiate()
 
 	# Set properites of object
-	add_shaders(new_object.material)
+	add_shaders(new_object)
 	new_object.position = str_to_var(object_data.position)
 	new_object.scale = str_to_var(object_data.scale)
+	new_object.player_generated = true
 	new_object.connect("interact", PlayerManager.state_machine._on_interact_signal)
 	
-	if object_data.type == "External Inventory":
-		new_object.toggle_inventory.connect(main.toggle_inventory_interface)
-		print("External Inventory connected")
-		# load inventory of object
 	main.add_child(new_object)
 	
-func add_shaders(object_material: Material) -> void:
-	if object_material:
-		var new_material: ShaderMaterial = object_material.duplicate()
+	match object_data.type:
+		"External Inventory":
+			# Load inventory
+			var inventory_array : Array = object_data.inventory
+			var inventory_data := deserialize_inventory(inventory_array)
+			new_object.inventory_data.set_inventory_slots(inventory_data)
+			new_object.toggle_inventory.connect(
+				main.toggle_inventory_interface
+			)
+			print("External Inventory connected")
+		# load inventory of object
+		"Processing":
+			# Load fill status
+			pass
+	
+func add_shaders(new_object: StaticBody2D) -> void:
+	if new_object.material:
+		var new_material: ShaderMaterial = new_object.material.duplicate()
 		if new_material.shader:
 			new_material.shader = new_material.shader.duplicate()
-		object_material = new_material
+		new_object.material = new_material
 
 # Get references to item resourcef files
 func load_all_items() -> void:

@@ -14,7 +14,7 @@ func _ready() -> void:
 	super._ready()
 	# Initialize all the drops added from the editor
 	drop_table.setup()
-	
+	set_object_name("bush")
 	activity_timer.timer_finished.connect(_on_gather_timeout)
 	activity_timer.set_time(gather_time)
 

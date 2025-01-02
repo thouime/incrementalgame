@@ -17,6 +17,7 @@ var compost_ready : bool = false
 
 func _ready() -> void:
 	super._ready()
+	object_type = "Processing"
 	# Set the compostable item to the first item in the material slot datas
 	# This is just the required items needed for a craft, in this case only 1
 	if composted_dirt.material_slot_datas.size() > 0:

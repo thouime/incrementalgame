@@ -6,6 +6,7 @@ signal interact
 var player_offset: float = 0.0
 var player_generated: bool = false
 var object_type: String
+var object_name: String
 
 @onready var selection: Area2D = $Selection
 
@@ -34,6 +35,12 @@ func get_object_type() -> String:
 
 func set_object_type(type: String) -> void:
 	object_type = type
+
+func get_object_name() -> String:
+	return object_name
+
+func set_object_name(name: String) -> void:
+	object_name = name
 
 func focus_shader(focus_state: int) -> void:
 	# Prevent hover shaders while in building state
