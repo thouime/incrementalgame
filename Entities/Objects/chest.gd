@@ -6,6 +6,7 @@ signal toggle_inventory(external_inventory_owner: Node)
 
 func _ready() -> void:
 	super._ready()
+	object_type = "External Inventory"
 	inventory_data = InventoryData.new()
 	inventory_data.initialize_slots(20)
 	add_to_group("external_inventory")

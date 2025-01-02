@@ -220,6 +220,8 @@ func place_object() -> void:
 
 		# Set object position to the grid cursor position
 		preview_object.position = grid.get_cursor()
+		# Keep track of objects created by the player for saving
+		preview_object.player_generated = true
 		# Add the object to the world
 		main.add_child(preview_object)
 		preview_object.connect("interact", PlayerManager.state_machine._on_interact_signal)

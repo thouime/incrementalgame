@@ -12,5 +12,5 @@ script = ExtResource("1_g5hml")
 defence = 1
 name = "Iron Helm"
 description = "A piece of armor used to protect thine skull."
-stackable = false
+_stackable = false
 texture = SubResource("AtlasTexture_q70fw")

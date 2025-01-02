@@ -27,6 +27,9 @@ func interact_action(_player: CharacterBody2D) -> void:
 func stop_interact_action(_player: CharacterBody2D) -> void:
 	activity_timer.stop()
 
+func is_gathering() -> bool:
+	return activity_timer.is_running()
+
 func get_drop(player: CharacterBody2D) -> Dictionary:
 	# Attempt to get a random drop from the drop table
 	var selected_drop: SlotData = drop_table.get_random_drop()

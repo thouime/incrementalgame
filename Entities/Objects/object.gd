@@ -4,6 +4,8 @@ signal interact
 
 # Offset for the player to be distanced from the object
 var player_offset: float = 0.0
+var player_generated: bool = false
+var object_type: String
 
 @onready var selection: Area2D = $Selection
 
@@ -26,6 +28,12 @@ func _get_offset() -> void:
 		if child is Sprite2D:
 			player_offset += child.get_rect().size.x
 	player_offset = player_offset / 2 + 10
+
+func get_object_type() -> String:
+	return object_type
+
+func set_object_type(type: String) -> void:
+	object_type = type
 
 func focus_shader(focus_state: int) -> void:
 	# Prevent hover shaders while in building state

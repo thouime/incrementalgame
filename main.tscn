@@ -1,52 +1,46 @@
-[gd_scene load_steps=43 format=3 uid="uid://bgi5nv12xjmka"]
+[gd_scene load_steps=31 format=3 uid="uid://bgi5nv12xjmka"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_xtwid"]
 [ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="2_h00hh"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data_equip.gd" id="4_2dnpy"]
 [ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="5_b2i4h"]
-[ext_resource type="Script" path="res://Entities/Objects/tree.gd" id="6_ip07t"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="7_8rb2x"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="7_jfsv6"]
 [ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://Stages/World/world.tscn" id="8_8lnwa"]
+[ext_resource type="PackedScene" uid="uid://cednyx6i43tlg" path="res://Entities/Objects/tree.tscn" id="8_73jjx"]
 [ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="9_4puhs"]
-[ext_resource type="Resource" uid="uid://bkbrdn41jos3k" path="res://Entities/Item/Items/battle/iron_helm_equip.tres" id="10_7mrtg"]
-[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="13_4w014"]
-[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="14_5jodk"]
 [ext_resource type="PackedScene" uid="uid://byoflltw01rq5" path="res://Entities/Objects/bush.tscn" id="14_h5qyt"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_interface.gd" id="15_4fcd7"]
 [ext_resource type="PackedScene" uid="uid://cjvrn7m4iia17" path="res://Utilities/Inventory/inventory.tscn" id="16_gmsb7"]
 [ext_resource type="PackedScene" uid="uid://dj0urcd0clvl4" path="res://Utilities/Inventory/slot.tscn" id="17_gq7v4"]
 [ext_resource type="PackedScene" uid="uid://c8wct85o6jfcu" path="res://Utilities/Inventory/hot_bar_inventory.tscn" id="18_ntxon"]
 [ext_resource type="PackedScene" uid="uid://bp0gw7kcfe8n3" path="res://Utilities/Crafting/crafting_menu.tscn" id="19_urs44"]
-[ext_resource type="Resource" uid="uid://c4yne4f4cx1uw" path="res://Entities/Item/Items/healing/health_potion.tres" id="20_ydott"]
 [ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="21_2rjjw"]
 [ext_resource type="Resource" uid="uid://blampwk84srx8" path="res://Utilities/Crafting/Crafts/composter_craft.tres" id="22_21q6l"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="23_rhjmk"]
 [ext_resource type="PackedScene" uid="uid://cworgwa38bkjg" path="res://Utilities/Saving/save_load_menu.tscn" id="24_bgc6y"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="24_xf1d2"]
 [ext_resource type="Resource" uid="uid://dcqj765a50tqf" path="res://Utilities/Crafting/Crafts/chest_craft.tres" id="26_2pr82"]
-[ext_resource type="PackedScene" uid="uid://ciuy4rj4cpsvn" path="res://Entities/Item/pickup.tscn" id="26_eues2"]
-[ext_resource type="PackedScene" uid="uid://cefnc8f41wint" path="res://Entities/Objects/chest.tscn" id="27_l85p4"]
 [ext_resource type="PackedScene" uid="uid://ckycnx3mj57po" path="res://Utilities/Building/BuildingMenu.tscn" id="27_rirn1"]
-[ext_resource type="PackedScene" uid="uid://by4s6muul7tdg" path="res://Entities/Objects/composter.tscn" id="28_6qef4"]
 
-[sub_resource type="Resource" id="Resource_nuvmb"]
+[sub_resource type="Resource" id="Resource_2t8m8"]
 script = ExtResource("5_b2i4h")
-item_data = ExtResource("13_4w014")
-quantity = 99
+item_data = ExtResource("7_jfsv6")
+quantity = 90
 
-[sub_resource type="Resource" id="Resource_w6n71"]
+[sub_resource type="Resource" id="Resource_cdcud"]
 script = ExtResource("5_b2i4h")
-item_data = ExtResource("14_5jodk")
-quantity = 99
+item_data = ExtResource("7_jfsv6")
+quantity = 90
 
-[sub_resource type="Resource" id="Resource_d7irm"]
+[sub_resource type="Resource" id="Resource_17kvy"]
 script = ExtResource("5_b2i4h")
-item_data = ExtResource("10_7mrtg")
-quantity = 1
+item_data = ExtResource("7_jfsv6")
+quantity = 85
 
 [sub_resource type="Resource" id="Resource_66drq"]
 script = ExtResource("24_xf1d2")
-slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_nuvmb"), SubResource("Resource_w6n71"), SubResource("Resource_d7irm"), null, null, null, null, null, null, null])
+slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_2t8m8"), null, null, null, null, null, null, null, SubResource("Resource_cdcud"), SubResource("Resource_17kvy")])
 inventory_size = 10
 
 [sub_resource type="Resource" id="Resource_0msbn"]
@@ -130,7 +124,7 @@ void fragment() {
 	}
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wdyxv"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pr1xd"]
 resource_local_to_scene = true
 shader = SubResource("Shader_pv86w")
 shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
@@ -141,114 +135,10 @@ shader_parameter/add_margins = true
 shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_gj4gj"]
-size = Vector2(13.5, 5.5)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2edif"]
-size = Vector2(41.5, 55)
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5k06o"]
 resource_local_to_scene = true
 shader = ExtResource("9_4puhs")
 shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
-shader_parameter/width = 0.8
-shader_parameter/pattern = 0
-shader_parameter/inside = true
-shader_parameter/add_margins = true
-shader_parameter/number_of_images = Vector2(1, 1)
-shader_parameter/focus = 0
-
-[sub_resource type="Resource" id="Resource_gmm5h"]
-script = ExtResource("5_b2i4h")
-item_data = ExtResource("20_ydott")
-quantity = 1
-
-[sub_resource type="Resource" id="Resource_xwj4b"]
-script = ExtResource("24_xf1d2")
-slot_datas = Array[ExtResource("5_b2i4h")]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
-inventory_size = 10
-
-[sub_resource type="Shader" id="Shader_u3fbt"]
-resource_local_to_scene = true
-code = "shader_type canvas_item;
-
-uniform vec4 color : source_color = vec4(1.0);
-uniform float width : hint_range(0, 10) = 1.0;
-uniform int pattern : hint_range(0, 2) = 0; // diamond, circle, square
-uniform bool inside = true;
-uniform bool add_margins = true; // only useful when inside is false
-uniform vec2 number_of_images = vec2(1.0); // number of horizontal and vertical images in the sprite sheet
-uniform int focus = 0; // 0 for false, 1 for true
-
-void vertex() {
-    if (add_margins) {
-        VERTEX += sign(VERTEX) * width; // replace sign(VERTEX) by (sign(VERTEX) * 2.0 - 1.0) if not Centered
-    }
-}
-
-bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, vec2 image_top_left, vec2 image_bottom_right, sampler2D texture) {
-    for (float i = -ceil(width); i <= ceil(width); i++) {
-        float x = abs(i) > width ? width * sign(i) : i;
-        float offset;
-
-        if (pattern == 0) {
-            offset = width - abs(x);
-        } else if (pattern == 1) {
-            offset = floor(sqrt(pow(width + 0.5, 2) - x * x));
-        } else if (pattern == 2) {
-            offset = width;
-        }
-
-        for (float j = -ceil(offset); j <= ceil(offset); j++) {
-            float y = abs(j) > offset ? offset * sign(j) : j;
-            vec2 xy = uv + texture_pixel_size * vec2(x, y);
-
-            if ((xy != clamp(xy, image_top_left, image_bottom_right) || texture(texture, xy).a <= 0.0) == inside) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-void fragment() {
-    vec2 uv = UV;
-    vec2 image_top_left = floor(uv * number_of_images) / number_of_images;
-    vec2 image_bottom_right = image_top_left + vec2(1.0) / number_of_images;
-
-    if (add_margins) {
-        vec2 texture_pixel_size = vec2(1.0) / (vec2(1.0) / TEXTURE_PIXEL_SIZE + vec2(width * 2.0) * number_of_images);
-
-        // Calculate the UV coordinates while adding margins
-        uv = (uv - texture_pixel_size * width - image_top_left) * TEXTURE_PIXEL_SIZE / texture_pixel_size + image_top_left;
-
-        // Clamp UV to ensure we don't sample outside the intended area
-        uv = clamp(uv, image_top_left, image_bottom_right);
-        
-        // Only sample if the UV is within the bounds
-        if (uv == image_top_left || uv == image_bottom_right) {
-            COLOR.a = 0.0; // Make it fully transparent if clamped to edges
-        } else {
-            COLOR = texture(TEXTURE, uv);
-        }
-    } else {
-        COLOR = texture(TEXTURE, uv);
-    }
-
-	// Use shader if the object is being focused
-	if (focus == 1) {
-	    if ((COLOR.a > 0.0) == inside && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, image_top_left, image_bottom_right, TEXTURE)) {
-	        COLOR.rgb = inside ? mix(COLOR.rgb, color.rgb, color.a) : color.rgb;
-	        COLOR.a += (1.0 - COLOR.a) * color.a;
-	    }
-	}
-}"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ba34e"]
-resource_local_to_scene = true
-shader = SubResource("Shader_u3fbt")
-shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
 shader_parameter/inside = true
@@ -283,40 +173,8 @@ collision_layer = 2
 inventory_data = SubResource("Resource_66drq")
 equip_inventory_data = SubResource("Resource_0msbn")
 
-[node name="Tree" type="StaticBody2D" parent="."]
-material = SubResource("ShaderMaterial_wdyxv")
-position = Vector2(252, 213)
-scale = Vector2(2, 2)
-script = ExtResource("6_ip07t")
-metadata/_edit_group_ = true
-
-[node name="Sprite1" type="Sprite2D" parent="Tree"]
-z_index = 3
-use_parent_material = true
-texture = ExtResource("7_8rb2x")
-region_enabled = true
-region_rect = Rect2(1, 80, 45, 44)
-
-[node name="Sprite2" type="Sprite2D" parent="Tree"]
-z_index = 1
-use_parent_material = true
-position = Vector2(1.5, 31)
-texture = ExtResource("7_8rb2x")
-region_enabled = true
-region_rect = Rect2(7, 124, 36, 20)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Tree"]
-z_index = 2
-position = Vector2(0.25, 24.25)
-shape = SubResource("RectangleShape2D_gj4gj")
-
-[node name="Selection" type="Area2D" parent="Tree"]
-
-[node name="MouseArea" type="CollisionShape2D" parent="Tree/Selection"]
-visible = false
-z_index = 4
-position = Vector2(0.75, 7.5)
-shape = SubResource("RectangleShape2D_2edif")
+[node name="Tree" parent="." instance=ExtResource("8_73jjx")]
+material = SubResource("ShaderMaterial_pr1xd")
 
 [node name="World" parent="." instance=ExtResource("8_8lnwa")]
 position = Vector2(64, 160)
@@ -384,18 +242,6 @@ craft_datas = Array[ExtResource("21_2rjjw")]([ExtResource("22_21q6l"), ExtResour
 [node name="BuildingMenu" parent="UI" instance=ExtResource("27_rirn1")]
 
 [node name="SaveLoadMenu" parent="UI" instance=ExtResource("24_bgc6y")]
-
-[node name="Pickup" parent="." instance=ExtResource("26_eues2")]
-position = Vector2(260, 405)
-slot_data = SubResource("Resource_gmm5h")
-
-[node name="Chest" parent="." groups=["external_inventory"] instance=ExtResource("27_l85p4")]
-position = Vector2(133, 488)
-inventory_data = SubResource("Resource_xwj4b")
-
-[node name="Composter" parent="." instance=ExtResource("28_6qef4")]
-material = SubResource("ShaderMaterial_ba34e")
-position = Vector2(192, 352)
 
 [connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]
 [connection signal="gui_input" from="UI/InventoryInterface" to="UI/InventoryInterface" method="_on_gui_input"]

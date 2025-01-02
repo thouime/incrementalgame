@@ -5,9 +5,11 @@ const SAVE_PATH = "user://save_json.json"
 var player_node: NodePath
 # Keep a dictionary of all resource items to load them in the game
 var items_by_name: Dictionary = {}
+var main: Node
 
 func _ready() -> void:
 	player_node = PlayerManager.player.get_path()
+	main = get_tree().current_scene
 	load_all_items()
 
 func save_game() -> void:
@@ -21,11 +23,16 @@ func save_game() -> void:
 	var save_dict := {
 		player = {
 			position = var_to_str(player.position),
+			direction = var_to_str(player.direction),
+			animation = player.animated_sprite.animation,
 			health = var_to_str(player.health),
 			inventory = serialize_inventory(inventory_slots)
+		},
+		world = {
+			# Save all placed objects in the game
+			objects = save_objects()
 		}
 	}
-	
 	# Save chest inventories
 	
 	file.store_line(JSON.stringify(save_dict))
@@ -49,6 +56,28 @@ func serialize_inventory(slot_datas: Array) -> Array:
 		})
 	return serialized_inventory
 
+# Save all objects in the game
+func save_objects() -> Array:
+	var save_objects = get_tree().get_nodes_in_group("Persist")
+	var serialized_objects := []
+	for object in save_objects:
+		# Objects that are placed by the editor do not need to be saved/loaded
+		if not object.player_generated:
+			continue
+		var object_name = object.get_name()
+		var object_data := {
+			"name": object_name,
+			"type": object.get_object_type(),
+			"position": var_to_str(object.position),
+			"scale": var_to_str(object.scale)
+		}
+		serialized_objects.append(object_data)
+		# Gather time
+		# if it has a drop table (like bush or tree)
+		# External inventory if it has it
+		# Fill status
+	return serialized_objects
+
 func load_game() -> void:
 	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
 	if not file:
@@ -64,12 +93,20 @@ func load_game() -> void:
 	# JSON doesn't support many of Godot's types such as Vector2.
 	# str_to_var can be used to convert a String to the corresponding 
 	player.position = str_to_var(save_dict.player.position)
+	if save_dict["player"].has("animation"):
+		player.animated_sprite.animation = save_dict.player.animation
+		player.direction = str_to_var(save_dict.player.direction)
+		# Flip the sprite if facing left
+		if player.velocity.x != 0:
+			player.animated_sprite.flip_h = player.velocity.x < 0
 	player.health = str_to_var(save_dict.player.health)
 	
 	# Load inventory
 	var inventory_array : Array = save_dict["player"]["inventory"]
 	var inventory_data := deserialize_inventory(inventory_array)
 	player_inventory.set_inventory_slots(inventory_data)
+	
+	load_objects(save_dict.world.objects)
 	
 	print("Game loaded successfully!")
 
@@ -89,6 +126,47 @@ func deserialize_inventory(
 		deserialized_slots.append(slot)
 	return deserialized_slots
 
+# Load all the objects in the game
+func load_objects(serialized_objects: Array) -> void:
+	var load_objects = serialized_objects
+	for object_data in load_objects:
+		create_object(object_data)
+	print("Object added to world.")
+
+func create_object(object_data: Dictionary) -> void:
+	
+	# Get object scene from objects folder
+	var objects_path = "res://Entities/Objects/"
+	var object_path: String = objects_path + object_data.name + ".tscn"
+	var packed_scene = load(object_path)
+	
+	# If the file path is incorrect
+	if not packed_scene:
+		print("Could not find scene file for object!")
+		return
+		
+	var new_object: StaticBody2D = packed_scene.instantiate()
+
+	# Set properites of object
+	add_shaders(new_object.material)
+	new_object.position = str_to_var(object_data.position)
+	new_object.scale = str_to_var(object_data.scale)
+	new_object.connect("interact", PlayerManager.state_machine._on_interact_signal)
+	
+	if object_data.type == "External Inventory":
+		new_object.toggle_inventory.connect(main.toggle_inventory_interface)
+		print("External Inventory connected")
+		# load inventory of object
+	main.add_child(new_object)
+	
+func add_shaders(object_material: Material) -> void:
+	if object_material:
+		var new_material: ShaderMaterial = object_material.duplicate()
+		if new_material.shader:
+			new_material.shader = new_material.shader.duplicate()
+		object_material = new_material
+
+# Get references to item resourcef files
 func load_all_items() -> void:
 	var item_path: String = "res://Entities/Item/Items/"
 	load_items_in_directory(item_path)
@@ -122,7 +200,6 @@ func load_items_in_directory(current_path: String) -> void:
 	
 	directory.list_dir_end()
 
-	
 # Get the item by passing in the name
 func get_item_by_name(item_name: String) -> ItemData:
 	return items_by_name.get(item_name, null)

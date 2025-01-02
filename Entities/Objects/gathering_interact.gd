@@ -5,6 +5,7 @@ var timer: Timer
 
 func _ready() -> void:
 	super._ready()
+	object_type = "Gathering"
 
 func interact_action(player: CharacterBody2D) -> void:
 	start_timer(player)
@@ -25,7 +26,8 @@ func stop_interact_action(_player: CharacterBody2D) -> void:
 		print("Stopped gathering.")
 
 func is_gathering() -> bool:
-	return timer.time_left > 0
+	print("Need to overrite this statement and use activity timer!")
+	return false
 
 func _on_timer_timeout(_player: CharacterBody2D) -> void:
 	print("Timer timeout sent")

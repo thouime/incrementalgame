@@ -27,8 +27,6 @@ func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	set_animation()
 	state_machine.init(self, CraftingSystem)
-	# Add to persist group for saving
-	add_to_group("Persist")
 	
 # Sprite and Animations
 func set_animation() -> void:
