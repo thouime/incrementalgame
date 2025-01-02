@@ -92,6 +92,9 @@ func build_tile(tiles_to_build: Array) -> void:
 		global_mouse_position - tilemap_global_position
 	)
 	add_tile(tiles_to_build, grass_tiles)
+	# Add the tiles to a dictionary for saving/loading
+	store_placed_tiles(tiles_to_build, grass_tiles)
+	
 	add_boundary(tilemap_coordinates, boundary_tiles)
 	check_and_remove_boundary(grid.get_global_mouse_position(), boundary_tiles)
 	inventory.reduce_slot_amount(tile_info.item, 1)
@@ -99,6 +102,23 @@ func build_tile(tiles_to_build: Array) -> void:
 	material_slots[tile_info.item]["total"] -= 1
 	if material_slots[tile_info.item]["total"] <= 0:
 		cancel_place_tile()
+
+func store_placed_tiles(
+	tiles_to_build: Array, 
+	grass_tiles: TileMapLayer
+) -> void:
+	var placed_tiles = PlayerManager.player.placed_tiles
+	var atlas_coords = tile_info.tile_map_coordinates
+	if not placed_tiles.has(grass_tiles):
+		placed_tiles[grass_tiles] = {}
+	
+	if not placed_tiles[grass_tiles].has(atlas_coords):
+		placed_tiles[grass_tiles][atlas_coords] = {
+			"coordinates" : tiles_to_build,
+			"source_id": 0
+		}
+	else:
+		placed_tiles[grass_tiles][atlas_coords]["coordinates"] += tiles_to_build
 
 func search_tiles(
 	cursor_position: Vector2, 

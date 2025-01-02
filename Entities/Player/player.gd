@@ -14,6 +14,7 @@ var direction: Vector2 = Vector2.UP
 var health : int = 5
 var target_position : Vector2 = Vector2.ZERO
 var interact_target : Node = null
+var placed_tiles : Dictionary
 @onready var animated_sprite : AnimatedSprite2D = $AnimatedSprite2D
 @onready var camera : Camera2D = $Camera2D
 @onready var interact_ray : RayCast2D = $Camera2D/InteractRay

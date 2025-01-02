@@ -32,7 +32,8 @@ func save_game() -> void:
 		},
 		world = {
 			# Save all placed objects in the game
-			objects = save_objects()
+			objects = save_objects(),
+			tiles = player.placed_tiles
 		}
 	}
 	# Save chest inventories

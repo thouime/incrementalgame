@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bgi5nv12xjmka"]
+[gd_scene load_steps=32 format=3 uid="uid://bgi5nv12xjmka"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_xtwid"]
 [ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="2_h00hh"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="5_b2i4h"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="7_8rb2x"]
 [ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="7_jfsv6"]
+[ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="8_0h1cl"]
 [ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://Stages/World/world.tscn" id="8_8lnwa"]
 [ext_resource type="PackedScene" uid="uid://cednyx6i43tlg" path="res://Entities/Objects/tree.tscn" id="8_73jjx"]
 [ext_resource type="PackedScene" uid="uid://byoflltw01rq5" path="res://Entities/Objects/bush.tscn" id="14_h5qyt"]
@@ -27,6 +28,11 @@ script = ExtResource("5_b2i4h")
 item_data = ExtResource("7_jfsv6")
 quantity = 90
 
+[sub_resource type="Resource" id="Resource_cw7xb"]
+script = ExtResource("5_b2i4h")
+item_data = ExtResource("8_0h1cl")
+quantity = 90
+
 [sub_resource type="Resource" id="Resource_cdcud"]
 script = ExtResource("5_b2i4h")
 item_data = ExtResource("7_jfsv6")
@@ -39,7 +45,7 @@ quantity = 85
 
 [sub_resource type="Resource" id="Resource_66drq"]
 script = ExtResource("24_xf1d2")
-slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_2t8m8"), null, null, null, null, null, null, null, SubResource("Resource_cdcud"), SubResource("Resource_17kvy")])
+slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_2t8m8"), SubResource("Resource_cw7xb"), null, null, null, null, null, null, SubResource("Resource_cdcud"), SubResource("Resource_17kvy")])
 inventory_size = 10
 
 [sub_resource type="Resource" id="Resource_0msbn"]
