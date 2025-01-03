@@ -17,8 +17,8 @@
 [ext_resource type="PackedScene" uid="uid://bp0gw7kcfe8n3" path="res://Utilities/Crafting/crafting_menu.tscn" id="19_urs44"]
 [ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="21_2rjjw"]
 [ext_resource type="Resource" uid="uid://blampwk84srx8" path="res://Utilities/Crafting/Crafts/composter_craft.tres" id="22_21q6l"]
+[ext_resource type="Script" path="res://Utilities/Saving/save_load_json.gd" id="22_shahs"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="23_rhjmk"]
-[ext_resource type="PackedScene" uid="uid://cworgwa38bkjg" path="res://Utilities/Saving/save_load_menu.tscn" id="24_bgc6y"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="24_xf1d2"]
 [ext_resource type="Resource" uid="uid://dcqj765a50tqf" path="res://Utilities/Crafting/Crafts/chest_craft.tres" id="26_2pr82"]
 [ext_resource type="PackedScene" uid="uid://ckycnx3mj57po" path="res://Utilities/Building/BuildingMenu.tscn" id="27_rirn1"]
@@ -246,7 +246,8 @@ craft_datas = Array[ExtResource("21_2rjjw")]([ExtResource("22_21q6l"), ExtResour
 
 [node name="BuildingMenu" parent="UI" instance=ExtResource("27_rirn1")]
 
-[node name="SaveLoadMenu" parent="UI" instance=ExtResource("24_bgc6y")]
+[node name="GameSaveManager" type="Node" parent="."]
+script = ExtResource("22_shahs")
 
 [connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]
 [connection signal="gui_input" from="UI/InventoryInterface" to="UI/InventoryInterface" method="_on_gui_input"]

@@ -16,6 +16,7 @@ const PICKUP = preload("res://Entities/Item/pickup.tscn")
 	"inventory" : PlayerManager.player_inventory,
 	"grid" : $Grid
 }
+@onready var game_save_manager: Node = $GameSaveManager
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -33,6 +34,7 @@ func _ready() -> void:
 	# Initialize references in Singletons
 	CraftingSystem.set_references(crafting_references)
 	crafting_menu.craft_item_request.connect(CraftingSystem.try_craft)
+	game_save_manager.load_game()
 
 func update_label(label: Label, material: int) -> void:
 	# Split the label text into prefix and current value
@@ -81,3 +83,8 @@ func _on_inventory_interface_drop_slot_data(slot_data: SlotData) -> void:
 	pick_up.slot_data = slot_data
 	pick_up.position = player.get_drop_position()
 	add_child(pick_up)
+
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		game_save_manager.save_game()
+		get_tree().quit() # default behavior

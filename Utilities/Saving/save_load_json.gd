@@ -1,4 +1,4 @@
-extends Button
+extends Node
 
 const SAVE_PATH = "user://save_json.json"
 
@@ -13,12 +13,11 @@ func _ready() -> void:
 	player_node = PlayerManager.player.get_path()
 	main = get_tree().current_scene
 	load_all_items()
-
 	
 func save_game() -> void:
 	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 
-	var player := get_node(player_node)
+	var player := PlayerManager.player
 	var player_inventory : InventoryData = player.inventory_data
 	var inventory_slots := player_inventory.get_inventory_slots()
 	# JSON doesn't support many of Godot's types such as Vector2.
@@ -43,8 +42,6 @@ func save_game() -> void:
 	file.close()
 	
 	print("Game saved successfully!")
-	
-	get_node(^"../LoadJSON").disabled = false
 
 func serialize_inventory(slot_datas: Array) -> Array:
 	var serialized_inventory := []
@@ -95,22 +92,36 @@ func save_type_data(object: StaticBody2D, object_data: Dictionary) -> void:
 			object_data["fill_status"] = object.current_amount
 
 func save_tiles(tiles: Dictionary) -> Dictionary:
-	var serialized_tiles = {}
+	var serialized_tiles = {
+		"grass": {},
+		"boundary": {}
+	}
 	for tile_map in tiles.keys():
-		var atlas_coords_dict = {}
 		for atlas_coords in tiles[tile_map].keys():
-			var coordinates = tiles[tile_map][atlas_coords]
+			var data = tiles[tile_map][atlas_coords]
 			
-			# Convert each Vector2 into json friendly string
-			var json_coordinates = []
-			for coord in coordinates:
-				json_coordinates.append(str(coord))
+			# If the atlas coordinates don't exist yet in grass or boundary, initialize them
+			if not serialized_tiles["grass"].has(str(atlas_coords)):
+				serialized_tiles["grass"][str(atlas_coords)] = []
+			if not serialized_tiles["boundary"].has(str(atlas_coords)):
+				serialized_tiles["boundary"][str(atlas_coords)] = []
 			
-			atlas_coords_dict[str(atlas_coords)] = json_coordinates
+			# Add serialized tile coordinates under "grass"
+			if data.has("tiles"):
+				for coord in data["tiles"]:
+					serialized_tiles["grass"][str(atlas_coords)].append(str(coord))
 			
-		serialized_tiles[tile_map.name] = atlas_coords_dict
-			
+			# Check if "boundary" key exists before accessing it
+			if data.has("boundary"):
+				# Add serialized boundary coordinates under "boundary"
+				for coord in data["boundary"]:
+					serialized_tiles["boundary"][str(atlas_coords)].append(str(coord))
+			else:
+				print("Warning: 'boundary' key is missing for atlas_coords:", atlas_coords)
+	
+	# Return the final dictionary with "grass" and "boundary" directly under "tiles"
 	return serialized_tiles
+
 
 func load_game() -> void:
 	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
@@ -237,21 +248,113 @@ func add_shaders(new_object: StaticBody2D) -> void:
 		new_object.material = new_material
 
 func load_tiles(placed_tiles: Dictionary) -> void:
-	var deserialized_tiles = {}
 	var world = get_node("/root/Main/World")
+	var grass: TileMapLayer
+	var boundary: TileMapLayer
+	var tiles_to_build: Array
+	var boundary_tiles: Array
+	var grass_atlas: Vector2
+	var boundary_atlas: Vector2
+	
 	for tile_map_name in placed_tiles.keys():
-		var atlas_coords = placed_tiles[tile_map_name].keys()
-		var tile_map = world.get_node(tile_map_name)
-		for atlas_coord in atlas_coords:
-			# Array of all tile coordinates
-			var atlas_tile = str_to_vector2i(atlas_coord)
-			for tile in placed_tiles[tile_map_name][atlas_coord]:
-				var coord = str_to_vector2i(tile)
+		var tile_map = world.get_node(tile_map_name.capitalize())
+		if tile_map_name == "boundary": 
+			boundary = tile_map
+		
+		for atlas_coord_str in placed_tiles[tile_map_name].keys():
+			var atlas_coord = str_to_vector2i(atlas_coord_str)
+			var data = placed_tiles[tile_map_name][atlas_coord_str]
+			if tile_map_name == "grass" and atlas_coord == Vector2i(2,1):
+				tiles_to_build = data
+				grass = tile_map
+				grass_atlas = atlas_coord
+			if tile_map_name == "boundary" and atlas_coord == Vector2i(0,1):
+				boundary_tiles = data
+				boundary_atlas = atlas_coord
+			# Load tiles
+			for tile_str in data:
+				var tile_coord = str_to_vector2i(tile_str)
+				if tile_map_name == "grass":
+					remove_boundary(tile_coord, boundary)
 				tile_map.set_cell(
-					coord,
+					tile_coord,
 					0,
-					atlas_tile
+					atlas_coord
 				)
+	store_placed_tiles(
+		tiles_to_build,
+		grass,
+		boundary_tiles,
+		[],
+		grass_atlas,
+		boundary_atlas
+	)
+
+func remove_boundary(
+	position: Vector2i,
+	tiles: TileMapLayer
+) -> void:
+	var data: TileData = tiles.get_cell_tile_data(position)
+	if data:
+		# If a boundary tile is found, remove it by setting it to an invalid tile ID (e.g., -1)
+		print("Removing boundary tile at position: (", position.x, ", ", position.y, ")")
+		# Remove from boundary list
+		tiles.set_cell(position, -1)  # Set the tile to empty
+
+func store_placed_tiles(
+	tiles_to_build: Array, 
+	tile_map: TileMapLayer,
+	placed_boundary_tiles: Array,
+	removed_boundary_tiles: Array,
+	atlas_coords: Vector2i,
+	boundary_atlas: Vector2i
+) -> void:
+	var placed_tiles = PlayerManager.player.placed_tiles
+	
+	# Add dictionary key if it doesn't exist
+	if not placed_tiles.has(tile_map):
+		placed_tiles[tile_map] = {}
+	# Add key for atlas_coords if it doesn't exist
+	if not placed_tiles[tile_map].has(atlas_coords):
+		placed_tiles[tile_map][atlas_coords] = {
+			"tiles": tiles_to_build.duplicate()
+		}
+	
+	# Add key for boundary_atlas if it doesn't exist
+	if not placed_tiles[tile_map].has(boundary_atlas):
+		placed_tiles[tile_map][boundary_atlas] = {
+			"boundary": placed_boundary_tiles.duplicate()
+		}
+	
+	else:
+		var existing_data = placed_tiles[tile_map][atlas_coords]
+		if not placed_tiles[tile_map][boundary_atlas].has("boundary"):
+			return
+		var existing_boundaries = placed_tiles[tile_map][boundary_atlas]["boundary"]
+
+		for tile in removed_boundary_tiles:
+			if tile in existing_boundaries: 
+				existing_boundaries.erase(tile)
+		
+		# Merge main tiles
+		var existing_tiles = existing_data["tiles"]
+		existing_data["tiles"] = merge_array(tiles_to_build, existing_tiles)
+		
+		# Merge boundary tiles
+		for new_tile in placed_boundary_tiles:
+			if not existing_boundaries.has(new_tile):
+				existing_boundaries.append(new_tile)
+
+		# Update the dictionary
+		placed_tiles[tile_map][atlas_coords] = existing_data
+		placed_tiles[tile_map][boundary_atlas]["boundary"] = existing_boundaries
+
+func merge_array(array_one: Array, array_two: Array) -> Array:
+	var new_array = array_one.duplicate()
+	for item in array_two:
+		if not array_one.has(item):
+			new_array.append(item)
+	return new_array
 
 func str_to_vector2i(vector_str: String) -> Vector2i:
 	var cleaned_str = vector_str.replace("(", "").replace(")", "")

@@ -86,6 +86,8 @@ func _handle_building_tile(tile: TileInfo) -> void:
 			
 func _on_state_changed() -> void:
 	if current_state and building_tile:
+		if not current_state.has_method("place_tile"):
+			return
 		current_state.place_tile(building_tile)
 		building_tile = null
 		state_changed.disconnect(_on_state_changed)
