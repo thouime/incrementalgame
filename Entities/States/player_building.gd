@@ -93,11 +93,10 @@ func build_tile(tiles_to_build: Array) -> void:
 	)
 	add_tile(tiles_to_build, grass_tiles)
 	# Add the tiles to a dictionary for saving/loading
-	var placed_boundary = add_boundary(tilemap_coordinates, boundary_tiles)
-	var removed_boundary = check_and_remove_boundary(
+	var placed_boundary: Array = add_boundary(tilemap_coordinates, boundary_tiles)
+	var removed_boundary: Array = check_and_remove_boundary(
 		grid.get_global_mouse_position(), 
-		boundary_tiles, 
-		placed_boundary
+		boundary_tiles
 	)
 	store_placed_tiles(
 		tiles_to_build, 
@@ -118,9 +117,9 @@ func store_placed_tiles(
 	placed_boundary_tiles: Array,
 	removed_boundary_tiles: Array
 ) -> void:
-	var placed_tiles = PlayerManager.player.placed_tiles
-	var atlas_coords = tile_info.tile_map_coordinates
-	var boundary_atlas = tile_info.tile_boundary.tile_map_coordinates
+	var placed_tiles: Dictionary = PlayerManager.player.placed_tiles
+	var atlas_coords: Vector2 = tile_info.tile_map_coordinates
+	var boundary_atlas: Vector2 = tile_info.tile_boundary.tile_map_coordinates
 	
 	# Add dictionary key if it doesn't exist
 	if not placed_tiles.has(tile_map):
@@ -140,19 +139,19 @@ func store_placed_tiles(
 					
 	else:
 		# Merge existing arrays
-		var existing_data = placed_tiles[tile_map][atlas_coords]
-		var existing_boundaries = placed_tiles[tile_map][boundary_atlas]["boundary"]
+		var existing_data: Dictionary = placed_tiles[tile_map][atlas_coords]
+		var existing_boundaries: Array = placed_tiles[tile_map][boundary_atlas]["boundary"]
 
-		for tile in removed_boundary_tiles:
+		for tile: Vector2 in removed_boundary_tiles:
 			if tile in existing_boundaries: 
 				existing_boundaries.erase(tile)
 		
 		# Merge main tiles
-		var existing_tiles = existing_data["tiles"]
+		var existing_tiles: Array = existing_data["tiles"]
 		existing_data["tiles"] = merge_array(tiles_to_build, existing_tiles)
 		
 		# Merge boundary tiles
-		for new_tile in placed_boundary_tiles:
+		for new_tile: Vector2 in placed_boundary_tiles:
 			if not existing_boundaries.has(new_tile):
 				existing_boundaries.append(new_tile)
 
@@ -161,8 +160,8 @@ func store_placed_tiles(
 		placed_tiles[tile_map][boundary_atlas]["boundary"] = existing_boundaries
 
 func merge_array(array_one: Array, array_two: Array) -> Array:
-	var new_array = array_one.duplicate()
-	for item in array_two:
+	var new_array: Array = array_one.duplicate()
+	for item: Variant in array_two:
 		if not array_one.has(item):
 			new_array.append(item)
 	return new_array
@@ -242,8 +241,7 @@ func add_boundary(
 
 func check_and_remove_boundary(
 	position: Vector2, 
-	tiles: TileMapLayer,
-	placed_boundary_tiles: Array
+	tiles: TileMapLayer
 ) -> Array:
 	var removed_tiles := []
 	
@@ -259,7 +257,7 @@ func check_and_remove_boundary(
 	# Loop through the 2x2 grid area and check each tile
 	for x in range(clicked_cell.x, clicked_cell.x + cells_to_check.x):
 		for y in range(clicked_cell.y, clicked_cell.y + cells_to_check.y):
-			var current_position = Vector2(x, y)
+			var current_position := Vector2(x, y)
 			# Get the tile data for the current position
 			var data: TileData = tiles.get_cell_tile_data(Vector2i(x, y))
 			
@@ -274,7 +272,6 @@ func check_and_remove_boundary(
 				#
 				removed_tiles.append(current_position)
 	return removed_tiles
-
 
 func draw_grid() -> void:
 	grid.draw_grid()

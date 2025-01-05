@@ -82,7 +82,7 @@ func add_item_effect(icon: Texture, quantity: int, is_gain: bool) -> void:
 	)
 
 func set_current_amount(percent: float) -> void:
-	current_amount = percent
+	current_amount = int(percent)
 	activity_timer.set_progress_value(percent)
 
 func _on_compost_ready() -> void:

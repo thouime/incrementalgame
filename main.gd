@@ -84,7 +84,8 @@ func _on_inventory_interface_drop_slot_data(slot_data: SlotData) -> void:
 	pick_up.position = player.get_drop_position()
 	add_child(pick_up)
 
-func _notification(what):
+# Run this code when the game is being closed
+func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
 		game_save_manager.save_game()
 		get_tree().quit() # default behavior
