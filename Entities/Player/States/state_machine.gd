@@ -33,7 +33,6 @@ func change_state(new_state: State) -> void:
 	current_state = new_state
 	current_state.enter()
 	
-	print("Processing queue...")
 	# Process any queued events after the state has transitioned
 	process_queue()
 

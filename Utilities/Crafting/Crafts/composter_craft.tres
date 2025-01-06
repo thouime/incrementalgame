@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="2_rq8b6"]
 [ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="5_v5rjc"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="6_1qgj7"]
-[ext_resource type="Script" path="res://Entities/Objects/composter.gd" id="6_1sei0"]
+[ext_resource type="Script" path="res://Entities/Objects/Composter/composter.gd" id="6_1sei0"]
 [ext_resource type="PackedScene" uid="uid://dlrmxq4bnsyvu" path="res://Entities/Objects/Components/activity_timer.tscn" id="7_3aweh"]
 
 [sub_resource type="Resource" id="Resource_a5stn"]
@@ -18,7 +18,7 @@ item_data = ExtResource("2_rq8b6")
 atlas = ExtResource("2_87lh3")
 region = Rect2(448, 352, 32, 32)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s3k23"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d6u4q"]
 shader = ExtResource("5_v5rjc")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/width = 0.8
@@ -34,23 +34,23 @@ size = Vector2(8.5, 7.4375)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fk0x8"]
 size = Vector2(8.5, 8.25)
 
-[sub_resource type="PackedScene" id="PackedScene_3m5lj"]
+[sub_resource type="PackedScene" id="PackedScene_vjfnt"]
 _bundled = {
 "conn_count": 0,
 "conns": PackedInt32Array(),
 "editable_instances": [],
-"names": PackedStringArray("Composter", "material", "position", "scale", "script", "compost_duration", "metadata/_edit_group_", "StaticBody2D", "Sprite1", "z_index", "use_parent_material", "texture", "region_enabled", "region_rect", "Sprite2D", "CollisionShape2D", "shape", "Selection", "Area2D", "MouseArea", "ActivityTimer"),
+"names": PackedStringArray("Composter", "StaticBody2D", "material", "scale", "script", "compost_duration", "metadata/_edit_group_", "Sprite1", "Sprite2D", "z_index", "use_parent_material", "texture", "region_enabled", "region_rect", "CollisionShape2D", "CollisionShape2D", "z_index", "position", "scale", "shape", "Selection", "Area2D", "scale", "MouseArea", "CollisionShape2D", "z_index", "position", "shape", "ActivityTimer"),
 "node_count": 6,
-"node_paths": [],
-"nodes": PackedInt32Array(-1, -1, 7, 0, -1, 6, 1, 0, 2, 1, 3, 2, 4, 3, 5, 4, 6, 5, 0, 0, 0, 14, 8, -1, 5, 9, 6, 10, 5, 11, 7, 12, 5, 13, 8, 0, 0, 0, 15, 15, -1, 4, 9, 9, 2, 10, 3, 2, 16, 11, 0, 0, 0, 18, 17, -1, 1, 3, 2, 0, 3, 0, 15, 19, -1, 3, 9, 12, 2, 10, 16, 13, 0, 0, 0, 2147483647, 20, 14, 0, 0),
-"variants": [SubResource("ShaderMaterial_s3k23"), Vector2(100, 100), Vector2(2, 2), ExtResource("6_1sei0"), 5, true, 3, ExtResource("6_1qgj7"), Rect2(80, 0, 16, 16), 2, Vector2(0, 0.5), SubResource("RectangleShape2D_4klis"), 4, SubResource("RectangleShape2D_fk0x8"), ExtResource("7_3aweh")],
+"node_paths": [NodePath("."), NodePath("."), NodePath("."), NodePath("./Selection"), NodePath(".")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 5, 2, 0, 3, 1, 4, 2, 5, 3, 6, 4, 0, 1073741824, 0, 8, 7, -1, 5, 9, 5, 10, 6, 11, 7, 12, 8, 13, 9, 0, 1073741825, 0, 15, 14, -1, 4, 16, 10, 17, 11, 18, 12, 19, 13, 0, 1073741826, 0, 21, 20, -1, 1, 22, 14, 0, 1073741827, 0, 24, 23, -1, 3, 25, 15, 26, 16, 27, 17, 0, 1073741828, 0, 2147483647, 28, 18, 0, 0),
+"variants": [SubResource("ShaderMaterial_d6u4q"), Vector2(2, 2), ExtResource("6_1sei0"), 5, true, 3, true, ExtResource("6_1qgj7"), true, Rect2(80, 0, 16, 16), 2, Vector2(0, 0.5), Vector2(2, 2), SubResource("RectangleShape2D_4klis"), Vector2(2, 2), 4, Vector2(0, 0.5), SubResource("RectangleShape2D_fk0x8"), ExtResource("7_3aweh")],
 "version": 3
 }
 
 [resource]
 script = ExtResource("1_pqv7l")
 type = 1
-object_scene = SubResource("PackedScene_3m5lj")
+object_scene = SubResource("PackedScene_vjfnt")
 name = "Composter"
 description = "A wooden container that converts organic material into dirt."
 menu_texture = SubResource("AtlasTexture_oaa3q")

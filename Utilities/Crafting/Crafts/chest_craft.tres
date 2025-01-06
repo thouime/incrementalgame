@@ -4,7 +4,7 @@
 [ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="2_k6ttm"]
 [ext_resource type="Texture2D" uid="uid://bulp7tkpnj8vn" path="res://Entities/Item/#1 - Transparent Icons.png" id="3_apf5u"]
 [ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="4_bhjdq"]
-[ext_resource type="Script" path="res://Entities/Objects/chest.gd" id="5_35vq2"]
+[ext_resource type="Script" path="res://Entities/Objects/Chest/chest.gd" id="5_35vq2"]
 [ext_resource type="Texture2D" uid="uid://1kukmo2577le" path="res://Assets/Art/objects/chest_01.png" id="6_sntr6"]
 [ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="7_sqchc"]
 
@@ -33,23 +33,23 @@ size = Vector2(30, 8.375)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bb5ap"]
 size = Vector2(16.5, 17.5)
 
-[sub_resource type="PackedScene" id="PackedScene_pa0t0"]
+[sub_resource type="PackedScene" id="PackedScene_7rdmo"]
 _bundled = {
 "conn_count": 0,
 "conns": PackedInt32Array(),
 "editable_instances": [],
-"names": PackedStringArray("Chest", "material", "position", "script", "metadata/_edit_group_", "StaticBody2D", "Sprite1", "use_parent_material", "scale", "texture", "region_enabled", "region_rect", "Sprite2D", "CollisionShape2D", "shape", "Selection", "Area2D", "MouseArea", "z_index"),
+"names": PackedStringArray("Chest", "StaticBody2D", "material", "position", "script", "metadata/_edit_group_", "Sprite1", "Sprite2D", "use_parent_material", "scale", "texture", "region_enabled", "region_rect", "CollisionShape2D", "CollisionShape2D", "position", "shape", "Selection", "Area2D", "scale", "MouseArea", "CollisionShape2D", "z_index", "position", "shape"),
 "node_count": 5,
-"node_paths": [],
-"nodes": PackedInt32Array(-1, -1, 5, 0, -1, 4, 1, 0, 2, 1, 3, 2, 4, 3, 0, 0, 0, 12, 6, -1, 5, 7, 3, 8, 4, 9, 5, 10, 3, 11, 6, 0, 0, 0, 13, 13, -1, 2, 2, 7, 14, 8, 0, 0, 0, 16, 15, -1, 1, 8, 4, 0, 3, 0, 13, 17, -1, 3, 18, 9, 2, 10, 14, 11, 0),
-"variants": [SubResource("ShaderMaterial_wjxxi"), Vector2(100, 100), ExtResource("5_35vq2"), true, Vector2(2, 2), ExtResource("6_sntr6"), Rect2(0, 0, 16, 16), Vector2(1, -7.8125), SubResource("RectangleShape2D_llfik"), 4, Vector2(0.75, 0.25), SubResource("RectangleShape2D_bb5ap")],
+"node_paths": [NodePath("."), NodePath("."), NodePath("."), NodePath("./Selection")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 4, 2, 0, 3, 1, 4, 2, 5, 3, 0, 1073741824, 0, 7, 6, -1, 5, 8, 4, 9, 5, 10, 6, 11, 7, 12, 8, 0, 1073741825, 0, 14, 13, -1, 2, 15, 9, 16, 10, 0, 1073741826, 0, 18, 17, -1, 1, 19, 11, 0, 1073741827, 0, 21, 20, -1, 3, 22, 12, 23, 13, 24, 14, 0),
+"variants": [SubResource("ShaderMaterial_wjxxi"), Vector2(100, 100), ExtResource("5_35vq2"), true, true, Vector2(2, 2), ExtResource("6_sntr6"), true, Rect2(0, 0, 16, 16), Vector2(1, -7.8125), SubResource("RectangleShape2D_llfik"), Vector2(2, 2), 4, Vector2(0.75, 0.25), SubResource("RectangleShape2D_bb5ap")],
 "version": 3
 }
 
 [resource]
 script = ExtResource("7_sqchc")
 type = 1
-object_scene = SubResource("PackedScene_pa0t0")
+object_scene = SubResource("PackedScene_7rdmo")
 name = "Chest"
 description = "A wooden container used to store items."
 menu_texture = SubResource("AtlasTexture_kbjl7")
