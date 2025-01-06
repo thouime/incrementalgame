@@ -11,6 +11,9 @@ func initialize_slots(size: int, default_value: Variant = null) -> void:
 	for i in range(size):
 		slot_datas.append(default_value)
 
+func get_slot_datas() -> Array[SlotData]:
+	return slot_datas
+
 func grab_slot_data(index: int) -> SlotData:
 	var slot_data: SlotData = slot_datas[index]
 	

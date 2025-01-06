@@ -7,7 +7,7 @@
 [ext_resource type="Script" path="res://Entities/Player/States/player_key_move.gd" id="5_kcpsp"]
 [ext_resource type="Script" path="res://Entities/Player/States/player_click_move.gd" id="6_doxm0"]
 [ext_resource type="Script" path="res://Entities/Player/States/player_gathering.gd" id="7_5ajlj"]
-[ext_resource type="Script" path="res://Entities/Player/States/player_building.gd" id="8_gbgay"]
+[ext_resource type="Script" path="res://Entities/Player/States/player_crafting.gd" id="8_gbgay"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="9_2som8"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="10_n6sx7"]
 

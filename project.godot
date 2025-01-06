@@ -18,7 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 PlayerManager="*res://Entities/Player/player_manager.gd"
-CraftingSystem="*res://Utilities/Crafting/crafting_system.gd"
+CraftingSystem="*res://Utilities/Crafting/crafting_manager.gd"
 MenuManager="*res://Utilities/menu_manager.gd"
 
 [debug]

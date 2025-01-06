@@ -61,6 +61,48 @@ func try_craft(craft_slot: CraftData) -> void:
 		# Print Missing materials
 		print_missing(material_slots)
 
+# Check if player has required materials for the craft
+func can_craft(craft_slot: CraftData, inventory: InventoryData) -> bool:
+	# Store all items from inventory that are needed
+	var items = []
+	var required_materials = craft_slot.material_slot_datas
+	
+	for material in required_materials:
+		# If it's null, skip to next material
+		if not material:
+			continue
+		items.append(material)
+	
+	return false
+
+## Check if there is enough materials available
+#func check_materials(material: ItemData, quantity: int) -> Dictionary:
+	## Keeps track of the materials, inventory index, and missing amount
+	#var materials: Dictionary = { material: 
+			#{ 
+			#"missing": 0, 
+			#"required": quantity, 
+			#"inv_slots": [] 
+			#}
+		#}
+	#var inventory_items: Array[SlotData] = slot_datas
+	#var remaining_quantity: int = quantity
+#
+	## Check each inventory slot for the material, adding info to dictionary
+	#for index in inventory_items.size():
+		#var slot: SlotData = inventory_items[index]
+		#if slot and slot.item_data == material:
+			#var available_quantity: int = slot.quantity
+			#if available_quantity >= remaining_quantity:
+				#remaining_quantity = 0
+				#materials[material]["inv_slots"].append(index)
+				#break
+			#else:
+				#materials[material]["inv_slots"].append(index)
+				#remaining_quantity -= available_quantity
+	#materials[material]["missing"] = remaining_quantity
+	#return materials
+
 func craft(material_slots: Dictionary, craft_slot: CraftData) -> void:
 	if craft_slot.type == craft_slot.Type.OBJECT:
 		build_object.emit()

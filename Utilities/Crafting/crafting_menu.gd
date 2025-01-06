@@ -40,12 +40,13 @@ func add_info(craft_data: CraftData) -> void:
 	
 	var materials: Array = craft_data.material_slot_datas
 	for craft_material: MaterialSlotData in materials:
-		if craft_material:
-			craft_info.add_material(
-				craft_material.item_data, 
-				craft_material.quantity
-			)
-			
+		if not craft_material:
+			return
+		craft_info.add_material(
+			craft_material.item_data, 
+			craft_material.quantity
+		)
+		
 	# Position craft_info window above crafting interface
 	set_info_pos(craft_info)
 
