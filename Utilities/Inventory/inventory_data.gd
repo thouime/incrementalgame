@@ -33,7 +33,7 @@ func add_inventory_entry(slot_data: SlotData, slot_index: int) -> void:
 	var item_data = slot_data.item_data
 	var item_name = item_data.name
 	
-	# Check if item is already in the inventory
+	# Initialize item entry in the inventory if it doesn't exist
 	if not item_inventory.has(item_name):
 		item_inventory[item_name] = {
 			"item_slots": {},
@@ -41,16 +41,18 @@ func add_inventory_entry(slot_data: SlotData, slot_index: int) -> void:
 		}
 	
 	var item_entry = item_inventory[item_name]
+	var item_index = item_entry["item_slots"]
 	
-	if not item_entry.has(slot_index):
+	# Initialize the slot entry for this index if it doesn't exist
+	if not item_index.has(slot_index):
 		# Update or add the new slot for the item
-		item_entry["item_slots"][slot_index] = {
+		item_index[slot_index] = {
 			"slot_data": slot_data,
 			"quantity":  0
 		}
 
 	# Update the quantities for that item and item's slot
-	item_entry["item_slots"][slot_index]["quantity"] += slot_data.quantity
+	item_index[slot_index]["quantity"] += slot_data.quantity
 	item_entry["total_quantity"] += slot_data.quantity
 
 func remove_inventory_entry(
@@ -67,9 +69,7 @@ func remove_inventory_entry(
 	
 	var item_entry = item_inventory[item_name]
 	
-	print(slot_index)
-	
-	if not item_entry.has(slot_index):
+	if not item_entry["item_slots"].has(slot_index):
 		# Update or add the new slot for the item
 		push_error("No item in that index!")
 		return
@@ -79,9 +79,11 @@ func remove_inventory_entry(
 	item_entry["total_quantity"] -= remove_quantity
 	
 	# Remove the index key from the dictionary if there's no items left
-	if item_entry["item_slots"][slot_index] <= 0:
-		item_entry.erase(slot_index)
-
+	if item_entry["item_slots"][slot_index]["quantity"] <= 0:
+		item_entry["item_slots"].erase(slot_index)
+	
+	if item_entry["item_slots"].size() == 0:
+		item_inventory.erase(item_name)
 
 func get_slot_datas() -> Array[SlotData]:
 	return slot_datas
@@ -100,6 +102,7 @@ func grab_slot_data(index: int) -> SlotData:
 	
 	if slot_data:
 		slot_datas[index] = null
+		remove_inventory_entry(slot_data, index, slot_data.quantity)
 		inventory_updated.emit(self)
 		return slot_data
 	else:
@@ -112,11 +115,12 @@ func drop_slot_data(grabbed_slot_data: SlotData, index: int) -> SlotData:
 	var return_slot_data: SlotData
 	if slot_data and slot_data.can_fully_merge_with(grabbed_slot_data):
 		slot_data.fully_merge_with(grabbed_slot_data)
+		add_inventory_entry(slot_data, index)
 		var grabbed_quantity = grabbed_slot_data.quantity
-		remove_inventory_entry(grabbed_slot_data, index, grabbed_quantity)
 	else:
 		slot_datas[index] = grabbed_slot_data
 		return_slot_data = slot_data
+		add_inventory_entry(grabbed_slot_data, index)
 	
 	inventory_updated.emit(self)
 	return return_slot_data
@@ -127,8 +131,12 @@ func drop_single_slot_data(grabbed_slot_data: SlotData, index: int) -> SlotData:
 	
 	if not slot_data:
 		slot_datas[index] = grabbed_slot_data.create_single_slot_data()
+		# remove one from grabbed data
+		add_inventory_entry(slot_datas[index], index)
 	elif slot_data.can_merge_with(grabbed_slot_data):
-		slot_data.fully_merge_with(grabbed_slot_data.create_single_slot_data())
+		var new_slot_data = grabbed_slot_data.create_single_slot_data()
+		slot_data.fully_merge_with(new_slot_data)
+		add_inventory_entry(new_slot_data, index)
 		
 	inventory_updated.emit(self)
 	
@@ -149,14 +157,14 @@ func use_slot_data(index: int) -> void:
 		if slot_data.quantity < 1:
 			slot_datas[index] = null
 	
-	print(slot_data.item_data.name)
 	PlayerManager.use_slot_data(slot_data)
 	
-	add_inventory_entry(slot_data, index)
+	# Remove one of the item from the inventory
+	remove_inventory_entry(slot_data, index, 1)
 	
 	inventory_updated.emit(self)
 
-# Pick up slot data from world
+# Pick up slot data from the world
 func pick_up_slot_data(slot_data: SlotData) -> bool:
 	
 	for index in slot_datas.size():
