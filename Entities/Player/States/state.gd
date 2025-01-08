@@ -1,6 +1,8 @@
 class_name State
 extends Node
 
+signal Transitioned
+
 @export var move_speed: int = 200
 # Hold a reference to the parent so that it can be controlled by the state
 var parent: Player

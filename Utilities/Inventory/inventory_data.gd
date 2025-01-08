@@ -1,19 +1,100 @@
 extends Resource
 class_name InventoryData
 
-@export var slot_datas: Array[SlotData]
-
 signal inventory_interact(inventory_data: InventoryData, index: int, button: int)
 signal inventory_updated(inventory_data: InventoryData)
+
+@export var slot_datas: Array[SlotData]
+
+# Inventory Dictionary Structure for Item Tracking
+# The dictionary is structured as followsd:
+#	item_name (key): String representing each item
+#		-> item_slots (key): Diciontary for each slot index in inventory
+#			-> slot_index (key): Represents index of the slot (e.g. 0, 1, 2)
+#				-> slot_data (key): Reference to slot data holding item info
+#				-> quantity (key): Quantity of item for this slot
+#		-> total_quantity (key): Total quantity of the item
+var item_inventory: Dictionary
 
 func initialize_slots(size: int, default_value: Variant = null) -> void:
 	slot_datas = []
 	for i in range(size):
 		slot_datas.append(default_value)
 
+func setup_item_inventory() -> void:
+	for slot_index in range(slot_datas.size()):
+		var slot_data = slot_datas[slot_index]
+		if not slot_data:
+			continue
+		add_inventory_entry(slot_data, slot_index)
+
+# Update item_inventory dictionary or add new entry if it doesn't exist
+func add_inventory_entry(slot_data: SlotData, slot_index: int) -> void:
+	var item_data = slot_data.item_data
+	var item_name = item_data.name
+	
+	# Check if item is already in the inventory
+	if not item_inventory.has(item_name):
+		item_inventory[item_name] = {
+			"item_slots": {},
+			"total_quantity": 0
+		}
+	
+	var item_entry = item_inventory[item_name]
+	
+	if not item_entry.has(slot_index):
+		# Update or add the new slot for the item
+		item_entry["item_slots"][slot_index] = {
+			"slot_data": slot_data,
+			"quantity":  0
+		}
+
+	# Update the quantities for that item and item's slot
+	item_entry["item_slots"][slot_index]["quantity"] += slot_data.quantity
+	item_entry["total_quantity"] += slot_data.quantity
+
+func remove_inventory_entry(
+	slot_data: SlotData, 
+	slot_index: int, 
+	remove_quantity: int
+) -> void:
+	var item_data = slot_data.item_data
+	var item_name = item_data.name
+	
+	if not item_inventory.has(item_name):
+		push_error("No item with that name in the inventory!")
+		return
+	
+	var item_entry = item_inventory[item_name]
+	
+	print(slot_index)
+	
+	if not item_entry.has(slot_index):
+		# Update or add the new slot for the item
+		push_error("No item in that index!")
+		return
+		
+	# Update the quantities for that item and item's slot
+	item_entry["item_slots"][slot_index]["quantity"] -= remove_quantity
+	item_entry["total_quantity"] -= remove_quantity
+	
+	# Remove the index key from the dictionary if there's no items left
+	if item_entry["item_slots"][slot_index] <= 0:
+		item_entry.erase(slot_index)
+
+
 func get_slot_datas() -> Array[SlotData]:
 	return slot_datas
+	
+func get_item_datas() -> Array[ItemData]:
+	var item_datas: Array[ItemData] = []
+	for slot in get_slot_datas():
+		if not slot:
+			continue
+		item_datas.append(slot.item_data)
+	return item_datas
 
+# Grab slot with cursor or other means
 func grab_slot_data(index: int) -> SlotData:
 	var slot_data: SlotData = slot_datas[index]
 	
@@ -24,12 +105,15 @@ func grab_slot_data(index: int) -> SlotData:
 	else:
 		return null
 
+# Drop or switch the currently grabbed slot with the given slot index
 func drop_slot_data(grabbed_slot_data: SlotData, index: int) -> SlotData:
 	var slot_data: SlotData = slot_datas[index]
 	
 	var return_slot_data: SlotData
 	if slot_data and slot_data.can_fully_merge_with(grabbed_slot_data):
 		slot_data.fully_merge_with(grabbed_slot_data)
+		var grabbed_quantity = grabbed_slot_data.quantity
+		remove_inventory_entry(grabbed_slot_data, index, grabbed_quantity)
 	else:
 		slot_datas[index] = grabbed_slot_data
 		return_slot_data = slot_data
@@ -37,6 +121,7 @@ func drop_slot_data(grabbed_slot_data: SlotData, index: int) -> SlotData:
 	inventory_updated.emit(self)
 	return return_slot_data
 
+# Drop one item into a slot
 func drop_single_slot_data(grabbed_slot_data: SlotData, index: int) -> SlotData:
 	var slot_data: SlotData = slot_datas[index]
 	
@@ -52,6 +137,7 @@ func drop_single_slot_data(grabbed_slot_data: SlotData, index: int) -> SlotData:
 	else:
 		return null
 
+# Activate a slot data's use function (if it has one)
 func use_slot_data(index: int) -> void:
 	var slot_data: SlotData = slot_datas[index]
 	
@@ -66,26 +152,32 @@ func use_slot_data(index: int) -> void:
 	print(slot_data.item_data.name)
 	PlayerManager.use_slot_data(slot_data)
 	
+	add_inventory_entry(slot_data, index)
+	
 	inventory_updated.emit(self)
 
+# Pick up slot data from world
 func pick_up_slot_data(slot_data: SlotData) -> bool:
 	
 	for index in slot_datas.size():
 		if slot_datas[index] and slot_datas[index].can_fully_merge_with(slot_data):
 			slot_datas[index].fully_merge_with(slot_data)
+			add_inventory_entry(slot_data, index)
 			inventory_updated.emit(self)
 			return true
 		elif slot_datas[index] and slot_datas[index].can_partially_merge_with(slot_data):
 			slot_datas[index].partially_merge_with()
+			add_inventory_entry(slot_data, index)
 			inventory_updated.emit(self)
 			return true
 			
 	for index in slot_datas.size():
 		if not slot_datas[index]:
 			slot_datas[index] = slot_data
+			add_inventory_entry(slot_data, index)
 			inventory_updated.emit(self)
 			return true
-	
+			
 	print("Inventory is full!")
 	return false
 

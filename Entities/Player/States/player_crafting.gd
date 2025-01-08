@@ -5,12 +5,15 @@ signal stop_building
 
 @export var idle_state : State
 @onready var grid: Control = $Grid
+@onready var player_inventory: InventoryData
 
 func enter() -> void:
 	parent.animated_sprite.animation = idle_animations[parent.direction]
+	player_inventory = PlayerManager.player_inventory
 	print("Entered Building State")
 
 func exit() -> void:
+	player_inventory = null
 	print("Exited Building State")
 
 func handle_event(event_data: Dictionary) -> void:
@@ -46,9 +49,8 @@ func stop_building_signal(crafting_system_node : Node) -> void:
 func complete_building() -> void:
 	stop_building.emit()
 	
-func process_craft_event(data) -> void:
+func process_craft_event(craft_data: CraftData) -> void:
 	print("Process craft event started!")
-	print("Data: ", data)
-
-func _on_stop_building() -> void:
-	print("Stopping building...")
+	# Check if we can craft the item
+	if not CraftingManager.can_craft(craft_data, player_inventory):
+		Transitioned.emit(idle_state)

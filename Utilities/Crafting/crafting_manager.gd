@@ -66,12 +66,24 @@ func can_craft(craft_slot: CraftData, inventory: InventoryData) -> bool:
 	# Store all items from inventory that are needed
 	var items = []
 	var required_materials = craft_slot.material_slot_datas
+	# Get an array of all the items from the player's inventory
+	var player_inventory = inventory.get_item_datas()
 	
+	# Add the required materials to an array if the player has them
 	for material in required_materials:
+		var material_name = material.item_data.name
 		# If it's null, skip to next material
 		if not material:
 			continue
+
+		# Scan inventory to see if any of the items are there
+		if not material.item_data in player_inventory:
+			print("There are no %ss in the inventory" % material_name)
+			return false
+		
+		# Add the items to an array for counting later
 		items.append(material)
+
 	
 	return false
 

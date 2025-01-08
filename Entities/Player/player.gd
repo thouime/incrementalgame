@@ -26,7 +26,7 @@ func _ready() -> void:
 	PlayerManager.state_machine = state_machine
 	screen_size = get_viewport_rect().size
 	set_animation()
-	state_machine.init(self, CraftingSystem)
+	state_machine.init(self, CraftingManager)
 	
 # Sprite and Animations
 func set_animation() -> void:

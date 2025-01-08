@@ -20,6 +20,7 @@ func _ready() -> void:
 func init(parent: Player, crafting_system_ref: Node) -> void:
 	for child in get_children():
 		child.parent = parent
+		child.Transitioned.connect(on_child_transition)
 	
 	crafting_system = crafting_system_ref
 	
@@ -35,6 +36,9 @@ func change_state(new_state: State) -> void:
 	
 	# Process any queued events after the state has transitioned
 	process_queue()
+
+func on_child_transition(new_state: State):
+	change_state(new_state)
 
 func enqueue_event(event_data: Dictionary) -> void:
 	event_queue.append(event_data)
@@ -117,17 +121,10 @@ func _connect_crafting_signal() -> void:
 
 # Signal activated via crafting menu, queues events after state change
 func _on_craft_request(craft_slot: CraftData) -> void:
-	print("queuing events...")
-
 	var craft_event: Dictionary = {
 		"type": "craft",
 		"data": craft_slot
 	}
-	enqueue_event({
-		"type": "connect_signal",
-		"signal": "stop_building",
-		"func": "_on_stop_building"
-	})
 	enqueue_event(craft_event)
 	process_state_event(craft_event)
 	
