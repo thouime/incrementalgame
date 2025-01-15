@@ -3,10 +3,11 @@ extends Control
 var grabbed_slot_data: SlotData
 var external_inventory_owner: Node
 
-@onready var player_inventory: PanelContainer = $PlayerInventory
+@onready var player_inventory: PanelContainer = $HBoxContainer/PlayerInventory
+@onready var equip_inventory: PanelContainer = $HBoxContainer/EquipInventory
 @onready var grabbed_slot: PanelContainer = $GrabbedSlot
 @onready var external_inventory: PanelContainer = $ExternalInventory
-@onready var equip_inventory: PanelContainer = $EquipInventory
+
 
 signal drop_slot_data(slot_data: SlotData)
 signal force_close

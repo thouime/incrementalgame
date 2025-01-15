@@ -43,6 +43,7 @@ func set_references(references : Dictionary) -> void:
 
 # Check if the player has the required materials in the player inventory
 func try_craft(craft_slot: CraftData) -> void:
+	print("trying to craft...")
 	var material_slots: Dictionary = {}
 	var missing_materials: bool = false
 	# Check for materials and quantities

@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3 uid="uid://dw7jp8bpq3h0m"]
+
+[ext_resource type="Script" path="res://Utilities/Inventory/inventory_interface.gd" id="1_x3d5g"]
+[ext_resource type="PackedScene" uid="uid://cjvrn7m4iia17" path="res://Utilities/Inventory/inventory.tscn" id="2_n0jkd"]
+[ext_resource type="PackedScene" uid="uid://dj0urcd0clvl4" path="res://Utilities/Inventory/slot.tscn" id="3_oprao"]
+
+[node name="InventoryInterface" type="Control"]
+z_index = 1
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 1
+script = ExtResource("1_x3d5g")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PlayerInventory" parent="HBoxContainer" instance=ExtResource("2_n0jkd")]
+layout_mode = 2
+
+[node name="EquipInventory" parent="HBoxContainer" instance=ExtResource("2_n0jkd")]
+layout_mode = 2
+
+[node name="ExternalInventory" parent="." instance=ExtResource("2_n0jkd")]
+visible = false
+layout_mode = 0
+offset_left = 110.0
+offset_top = 195.0
+offset_right = 150.0
+offset_bottom = 235.0
+
+[node name="GrabbedSlot" parent="." instance=ExtResource("3_oprao")]
+visible = false
+modulate = Color(1, 1, 1, 0.490196)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]

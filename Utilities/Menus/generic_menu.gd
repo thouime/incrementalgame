@@ -16,6 +16,8 @@ var slot_hovering: bool = false
 
 func _ready() -> void:
 	populate_slot_grid()
+	var state_machine: Node = PlayerManager.state_machine
+	slot_clicked.connect(state_machine._handle_building_tile)
 
 # Create the slot grid for each slot shown in the menu
 func populate_slot_grid() -> void:
@@ -58,7 +60,6 @@ func hide_slot_info(slot_index: int) -> void:
 			slot_info.hide()
 
 func on_slot_clicked(index: int, _button: int) -> void:
-	print("Generic Slot Clicked!")
 	slot_clicked.emit(slot_datas[index])
 
 func on_slot_hovered(index: int) -> void:

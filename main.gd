@@ -6,8 +6,6 @@ const PICKUP = preload("res://Entities/Item/pickup.tscn")
 
 @onready var player: CharacterBody2D = $Player
 @onready var inventory_interface: Control = $UI/InventoryInterface
-@onready var hot_bar_inventory: PanelContainer = $UI/HotBarInventory
-@onready var crafting_menu: PanelContainer = $UI/CraftingMenu
 @onready var crafting_references : Dictionary = {
 	"main" : self,
 	"world" : $World,
@@ -22,18 +20,14 @@ const PICKUP = preload("res://Entities/Item/pickup.tscn")
 func _ready() -> void:
 	inventory_interface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	# Inventory Setup
-	player.toggle_inventory.connect(toggle_inventory_interface)
 	inventory_interface.set_player_inventory_data(player.inventory_data)
 	inventory_interface.set_equip_inventory_data(player.equip_inventory_data)
-	inventory_interface.force_close.connect(toggle_inventory_interface)
-	hot_bar_inventory.set_inventory_data(player.inventory_data)
 	
 	for node in get_tree().get_nodes_in_group("external_inventory"):
 		node.toggle_inventory.connect(toggle_inventory_interface)
 		
 	# Initialize references in Singletons
 	CraftingSystem.set_references(crafting_references)
-	crafting_menu.craft_item_request.connect(CraftingSystem.try_craft)
 	game_save_manager.load_game()
 
 func update_label(label: Label, material: int) -> void:
@@ -64,13 +58,6 @@ func toggle_inventory_interface(external_inventory_owner: Node = null) -> void:
 		# Clear any external inventory if closing or only showing player inventory
 		if not inventory_interface.visible:
 			inventory_interface.clear_external_inventory()
-	
-	# Handle the hot bar based on visibility
-	if inventory_interface.visible:
-		hot_bar_inventory.hide()
-	else:
-		hot_bar_inventory.show()
-
 
 func toggle_external_inventory(external_inventory_owner: Node) -> void:
 	if external_inventory_owner and inventory_interface.visible:
