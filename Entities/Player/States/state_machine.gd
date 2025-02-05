@@ -121,10 +121,19 @@ func _connect_crafting_signal() -> void:
 
 # Signal activated via crafting menu, queues events after state change
 func _on_craft_request(craft_slot: CraftData) -> void:
-	var craft_event: Dictionary = {
-		"type": "craft",
-		"data": craft_slot
-	}
+	var craft_event: Dictionary
+	if craft_slot.type == craft_slot.Type.OBJECT:
+		craft_event = {
+			"type": "build",
+			"data": craft_slot
+		}
+	if craft_slot.type == craft_slot.Type.ITEM:
+		craft_event = {
+			"type": "craft",
+			"data": craft_slot
+		}
+	if not craft_event:
+		return
 	enqueue_event(craft_event)
 	process_state_event(craft_event)
 	

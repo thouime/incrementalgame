@@ -26,7 +26,7 @@ func _get_offset() -> void:
 
 func focus_shader(focus_state: int) -> void:
 	# Prevent hover shaders while in building state
-	if PlayerManager.player_state is PlayerBuilding:
+	if PlayerManager.player_state is PlayerCrafting:
 		return
 	
 	draw_shader(focus_state)

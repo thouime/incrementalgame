@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://bgi5nv12xjmka"]
+[gd_scene load_steps=59 format=3 uid="uid://txgdb31e8wvy"]
 
 [ext_resource type="Script" path="res://Stages/main.gd" id="1_xtwid"]
 [ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="2_h00hh"]
@@ -27,6 +27,7 @@
 [ext_resource type="Resource" uid="uid://dcqj765a50tqf" path="res://Utilities/Crafting/Crafts/chest_craft.tres" id="26_2pr82"]
 [ext_resource type="PackedScene" uid="uid://ciuy4rj4cpsvn" path="res://Entities/Item/pickup.tscn" id="26_eues2"]
 [ext_resource type="Texture2D" uid="uid://1kukmo2577le" path="res://Assets/Art/objects/chest_01.png" id="26_w22oc"]
+[ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="27_gx25i"]
 [ext_resource type="PackedScene" uid="uid://cefnc8f41wint" path="res://Entities/Objects/Chest/chest.tscn" id="27_l85p4"]
 [ext_resource type="PackedScene" uid="uid://by4s6muul7tdg" path="res://Entities/Objects/Composter/composter.tscn" id="28_6qef4"]
 
@@ -219,6 +220,29 @@ description = "A wooden container used to store items."
 menu_texture = SubResource("AtlasTexture_kbjl7")
 material_slot_datas = Array[ExtResource("22_sge2o")]([SubResource("Resource_ltig8"), SubResource("Resource_4gxie"), SubResource("Resource_mywmr")])
 
+[sub_resource type="Resource" id="Resource_kgm0u"]
+script = ExtResource("22_sge2o")
+quantity = 10
+item_data = ExtResource("14_5jodk")
+
+[sub_resource type="Resource" id="Resource_xs8b8"]
+script = ExtResource("22_sge2o")
+quantity = 5
+item_data = ExtResource("13_4w014")
+
+[sub_resource type="Resource" id="Resource_kdvho"]
+script = ExtResource("5_b2i4h")
+item_data = ExtResource("27_gx25i")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_6psoh"]
+script = ExtResource("21_2rjjw")
+type = 0
+slot_data = SubResource("Resource_kdvho")
+name = ""
+description = ""
+material_slot_datas = Array[ExtResource("22_sge2o")]([SubResource("Resource_kgm0u"), SubResource("Resource_xs8b8")])
+
 [sub_resource type="Resource" id="Resource_gmm5h"]
 script = ExtResource("5_b2i4h")
 item_data = ExtResource("20_ydott")
@@ -228,7 +252,7 @@ quantity = 1
 script = ExtResource("24_xf1d2")
 slot_datas = Array[ExtResource("5_b2i4h")]([null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null])
 
-[sub_resource type="Shader" id="Shader_03pey"]
+[sub_resource type="Shader" id="Shader_bxlmv"]
 resource_local_to_scene = true
 code = "shader_type canvas_item;
 
@@ -305,9 +329,9 @@ void fragment() {
 	}
 }"
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rcbit"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5prdp"]
 resource_local_to_scene = true
-shader = SubResource("Shader_03pey")
+shader = SubResource("Shader_bxlmv")
 shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
@@ -421,7 +445,7 @@ offset_left = 97.0
 offset_top = 519.0
 offset_right = 429.0
 offset_bottom = 575.0
-craft_slots = Array[ExtResource("21_2rjjw")]([ExtResource("22_21q6l"), ExtResource("26_2pr82"), SubResource("Resource_3r8ra")])
+craft_slots = Array[ExtResource("21_2rjjw")]([ExtResource("22_21q6l"), ExtResource("26_2pr82"), SubResource("Resource_3r8ra"), SubResource("Resource_6psoh")])
 
 [node name="Pickup" parent="." instance=ExtResource("26_eues2")]
 position = Vector2(260, 405)
@@ -432,7 +456,7 @@ position = Vector2(133, 488)
 inventory_data = SubResource("Resource_xwj4b")
 
 [node name="Composter" parent="." instance=ExtResource("28_6qef4")]
-material = SubResource("ShaderMaterial_rcbit")
+material = SubResource("ShaderMaterial_5prdp")
 position = Vector2(192, 352)
 
 [connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]

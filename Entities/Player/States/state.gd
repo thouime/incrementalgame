@@ -48,5 +48,5 @@ func process_physics(_delta: float) -> State:
 	return null
 
 func get_next_state(_event_data: Dictionary) -> State:
-	print("This state doesn't have a get_next_event method!")
+	print("This state doesn't have a get_next_state method!")
 	return null

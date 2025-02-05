@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://dn215u4niu0ji"]
+[gd_scene load_steps=59 format=3 uid="uid://dn215u4niu0ji"]
 
 [ext_resource type="Script" path="res://Entities/Player/player.gd" id="1_87i8y"]
 [ext_resource type="Texture2D" uid="uid://c4ifn1fjbi2ye" path="res://Entities/Player/Art/player.png" id="2_qrrvf"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://Entities/Player/States/player_gathering.gd" id="7_5ajlj"]
 [ext_resource type="Script" path="res://Entities/Player/States/player_crafting.gd" id="8_gbgay"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="9_2som8"]
+[ext_resource type="PackedScene" uid="uid://dqd8q0yay62vk" path="res://Utilities/Crafting/crafter.tscn" id="9_m0pfn"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="10_n6sx7"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ojwf"]
@@ -429,31 +430,33 @@ script = ExtResource("4_26u2a")
 key_move_state = NodePath("../PlayerKeyMove")
 click_move_state = NodePath("../PlayerClickMove")
 gather_state = NodePath("../PlayerGathering")
-build_state = NodePath("../PlayerBuilding")
+build_state = NodePath("../PlayerCrafting")
 
 [node name="PlayerKeyMove" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state", "build_state")]
 script = ExtResource("5_kcpsp")
 idle_state = NodePath("../PlayerIdle")
-build_state = NodePath("../PlayerBuilding")
+build_state = NodePath("../PlayerCrafting")
 
 [node name="PlayerClickMove" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state", "gather_state", "build_state", "key_move_state")]
 script = ExtResource("6_doxm0")
 idle_state = NodePath("../PlayerIdle")
 gather_state = NodePath("../PlayerGathering")
-build_state = NodePath("../PlayerBuilding")
+build_state = NodePath("../PlayerCrafting")
 key_move_state = NodePath("../PlayerKeyMove")
 
 [node name="PlayerGathering" type="Node" parent="StateMachine" node_paths=PackedStringArray("key_move_state", "click_move_state", "build_state")]
 script = ExtResource("7_5ajlj")
 key_move_state = NodePath("../PlayerKeyMove")
 click_move_state = NodePath("../PlayerClickMove")
-build_state = NodePath("../PlayerBuilding")
+build_state = NodePath("../PlayerCrafting")
 
-[node name="PlayerBuilding" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state")]
+[node name="PlayerCrafting" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state")]
 script = ExtResource("8_gbgay")
 idle_state = NodePath("../PlayerIdle")
 
-[node name="Grid" type="Control" parent="StateMachine/PlayerBuilding"]
+[node name="Crafter" parent="StateMachine/PlayerCrafting" instance=ExtResource("9_m0pfn")]
+
+[node name="Grid" type="Control" parent="StateMachine/PlayerCrafting"]
 light_mask = 0
 visibility_layer = 512
 z_index = 100
@@ -461,7 +464,7 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("9_2som8")
 
-[node name="Cursor" type="Sprite2D" parent="StateMachine/PlayerBuilding/Grid"]
+[node name="Cursor" type="Sprite2D" parent="StateMachine/PlayerCrafting/Grid"]
 visible = false
 z_index = 1
 scale = Vector2(2, 2)

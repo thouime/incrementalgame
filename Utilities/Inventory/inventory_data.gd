@@ -9,7 +9,7 @@ signal inventory_updated(inventory_data: InventoryData)
 # Inventory Dictionary Structure for Item Tracking
 # The dictionary is structured as followsd:
 #	item_name (key): String representing each item
-#		-> item_slots (key): Diciontary for each slot index in inventory
+#		-> item_slots (key): Dictionary for each slot index in inventory
 #			-> slot_index (key): Represents index of the slot (e.g. 0, 1, 2)
 #				-> slot_data (key): Reference to slot data holding item info
 #				-> quantity (key): Quantity of item for this slot
@@ -23,15 +23,15 @@ func initialize_slots(size: int, default_value: Variant = null) -> void:
 
 func setup_item_inventory() -> void:
 	for slot_index in range(slot_datas.size()):
-		var slot_data = slot_datas[slot_index]
+		var slot_data := slot_datas[slot_index]
 		if not slot_data:
 			continue
 		add_inventory_entry(slot_data, slot_index)
 
 # Update item_inventory dictionary or add new entry if it doesn't exist
 func add_inventory_entry(slot_data: SlotData, slot_index: int) -> void:
-	var item_data = slot_data.item_data
-	var item_name = item_data.name
+	var item_data := slot_data.item_data
+	var item_name := item_data.name
 	
 	# Initialize item entry in the inventory if it doesn't exist
 	if not item_inventory.has(item_name):
@@ -40,8 +40,8 @@ func add_inventory_entry(slot_data: SlotData, slot_index: int) -> void:
 			"total_quantity": 0
 		}
 	
-	var item_entry = item_inventory[item_name]
-	var item_index = item_entry["item_slots"]
+	var item_entry : Dictionary = item_inventory[item_name]
+	var item_index : Dictionary = item_entry["item_slots"]
 	
 	# Initialize the slot entry for this index if it doesn't exist
 	if not item_index.has(slot_index):
@@ -60,11 +60,11 @@ func remove_inventory_entry(
 	slot_index: int, 
 	remove_quantity: int
 ) -> void:
-	var item_data = slot_data.item_data
-	var item_name = item_data.name
+	var item_data := slot_data.item_data
+	var item_name := item_data.name
 	
 	if not item_inventory.has(item_name):
-		push_error("No item with that name in the inventory!")
+		push_error("No item with that natnevetme in the inventory!")
 		return
 	
 	var item_entry = item_inventory[item_name]
@@ -188,6 +188,54 @@ func pick_up_slot_data(slot_data: SlotData) -> bool:
 			
 	print("Inventory is full!")
 	return false
+
+# Set the slot data to null signifying there is no item in that slot
+func clear_slot_data(slot_data: SlotData, index: int) -> void:
+	if slot_data:
+		slot_datas[index] = null
+
+# Check if the slot data has a positive quantity
+func update_slot_quantity(
+	slot_data: SlotData, 
+	index: int, 
+	quantity: int
+) -> void:
+	if slot_data:
+		slot_data.quantity -= quantity
+	if slot_data.quantity < 1:
+		clear_slot_data(slot_data, index)
+
+func remove_item(item_name: String, quantity: int) -> void:
+	if not item_inventory.has(item_name):
+		print("404 item not found!")
+		return
+	if item_inventory[item_name]["total_quantity"] < quantity:
+		print("Not enough items to be removed, construct additional pylons!")
+		return
+		
+	var removed_quantity := 0
+	var items_to_remove: Dictionary = item_inventory[item_name]["item_slots"]
+	
+	for item in items_to_remove.keys():
+		var slot_data: SlotData = slot_datas[item]
+		if not slot_data:
+			push_error("Slot Data doesn't exist!")
+			return
+		var available_quantity = items_to_remove[item]["quantity"]
+		var required_quantity = quantity - removed_quantity
+		if available_quantity >= required_quantity:
+			update_slot_quantity(slot_data, item, required_quantity)
+			remove_inventory_entry(slot_data, item, required_quantity)
+			inventory_updated.emit(self)
+			break
+		else:
+			removed_quantity += available_quantity
+			clear_slot_data(slot_data, item)
+			remove_inventory_entry(slot_data, item, available_quantity)
+			inventory_updated.emit(self)
+			# Removed enough items
+		if removed_quantity >= quantity:
+			return
 
 func reduce_slot_amount(index: int, amount: int) -> void:
 	var slot_data: SlotData = slot_datas[index]

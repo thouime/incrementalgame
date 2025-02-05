@@ -48,6 +48,15 @@ func process_frame(_delta: float) -> State:
 	
 	return null
 
+func get_next_state(event_data: Dictionary) -> State:
+	match event_data.type:
+		"build":
+			return build_state
+		"craft":
+			return build_state
+		_:
+			return null
+
 func handle_key_movement() -> Vector2:
 	var velocity : Vector2 = Vector2.ZERO
 	# Check for movement inputs

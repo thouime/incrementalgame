@@ -31,6 +31,8 @@ func process_physics(_delta: float) -> State:
 
 func get_next_state(event_data: Dictionary) -> State:
 	match event_data.type:
+		"build":
+			return build_state
 		"craft":
 			return build_state
 		_:
