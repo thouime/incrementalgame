@@ -12,5 +12,5 @@ script = ExtResource("1_qu7bn")
 heal_value = 1
 name = "Health Potion"
 description = "A concoted vial that remarkably cures wounds."
-_stackable = true
+stackable = true
 texture = SubResource("AtlasTexture_4t530")
