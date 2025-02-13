@@ -8,6 +8,7 @@ const PICKUP = preload("res://Entities/Item/pickup.tscn")
 @onready var inventory_interface: Control = $UI/InventoryInterface
 @onready var hot_bar_inventory: PanelContainer = $UI/HotBarInventory
 @onready var crafting_menu: PanelContainer = $UI/CraftingMenu
+@onready var world: Node2D = $World
 @onready var crafting_references : Dictionary = {
 	"main" : self,
 	"world" : $World,
@@ -35,6 +36,7 @@ func _ready() -> void:
 	CraftingSystem.set_references(crafting_references)
 	crafting_menu.craft_item_request.connect(CraftingSystem.try_craft)
 	game_save_manager.load_game()
+	player.world = world
 
 func update_label(label: Label, material: int) -> void:
 	# Split the label text into prefix and current value

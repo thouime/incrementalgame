@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dl36ac4etq1lu"]
+
+[ext_resource type="Script" path="res://Utilities/Movement/a_star_pathfinding.gd" id="1_d5jux"]
+
+[node name="AStarPathfinding" type="Node"]
+script = ExtResource("1_d5jux")

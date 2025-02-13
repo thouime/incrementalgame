@@ -49,6 +49,7 @@ func process_frame(_delta: float) -> State:
 func move_towards_target(_delta: float, target_position: Vector2) -> Vector2:
 	# Calculate the direction vector to the target position
 	var direction : Vector2 = (target_position - parent.global_position).normalized()
+	
 	# Get the animation direction based on which is closest to the object
 	parent.direction = get_closest_direction(direction)
 	# Calculate the velocity

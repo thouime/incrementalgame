@@ -11,6 +11,8 @@ var interact_target : Node = null
 var crafting_system : Node = null
 # For passing the tile to the building state
 var building_tile : TileInfo = null
+var tile_map := TileMap
+var a_star_pathfinding : Node
 
 # Initialize the state machine by giving each child state a reference to the
 # parent object it belongs to and enter the default initial_state
@@ -19,6 +21,7 @@ func init(parent: Player, crafting_system_ref: Node) -> void:
 		child.parent = parent
 	
 	crafting_system = crafting_system_ref
+	a_star_pathfinding = parent.a_star_pathfinding
 	
 	# Initialize to the default state
 	change_state(initial_state)
