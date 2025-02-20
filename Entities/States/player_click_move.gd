@@ -5,6 +5,10 @@ extends State
 @export var gather_state : State
 @export var build_state : State
 @export var key_move_state : State
+# An array of each tile using Astar pathfinding
+var tile_path : Array = []
+# Keep track of the target tile in a tile path array
+var current_target_index : int = 0
 var ready_to_build : bool = false
 
 func enter() -> void:
@@ -47,8 +51,32 @@ func process_frame(_delta: float) -> State:
 	return null
 
 func move_towards_target(_delta: float, target_position: Vector2) -> Vector2:
+	
+	# Calculate a new path if there isn't one
+	if tile_path.size() == 0:
+		tile_path = parent.a_star_pathfinding.get_tile_path(
+			parent.global_position, target_position
+		)
+		current_target_index = 0
+	
+	# If we reached the end of the tile path, stop moving
+	if current_target_index >= tile_path.size():
+		return Vector2.ZERO
+	
+	var current_target = tile_path[current_target_index]
+	
 	# Calculate the direction vector to the target position
-	var direction : Vector2 = (target_position - parent.global_position).normalized()
+	var direction : Vector2 = (
+		current_target - parent.global_position
+	).normalized()
+	
+	# Check if we reached the current target
+	if parent.global_position.distance_to(current_target) <= 10:
+		current_target_index += 1
+		if current_target_index >= tile_path.size():
+			return Vector2.ZERO
+		current_target = tile_path[current_target_index]
+		direction = (current_target - parent.global_position).normalized()
 	
 	# Get the animation direction based on which is closest to the object
 	parent.direction = get_closest_direction(direction)

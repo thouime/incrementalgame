@@ -14,7 +14,7 @@ func initialize_astar(world_node: Node2D) -> void:
 		tile_size = tile_map_ground.tile_set.tile_size
 		get_tiles()
 
-func get_tiles() -> void:	
+func get_tiles() -> void:
 	var used_tiles = tile_map_ground.get_used_cells()  # Layer 0
 	for tile in used_tiles:
 		add_point(tile)
