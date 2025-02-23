@@ -200,6 +200,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("15_4fcd7")
+metadata/_edit_lock_ = true
 
 [node name="PlayerInventory" parent="UI/InventoryInterface" instance=ExtResource("16_gmsb7")]
 layout_mode = 0
@@ -235,6 +236,7 @@ offset_left = 126.0
 offset_top = 651.0
 offset_right = 354.0
 offset_bottom = 699.0
+metadata/_edit_lock_ = true
 
 [node name="CraftingMenu" parent="UI" instance=ExtResource("19_urs44")]
 offset_left = 97.0
@@ -242,8 +244,10 @@ offset_top = 519.0
 offset_right = 429.0
 offset_bottom = 575.0
 craft_datas = Array[ExtResource("21_2rjjw")]([ExtResource("22_21q6l"), ExtResource("26_2pr82")])
+metadata/_edit_lock_ = true
 
 [node name="BuildingMenu" parent="UI" instance=ExtResource("27_rirn1")]
+metadata/_edit_lock_ = true
 
 [node name="GameSaveManager" type="Node" parent="."]
 script = ExtResource("22_shahs")

@@ -14,11 +14,14 @@ func enter() -> void:
 func exit() -> void:
 	ready_to_build = false
 
-func process_input(_event: InputEvent) -> State:
+func process_input(event: InputEvent) -> State:
 	# Check for movement inputs
 	for action : String in directions.keys():
 		if Input.is_action_just_pressed(action):
 			return key_move_state
+	if event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:
+		parent.target_position = parent.camera.get_global_mouse_position()
+
 	return null
 	
 func process_physics(_delta: float) -> State:

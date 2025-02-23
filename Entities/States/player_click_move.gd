@@ -17,6 +17,8 @@ func enter() -> void:
 func exit() -> void:
 	parent.velocity = Vector2.ZERO
 	parent.target_position = Vector2.ZERO
+	tile_path = []
+	current_target_index = 0
 	ready_to_build = false
 
 func process_input(_event: InputEvent) -> State:

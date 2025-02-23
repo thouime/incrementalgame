@@ -17,6 +17,10 @@ func initialize_astar(world_node: Node2D) -> void:
 func get_tiles() -> void:
 	var used_tiles = tile_map_ground.get_used_cells()  # Layer 0
 	for tile in used_tiles:
+		# Convert tile coordinates to local coordinates
+		var local_pos = tile_map_ground.map_to_local(tile)
+		# Convert local coordinates to global coordinates
+		var global_pos = tile_map_ground.to_global(local_pos)
 		add_point(tile)
 
 	# Connect neighboring tiles
@@ -40,20 +44,33 @@ func connect_points(tile_a: Vector2, tile_b: Vector2) -> void:
 		astar.connect_points(point_id_a, point_id_b)
 
 func get_point_id(tile: Vector2) -> int:
-	return int(tile.x + tile.y * tile_map_ground.get_used_rect().size.x)
+	var rect = tile_map_ground.get_used_rect()
+	return int(tile.x - rect.position. x + (
+		tile.y - rect.position.y * rect.size.x 
+	) * rect.size.x)
 
 func world_to_grid(position: Vector2) -> Vector2:
-	return tile_map_ground.local_to_map(position)
+	# Convert global position to local position relative to the TileMap
+	var local_pos = tile_map_ground.to_local(position)
+	# Convert local position to tile coordinates
+	return tile_map_ground.local_to_map(local_pos)
 
 func grid_to_world(tile: Vector2) -> Vector2:
-	return tile_map_ground.map_to_local(tile)
+	# Convert tile coordinates to local coordinates
+	var local_pos = tile_map_ground.map_to_local(tile)
+	# Convert local coordinates to global coordinates
+	var global_pos = tile_map_ground.to_global(local_pos)
+	return global_pos
 
 func get_tile_path(start: Vector2, end: Vector2) -> Array:
+	
+	# Convert Global Coordinates to Tile Coordinates
 	var start_tile = world_to_grid(start)
 	var end_tile = world_to_grid(end)
-	
+
 	var start_id = get_point_id(start_tile)
 	var end_id = get_point_id(end_tile)
+	
 	
 	if astar.has_point(start_id) and astar.has_point(end_id):
 		var path_tiles = astar.get_point_path(start_id, end_id)
