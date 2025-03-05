@@ -171,7 +171,7 @@ region_rect = Rect2(80, 0, 16, 16)
 
 [node name="Player" parent="." instance=ExtResource("2_h00hh")]
 z_index = 2
-position = Vector2(266, 483)
+position = Vector2(344, 500)
 scale = Vector2(1, 1)
 collision_layer = 2
 inventory_data = SubResource("Resource_66drq")
@@ -255,3 +255,5 @@ script = ExtResource("22_shahs")
 [connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]
 [connection signal="gui_input" from="UI/InventoryInterface" to="UI/InventoryInterface" method="_on_gui_input"]
 [connection signal="visibility_changed" from="UI/InventoryInterface" to="UI/InventoryInterface" method="_on_visibility_changed"]
+
+[editable path="World"]

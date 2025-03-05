@@ -31,7 +31,7 @@ func _ready() -> void:
 	set_animation()
 	state_machine.init(self, CraftingSystem)
 	call_deferred("start_a_star")
-	
+
 # Sprite and Animations
 func set_animation() -> void:
 	var current_animation : String = animated_sprite.animation

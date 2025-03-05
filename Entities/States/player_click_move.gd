@@ -32,14 +32,20 @@ func process_physics(delta: float) -> State:
 	var velocity : Vector2  = move_towards_target(delta, parent.target_position)
 	parent.animated_sprite.animation = animations[parent.direction]
 	
+	if velocity == Vector2.ZERO:
+		return idle_state
+	
 	# Flip the sprite if facing left
 	if velocity.x != 0:
 		parent.animated_sprite.flip_h = velocity.x < 0
 		
 	# Start movement
 	velocity = velocity.normalized() * move_speed
+	
+	# Check if there is a target object
 	if parent.global_position.distance_to(parent.target_position) <= 10:
-		return gather_state
+		if parent.interact_target:
+			return gather_state
 
 	parent.position += velocity * delta
 	parent.move_and_slide()
@@ -65,10 +71,10 @@ func move_towards_target(_delta: float, target_position: Vector2) -> Vector2:
 	if current_target_index >= tile_path.size():
 		return Vector2.ZERO
 	
-	var current_target = tile_path[current_target_index]
+	var current_target: Vector2 = tile_path[current_target_index]
 	
 	# Calculate the direction vector to the target position
-	var direction : Vector2 = (
+	var direction: Vector2 = (
 		current_target - parent.global_position
 	).normalized()
 	
@@ -83,7 +89,7 @@ func move_towards_target(_delta: float, target_position: Vector2) -> Vector2:
 	# Get the animation direction based on which is closest to the object
 	parent.direction = get_closest_direction(direction)
 	# Calculate the velocity
-	var velocity : Vector2 = direction * parent.player_speed
+	var velocity: Vector2 = direction * parent.player_speed
 	return velocity
 
 func get_closest_direction(direction: Vector2) -> Vector2:
@@ -94,7 +100,7 @@ func get_closest_direction(direction: Vector2) -> Vector2:
 	var dot_down: float = direction.dot(Vector2.DOWN)
 
 	# Determine which direction has the highest dot product (most aligned)
-	var max_dot : float = max(dot_right, dot_left, dot_up, dot_down)
+	var max_dot: float = max(dot_right, dot_left, dot_up, dot_down)
 
 	# Set default priority order for cases where directions are equally close
 	if max_dot == dot_right:

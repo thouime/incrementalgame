@@ -130,3 +130,10 @@ visible = false
 z_index = 4
 position = Vector2(0.75, 7.5)
 shape = SubResource("RectangleShape2D_2edif")
+
+[node name="NotWalkable" type="ColorRect" parent="."]
+offset_left = -21.0
+offset_top = -6.0
+offset_right = 23.0
+offset_bottom = 34.0
+color = Color(1, 0, 0, 0.0980392)
