@@ -474,5 +474,5 @@ region_rect = Rect2(80, 0, 16, 16)
 [node name="AStarPathfinding" parent="." instance=ExtResource("11_q3ijd")]
 
 [node name="MarkTilePath" parent="AStarPathfinding" instance=ExtResource("12_fyjvd")]
-z_index = 1000
+z_index = 1
 z_as_relative = false

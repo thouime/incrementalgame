@@ -15,17 +15,26 @@ func enter() -> void:
 	pass
 
 func exit() -> void:
+	clear_position()
+	ready_to_build = false
+
+func clear_position() -> void:
 	parent.velocity = Vector2.ZERO
 	parent.target_position = Vector2.ZERO
 	tile_path = []
 	current_target_index = 0
-	ready_to_build = false
 
-func process_input(_event: InputEvent) -> State:
+func process_input(event: InputEvent) -> State:
 	# Allow interruption to key movement
 	for action : String in directions.keys():
 		if Input.is_action_just_pressed(action):
 			return key_move_state
+	# Check for new mouse inputs
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			clear_position()
+			parent.target_position = parent.camera.get_global_mouse_position()
+			
 	return null
 	
 func process_physics(delta: float) -> State:
@@ -62,8 +71,13 @@ func move_towards_target(_delta: float, target_position: Vector2) -> Vector2:
 	
 	# Calculate a new path if there isn't one
 	if tile_path.size() == 0:
-		tile_path = parent.a_star_pathfinding.get_tile_path(
-			parent.global_position, target_position
+		var a_star = parent.a_star_pathfinding
+		# Find the nearest closest tile
+		var target_tile = a_star.get_closest_tile(target_position)
+		
+		tile_path = a_star.get_tile_path(
+			parent.global_position, 
+			a_star.grid_to_world(target_tile)
 		)
 		current_target_index = 0
 	
@@ -78,11 +92,17 @@ func move_towards_target(_delta: float, target_position: Vector2) -> Vector2:
 		current_target - parent.global_position
 	).normalized()
 	
-	# Check if we reached the current target
-	if parent.global_position.distance_to(current_target) <= 10:
+	# Ensure we are actually stopping at the tile center
+	var distance_to_target = parent.global_position.distance_to(current_target)
+	if distance_to_target <= 2:  # Small threshold for stopping
 		current_target_index += 1
 		if current_target_index >= tile_path.size():
-			return Vector2.ZERO
+			# Ensure final snap to tile center
+			print(tile_path[-1])
+			parent.position = tile_path[-1]
+			print("Final Position: ", parent.position)
+			return Vector2.ZERO  # Stop moving
+		
 		current_target = tile_path[current_target_index]
 		direction = (current_target - parent.global_position).normalized()
 	

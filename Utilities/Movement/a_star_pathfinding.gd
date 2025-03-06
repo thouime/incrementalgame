@@ -66,9 +66,6 @@ func grid_to_world(tile: Vector2) -> Vector2:
 	# Convert tile coordinates to local coordinates
 	var local_pos : Vector2 = tile_map_ground.map_to_local(tile)
 	
-	# Adjust to top-left corner by subtracting half of tile size (16x16)
-	local_pos -= Vector2(8, 8) # Adjust for the center-to-top-left difference
-	
 	# Convert local coordinates to global coordinates
 	var global_pos : Vector2 = tile_map_ground.to_global(local_pos)
 	return global_pos
@@ -138,4 +135,40 @@ func mark_restricted_tiles(tiles: Array) -> void:
 # Show the path in colored rectangles
 func show_tile_path(tiles: Array) -> void:
 	$MarkTilePath.update_highlight(tiles)
+
+func get_closest_tile(click_pos: Vector2) -> Vector2i:
+	var grid_pos = world_to_grid(click_pos)
 	
+	# Get tilemap bounds
+	var tilemap_rect = tile_map_ground.get_used_rect()
+	
+	# Clamp the position within the tilemap bounds
+	var clamped_x = clamp(
+		grid_pos.x, tilemap_rect.position.x, 
+		tilemap_rect.end.x - 1
+	)
+	var clamped_y = clamp(
+		grid_pos.y, tilemap_rect.position.y, 
+		tilemap_rect.end.y - 1
+	)
+	
+	# Find the closest walkable tile
+	var search_radius = 5 # Adjust radius to limit search area if needed
+	var closest_tile = Vector2i(clamped_x, clamped_y)
+	var min_distance = INF
+	
+	for x in range(clamped_x - search_radius, clamped_x + search_radius + 1):
+		for y in range(clamped_y - search_radius, clamped_y + search_radius + 1):
+			var tile_pos = Vector2i(x, y)
+			if is_walkable(tile_pos):  # Ensure tile is valid
+				var dist = tile_pos.distance_to(grid_pos)
+				if dist < min_distance:
+					min_distance = dist
+					closest_tile = tile_pos
+	
+	return closest_tile
+
+# Function to check if tile is walkable
+func is_walkable(tile_pos: Vector2i) -> bool:
+	var tile_data = tile_map_ground.get_cell_tile_data(tile_pos)
+	return tile_data != null  # Adjust this to check tile type if necessary	
