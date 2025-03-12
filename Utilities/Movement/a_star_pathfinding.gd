@@ -5,7 +5,7 @@ var tile_map_ground : TileMapLayer
 var tile_map_boundary : TileMapLayer
 var astar := AStar2D.new()
 var tile_size: Vector2
-var restricted_tiles := []
+var restricted_tiles : Array[Vector2i] = []
 @onready var mark_tile_path: Node2D = $MarkTilePath
 
 func initialize_astar(world_node: Node2D) -> void:
@@ -35,7 +35,8 @@ func get_tiles() -> void:
 				if dx == 0 and dy == 0:
 					continue
 				var neighbor: Vector2i = Vector2i(tile.x + dx, tile.y + dy)
-				if tile_map_ground.get_cell_source_id(neighbor) != -1:  # Check if neighbor exists
+				# Check if neighbor exists
+				if tile_map_ground.get_cell_source_id(neighbor) != -1: 
 					connect_points(tile, neighbor)
 
 func add_point(tile: Vector2) -> void:
@@ -91,9 +92,9 @@ func get_tile_path(start: Vector2, end: Vector2) -> Array:
 		return path_world
 	return []
 
-func update_tile(tile: Vector2, is_walkable: bool) -> void:
+func update_tile(tile: Vector2, walkable: bool) -> void:
 	var point_id : int = get_point_id(tile)
-	if is_walkable:
+	if walkable:
 		if not astar.has_point(point_id):
 			add_point(tile)
 			# Reconnect to neighbors
@@ -102,7 +103,7 @@ func update_tile(tile: Vector2, is_walkable: bool) -> void:
 					if dx == 0 and dy == 0:
 						continue
 					var neighbor := Vector2(tile.x + dx, tile.y + dy)
-					if tile_map_ground.get_tile_source_id(0, neighbor) != -1:
+					if tile_map_ground.get_cell_source_id(neighbor) != -1:
 						connect_points(tile, neighbor)
 	else:
 		if astar.has_point(point_id):
@@ -115,12 +116,12 @@ func get_object_tiles(object: Node2D) -> Array:
 	if unwalkable_shape:
 		var global_pos : Vector2 = unwalkable_shape.global_position
 		var size : Vector2 = unwalkable_shape.size * 2 # Objects are scaled
-		var top_left = world_to_grid(global_pos)
+		var top_left : Vector2i = world_to_grid(global_pos)
 		var bottom_right : Vector2i = world_to_grid(global_pos + size)
 	
 		for x : int in range(top_left.x, bottom_right.x + 1):
 			for y : int in range(top_left.y, bottom_right.y + 1):
-				tiles.append(Vector2(x, y))
+				tiles.append(Vector2i(x, y))
 				
 	return tiles
 	
@@ -137,38 +138,36 @@ func show_tile_path(tiles: Array) -> void:
 	$MarkTilePath.update_highlight(tiles)
 
 func get_closest_tile(click_pos: Vector2) -> Vector2i:
-	var grid_pos = world_to_grid(click_pos)
+	var grid_pos : Vector2i = world_to_grid(click_pos)
 	
 	# Get tilemap bounds
-	var tilemap_rect = tile_map_ground.get_used_rect()
+	var tilemap_rect : Rect2 = tile_map_ground.get_used_rect()
 	
 	# Clamp the position within the tilemap bounds
-	var clamped_x = clamp(
-		grid_pos.x, tilemap_rect.position.x, 
-		tilemap_rect.end.x - 1
-	)
-	var clamped_y = clamp(
-		grid_pos.y, tilemap_rect.position.y, 
-		tilemap_rect.end.y - 1
-	)
+	var clamped_x : int = clamp(grid_pos.x, tilemap_rect.position.x, tilemap_rect.end.x - 1)
+	var clamped_y : int = clamp(grid_pos.y, tilemap_rect.position.y, tilemap_rect.end.y - 1)
 	
-	# Find the closest walkable tile
-	var search_radius = 5 # Adjust radius to limit search area if needed
-	var closest_tile = Vector2i(clamped_x, clamped_y)
-	var min_distance = INF
+	# If the initial tile is walkable, return it immediately
+	if is_walkable(Vector2i(clamped_x, clamped_y)):
+		return Vector2i(clamped_x, clamped_y)
+
+	# Search for the nearest walkable tile
+	var search_radius := 10 # Adjust radius as needed
+	var closest_tile := Vector2i(clamped_x, clamped_y)
+	var min_distance := INF
 	
 	for x in range(clamped_x - search_radius, clamped_x + search_radius + 1):
 		for y in range(clamped_y - search_radius, clamped_y + search_radius + 1):
-			var tile_pos = Vector2i(x, y)
+			var tile_pos := Vector2i(x, y)
 			if is_walkable(tile_pos):  # Ensure tile is valid
-				var dist = tile_pos.distance_to(grid_pos)
+				var dist : float = tile_pos.distance_to(grid_pos)
 				if dist < min_distance:
 					min_distance = dist
 					closest_tile = tile_pos
-	
+	# Return the closest valid tile (even if it's the same as the input)
 	return closest_tile
 
 # Function to check if tile is walkable
 func is_walkable(tile_pos: Vector2i) -> bool:
-	var tile_data = tile_map_ground.get_cell_tile_data(tile_pos)
-	return tile_data != null  # Adjust this to check tile type if necessary	
+	var tile_data : TileData = tile_map_ground.get_cell_tile_data(tile_pos)
+	return tile_data != null and not restricted_tiles.has(tile_pos)

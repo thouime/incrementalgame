@@ -100,8 +100,8 @@ func save_tiles(tiles: Dictionary) -> Dictionary:
 		# When static typing the saves break here
 		# Something happens after loading into the tiles dictionary and
 		# Saving over it again. 
-		for atlas_coords in tiles[tile_map].keys():
-			var data = tiles[tile_map][atlas_coords]
+		for atlas_coords : Variant in tiles[tile_map].keys():
+			var data : Variant = tiles[tile_map][atlas_coords]
 			
 			# If the atlas coordinates don't exist yet in grass or boundary, initialize them
 			if not serialized_tiles["grass"].has(str(atlas_coords)):
@@ -111,14 +111,18 @@ func save_tiles(tiles: Dictionary) -> Dictionary:
 			
 			# Add serialized tile coordinates under "grass"
 			if data.has("tiles"):
-				for coord in data["tiles"]:
-					serialized_tiles["grass"][str(atlas_coords)].append(str(coord))
+				for coord : Variant in data["tiles"]:
+					var atlas_key := str(atlas_coords)
+					var coord_str := str(coord)
+					serialized_tiles["grass"][atlas_key].append(coord_str)
 			
 			# Check if "boundary" key exists before accessing it
 			if data.has("boundary"):
 				# Add serialized boundary coordinates under "boundary"
-				for coord in data["boundary"]:
-					serialized_tiles["boundary"][str(atlas_coords)].append(str(coord))
+				for coord : Variant in data["boundary"]:
+					var atlas_key := str(atlas_coords)
+					var coord_str := str(coord)
+					serialized_tiles["boundary"][atlas_key].append(coord_str)
 	
 	# Return the final dictionary with "grass" and "boundary" directly under "tiles"
 	return serialized_tiles

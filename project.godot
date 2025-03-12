@@ -95,9 +95,10 @@ cancel={
 
 [layer_names]
 
-2d_physics/layer_1="Environment"
-2d_physics/layer_2="Player"
-2d_physics/layer_3="Interact"
+2d_physics/layer_1="Boundary"
+2d_physics/layer_2="Player Feet"
+2d_physics/layer_3="Player"
+2d_physics/layer_4="Objects"
 
 [rendering]
 

@@ -16,14 +16,14 @@ func _draw() -> void:
 	for i in range(tiles_to_highlight.size()):
 		var tile : Vector2 = tiles_to_highlight[i]
 		
-		# Offset the tile position by half the tile size to draw from the top-left corner
-		var offset_tile = tile - Vector2(8, 8)  # Adjust by half the size of a tile (8, 8)
+		# Adjust by half the size of a tile (8, 8)
+		var offset_tile : Vector2 = tile - Vector2(8, 8)
 
 		# Create a Rect2 using the adjusted position and tile size
 		var rect := Rect2(offset_tile, Vector2(16, 16))
 		
 		# Choose the appropriate color for the current tile
-		var color_to_use = highlight_color
+		var color_to_use : Color = highlight_color
 		if i + 1 == tiles_to_highlight.size():  # If this is the last tile, use the target color
 			color_to_use = target_color
 		
@@ -34,4 +34,3 @@ func _draw() -> void:
 func update_highlight(tiles : Array) -> void:
 	tiles_to_highlight = tiles
 	queue_redraw()  # Trigger the _draw method
-	print("Updating drawn path...")

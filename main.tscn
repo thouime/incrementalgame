@@ -172,14 +172,15 @@ region_rect = Rect2(80, 0, 16, 16)
 
 [node name="Player" parent="." instance=ExtResource("2_h00hh")]
 z_index = 2
-position = Vector2(344, 500)
+position = Vector2(360, 472)
 scale = Vector2(1, 1)
-collision_layer = 2
 inventory_data = SubResource("Resource_66drq")
 equip_inventory_data = SubResource("Resource_0msbn")
 
 [node name="Tree" parent="." instance=ExtResource("8_73jjx")]
 material = SubResource("ShaderMaterial_5c6pj")
+collision_layer = 8
+collision_mask = 4
 
 [node name="World" parent="." instance=ExtResource("8_8lnwa")]
 position = Vector2(64, 160)
@@ -187,6 +188,8 @@ metadata/_edit_lock_ = true
 
 [node name="Bush" parent="." instance=ExtResource("14_h5qyt")]
 material = SubResource("ShaderMaterial_5k06o")
+collision_layer = 8
+collision_mask = 4
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -254,6 +257,7 @@ metadata/_edit_lock_ = true
 script = ExtResource("22_shahs")
 
 [node name="GridDebugger" parent="." node_paths=PackedStringArray("world") instance=ExtResource("23_es58b")]
+visible = false
 world = NodePath("../World")
 
 [connection signal="drop_slot_data" from="UI/InventoryInterface" to="." method="_on_inventory_interface_drop_slot_data"]
