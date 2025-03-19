@@ -8,13 +8,14 @@ var external_inventory_owner: Node
 @onready var grabbed_slot: PanelContainer = $GrabbedSlot
 @onready var external_inventory: PanelContainer = $ExternalInventory
 
-
 signal drop_slot_data(slot_data: SlotData)
 signal force_close
 
 func _physics_process(_delta: float) -> void:
 	if grabbed_slot.visible:
-		grabbed_slot.global_position = get_global_mouse_position() + Vector2(5, 5)
+		grabbed_slot.global_position = (
+			get_global_mouse_position() + Vector2(5, 5)
+		)
 	
 	# If the player is too far from an external inventory.
 	if external_inventory_owner:
@@ -24,6 +25,10 @@ func _physics_process(_delta: float) -> void:
 			force_close.emit()
 
 func set_player_inventory_data(inventory_data: InventoryData) -> void:
+	print("set player inventory data has run")
+	# If the signal is already connected, disconnect it
+	if inventory_data.inventory_interact.is_connected(on_inventory_interact):
+		inventory_data.inventory_interact.disconnect(on_inventory_interact)
 	inventory_data.inventory_interact.connect(on_inventory_interact)
 	player_inventory.set_inventory_data(inventory_data)
 
@@ -41,26 +46,39 @@ func set_external_inventory(_external_inventory_owner: Node) -> void:
 	external_inventory.show()
 
 func clear_external_inventory() -> void:
+	
 	if external_inventory_owner:
-		var inventory_data: InventoryData = external_inventory_owner.inventory_data
+		var inventory_data: InventoryData = (
+			external_inventory_owner.inventory_data
+		)
 		
 		inventory_data.inventory_interact.disconnect(on_inventory_interact)
+			
 		external_inventory.clear_inventory_data(inventory_data)
 		
 		external_inventory.hide()
 		external_inventory_owner = null
 
-func on_inventory_interact(inventory_data: InventoryData, index: int, button: int) -> void:
+func on_inventory_interact(
+	inventory_data: InventoryData,
+	index: int, 
+	button: int
+) -> void:
+	
 	match [grabbed_slot_data, button]:
 		[null, MOUSE_BUTTON_LEFT]:
 			grabbed_slot_data = inventory_data.grab_slot_data(index)
 		[_, MOUSE_BUTTON_LEFT]:
-			grabbed_slot_data = inventory_data.drop_slot_data(grabbed_slot_data, index)
+			grabbed_slot_data = inventory_data.drop_slot_data(
+				grabbed_slot_data, index
+			)
 		[null, MOUSE_BUTTON_RIGHT]:
 			inventory_data.use_slot_data(index)
 		[_, MOUSE_BUTTON_RIGHT]:
-			grabbed_slot_data = inventory_data.drop_single_slot_data(grabbed_slot_data, index)
-			
+			grabbed_slot_data = inventory_data.drop_single_slot_data(
+				grabbed_slot_data, index
+			)
+	
 	update_grabbed_slot()
 
 func update_grabbed_slot() -> void:

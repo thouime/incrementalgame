@@ -5,7 +5,8 @@ extends Node
 const PICKUP = preload("res://Entities/Item/pickup.tscn")
 
 @onready var player: CharacterBody2D = $Player
-@onready var inventory_interface: Control = $UI/InventoryInterface
+@onready var hub_menu: Control = $UI/HubMenu
+@onready var inventory_interface : Control
 @onready var crafting_references : Dictionary = {
 	"main" : self,
 	"world" : $World,
@@ -18,18 +19,20 @@ const PICKUP = preload("res://Entities/Item/pickup.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	inventory_interface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# Inventory Setup
-	inventory_interface.set_player_inventory_data(player.inventory_data)
-	inventory_interface.set_equip_inventory_data(player.equip_inventory_data)
+	#inventory_interface.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	## Inventory Setup
+	#inventory_interface.set_player_inventory_data(player.inventory_data)
+	#inventory_interface.set_equip_inventory_data(player.equip_inventory_data)
 	
-	for node in get_tree().get_nodes_in_group("external_inventory"):
-		node.toggle_inventory.connect(toggle_inventory_interface)
+	#inventory_interface = hub_menu.inventory_interface
+	
+	#for node in get_tree().get_nodes_in_group("external_inventory"):
+		#node.toggle_inventory.connect(toggle_inventory_interface)
 		
 	# Initialize references in Singletons
 	CraftingSystem.set_references(crafting_references)
 	game_save_manager.load_game()
-
+	
 func update_label(label: Label, material: int) -> void:
 	# Split the label text into prefix and current value
 	var label_text: Array[String] = label.text.split(": ")
@@ -46,24 +49,24 @@ func create_timer(duration: int, _on_timeout: Callable) -> Timer:
 	timer.timeout.connect(_on_timeout)
 	return timer
 
-func toggle_inventory_interface(external_inventory_owner: Node = null) -> void:
-	# Check if opening or closing player inventory
-	if external_inventory_owner:
-		# Always set the external inventory if it's provided
-		inventory_interface.set_external_inventory(external_inventory_owner)
-		inventory_interface.visible = true  # Ensure it opens if interacting with external
-	else:
-		# Toggle only the player's inventory visibility
-		inventory_interface.visible = not inventory_interface.visible
-		# Clear any external inventory if closing or only showing player inventory
-		if not inventory_interface.visible:
-			inventory_interface.clear_external_inventory()
+#func toggle_inventory_interface(external_inventory_owner: Node = null) -> void:
+	## Check if opening or closing player inventory
+	#if external_inventory_owner:
+		## Always set the external inventory if it's provided
+		#inventory_interface.set_external_inventory(external_inventory_owner)
+		#inventory_interface.visible = true  # Ensure it opens if interacting with external
+	#else:
+		## Toggle only the player's inventory visibility
+		#inventory_interface.visible = not inventory_interface.visible
+		## Clear any external inventory if closing or only showing player inventory
+		#if not inventory_interface.visible:
+			#inventory_interface.clear_external_inventory()
 
-func toggle_external_inventory(external_inventory_owner: Node) -> void:
-	if external_inventory_owner and inventory_interface.visible:
-		inventory_interface.set_external_inventory(external_inventory_owner)
-	else:
-		inventory_interface.clear_external_inventory()
+#func toggle_external_inventory(external_inventory_owner: Node) -> void:
+	#if external_inventory_owner and inventory_interface.visible:
+		#inventory_interface.set_external_inventory(external_inventory_owner)
+	#else:
+		#inventory_interface.clear_external_inventory()
 
 func _on_inventory_interface_drop_slot_data(slot_data: SlotData) -> void:
 	var pick_up: Area2D = PICKUP.instantiate()

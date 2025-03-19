@@ -11,7 +11,6 @@
 [ext_resource type="PackedScene" uid="uid://cednyx6i43tlg" path="res://Entities/Objects/tree.tscn" id="8_73jjx"]
 [ext_resource type="PackedScene" uid="uid://6nrx3gn8vdr3" path="res://Utilities/Menus/hub_menu.tscn" id="13_3h7c1"]
 [ext_resource type="PackedScene" uid="uid://byoflltw01rq5" path="res://Entities/Objects/bush.tscn" id="14_h5qyt"]
-[ext_resource type="PackedScene" uid="uid://dw7jp8bpq3h0m" path="res://Utilities/Inventory/inventory_interface.tscn" id="14_wquqt"]
 [ext_resource type="Script" path="res://Utilities/Saving/save_load_json.gd" id="22_shahs"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="23_rhjmk"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="24_xf1d2"]
@@ -36,10 +35,15 @@ script = ExtResource("5_b2i4h")
 item_data = ExtResource("7_jfsv6")
 quantity = 85
 
+[sub_resource type="Resource" id="Resource_v6a5q"]
+script = ExtResource("5_b2i4h")
+item_data = ExtResource("7_jfsv6")
+quantity = 1
+
 [sub_resource type="Resource" id="Resource_66drq"]
 script = ExtResource("24_xf1d2")
-slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_2t8m8"), SubResource("Resource_cw7xb"), null, null, null, null, null, null, SubResource("Resource_cdcud"), SubResource("Resource_17kvy"), null, null, null, null, null])
-inventory_size = 10
+slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_2t8m8"), SubResource("Resource_cw7xb"), null, null, null, null, null, null, SubResource("Resource_cdcud"), SubResource("Resource_17kvy"), null, null, null, null, SubResource("Resource_v6a5q")])
+inventory_size = 15
 
 [sub_resource type="Resource" id="Resource_0msbn"]
 script = ExtResource("4_2dnpy")
@@ -183,9 +187,6 @@ material = SubResource("ShaderMaterial_5k06o")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="HubMenu" parent="UI" instance=ExtResource("13_3h7c1")]
-
-[node name="InventoryInterface" parent="UI" instance=ExtResource("14_wquqt")]
-visible = false
 
 [node name="GameSaveManager" type="Node" parent="."]
 script = ExtResource("22_shahs")

@@ -16,7 +16,10 @@ func get_inventory_slots() -> Array[SlotData]:
 	return slot_datas
 
 func set_inventory_slots(new_slot_datas: Array[SlotData]) -> void:
-	slot_datas = new_slot_datas
+	slot_datas = new_slot_datas.duplicate()
+	# Ensure the inventory size is set to the export variable inventory_size
+	slot_datas.resize(inventory_size)
+	
 	inventory_updated.emit(self)
 
 func grab_slot_data(index: int) -> SlotData:

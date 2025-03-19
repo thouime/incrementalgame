@@ -8,6 +8,7 @@ var items_by_name: Dictionary = {}
 var main: Node
 # Keep track of any objects that were already loaded when loading again
 var loaded_objects: Array = []
+@onready var hub_menu: Control = $"../UI/HubMenu"
 
 func _ready() -> void:
 	player_node = PlayerManager.player.get_path()
@@ -138,7 +139,7 @@ func load_game() -> void:
 	var save_dict := json.get_data() as Dictionary
 	
 	var player := get_node(player_node) as Player
-	var player_inventory : InventoryData = player.inventory_data
+
 	# JSON doesn't support many of Godot's types such as Vector2.
 	# str_to_var can be used to convert a String to the corresponding 
 	player.position = str_to_var(save_dict.player.position)
@@ -150,10 +151,17 @@ func load_game() -> void:
 			player.animated_sprite.flip_h = player.velocity.x < 0
 	player.health = str_to_var(save_dict.player.health)
 	
+	var player_inventory : InventoryData = player.inventory_data
+	
 	# Load inventory
 	var inventory_array : Array = save_dict["player"]["inventory"]
 	var inventory_data := deserialize_inventory(inventory_array)
+	# Enforce number of slots to be what was loaded.
 	player_inventory.set_inventory_slots(inventory_data)
+	print("Loading inventory...")
+	hub_menu.inventory_interface.set_player_inventory_data(player_inventory)
+
+	#player.inventory_data = inventory_data
 	
 	load_objects(save_dict.world.objects)
 	
@@ -236,7 +244,7 @@ func load_type_data(object: StaticBody2D, object_data: Dictionary) -> void:
 			var inventory_data := deserialize_inventory(inventory_array)
 			object.inventory_data.set_inventory_slots(inventory_data)
 			object.toggle_inventory.connect(
-				main.toggle_inventory_interface
+				hub_menu.toggle_inventory_interface
 			)
 			print("External Inventory connected")
 		"Processing":
