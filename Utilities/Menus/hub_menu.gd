@@ -29,7 +29,7 @@ func _ready() -> void:
 		PlayerManager.player.inventory_data)
 	inventory_interface.set_equip_inventory_data(
 		PlayerManager.player.equip_inventory_data)
-	inventory_interface.force_close.connect(toggle_inventory_interface)
+	inventory_interface.force_close.connect(close_external_inventory)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -45,32 +45,62 @@ func _process(delta: float) -> void:
 # Turn off any visible menus and flip the visibility of the current menu
 func toggle_menu(menu: Control, clicked_button: Button) -> void:
 	
+	# If the inventory interface is open and has an external inventory, clear it
+	if (
+		inventory_interface.visible 
+		and inventory_interface.has_external_inventory()
+	):
+		inventory_interface.clear_external_inventory()
+	
+	# Determine if the menu is currently open
+	var is_menu_open = menu and menu.visible
+	
 	# Hide all menus
 	for current_menu in menus:
-		if current_menu != menu:
-			current_menu.visible = false
+		current_menu.visible = false
 	
+	# Unpress all buttons
 	for button in buttons:
-		if button != clicked_button:
-			button.button_pressed = false
+		button.button_pressed = false
 	
-	if not menu:
-		return
-	
-	menu.visible = !menu.visible
+	if menu:
+		menu.visible = not is_menu_open # Toggle visibility
+		
+		# Ensure button reflects new state
+		clicked_button.button_pressed = menu.visible
 
 func toggle_inventory_interface(external_inventory_owner: Node = null) -> void:
 	# Check if opening or closing player inventory
 	if external_inventory_owner:
+		if (
+			inventory_interface.visible 
+			and inventory_interface.has_external_inventory()
+		):
+			return
+		if inventory_interface.visible:
+			inventory_interface.set_external_inventory(
+				external_inventory_owner
+			)
+			return
+		
 		# Always set the external inventory if it's provided
 		inventory_interface.set_external_inventory(external_inventory_owner)
-		inventory_interface.visible = true  # Ensure it opens if interacting with external
+		
+		toggle_menu(
+			inventory_interface, 
+			v_box_container_left.get_node("InventoryButton")
+		)
 	else:
-		# Toggle only the player's inventory visibility
-		inventory_interface.visible = not inventory_interface.visible
+		toggle_menu(
+			inventory_interface, 
+			v_box_container_left.get_node("InventoryButton")
+		)
 		# Clear any external inventory if closing or only showing player inventory
 		if not inventory_interface.visible:
-			inventory_interface.clear_external_inventory()
+			close_external_inventory()
+
+func close_external_inventory():
+	inventory_interface.clear_external_inventory()
 
 func _on_inventory_button_pressed() -> void:
 	toggle_menu(

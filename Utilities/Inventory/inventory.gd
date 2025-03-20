@@ -4,9 +4,7 @@ const Slot = preload("res://Utilities/Inventory/slot.tscn")
 @onready var item_grid: GridContainer = $MarginContainer/ItemGrid
 
 func set_inventory_data(inventory_data: InventoryData) -> void:
-	print("Set inventory data has run!")
-	if not inventory_data.inventory_updated.is_connected:
-		print("connecting signal")
+	if not inventory_data.inventory_updated.is_connected(populate_item_grid):
 		inventory_data.inventory_updated.connect(populate_item_grid)
 	populate_item_grid(inventory_data)
 
@@ -14,7 +12,6 @@ func clear_inventory_data(inventory_data: InventoryData) -> void:
 	inventory_data.inventory_updated.disconnect(populate_item_grid)
 
 func populate_item_grid(inventory_data: InventoryData) -> void:
-	print("Populate item grid has run!")
 	for child in item_grid.get_children():
 		child.queue_free()
 	

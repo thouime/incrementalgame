@@ -3,8 +3,8 @@ extends Control
 var grabbed_slot_data: SlotData
 var external_inventory_owner: Node
 
-@onready var player_inventory: PanelContainer = $HBoxContainer/PlayerInventory
-@onready var equip_inventory: PanelContainer = $HBoxContainer/EquipInventory
+@onready var player_inventory: PanelContainer = $HBoxContainer/HBoxContainer/PlayerInventory
+@onready var equip_inventory: PanelContainer = $HBoxContainer/HBoxContainer2/EquipInventory
 @onready var grabbed_slot: PanelContainer = $GrabbedSlot
 @onready var external_inventory: PanelContainer = $ExternalInventory
 
@@ -25,7 +25,6 @@ func _physics_process(_delta: float) -> void:
 			force_close.emit()
 
 func set_player_inventory_data(inventory_data: InventoryData) -> void:
-	print("set player inventory data has run")
 	# If the signal is already connected, disconnect it
 	if inventory_data.inventory_interact.is_connected(on_inventory_interact):
 		inventory_data.inventory_interact.disconnect(on_inventory_interact)
@@ -44,6 +43,9 @@ func set_external_inventory(_external_inventory_owner: Node) -> void:
 	external_inventory.set_inventory_data(inventory_data)
 	
 	external_inventory.show()
+
+func has_external_inventory() -> bool:
+	return external_inventory_owner != null
 
 func clear_external_inventory() -> void:
 	

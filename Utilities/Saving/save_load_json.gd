@@ -156,12 +156,9 @@ func load_game() -> void:
 	# Load inventory
 	var inventory_array : Array = save_dict["player"]["inventory"]
 	var inventory_data := deserialize_inventory(inventory_array)
-	# Enforce number of slots to be what was loaded.
+	# Update inventory with loaded inventory (overwrites default inventory)
 	player_inventory.set_inventory_slots(inventory_data)
-	print("Loading inventory...")
 	hub_menu.inventory_interface.set_player_inventory_data(player_inventory)
-
-	#player.inventory_data = inventory_data
 	
 	load_objects(save_dict.world.objects)
 	
