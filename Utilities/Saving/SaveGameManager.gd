@@ -1,29 +1,100 @@
 extends Node
 
-const SAVE_PATH = "user://save_json.json"
+const SAVE_FOLDER = "user://saves"
+const SAVE_PREFIX = SAVE_FOLDER + "/save_slot_"
 
-var player_node: NodePath
 # Keep a dictionary of all resource items to load them in the game
-var items_by_name: Dictionary = {}
-var main: Node
+var items_by_name : Dictionary = {}
+var save_slot : int
+var save_path : String
 # Keep track of any objects that were already loaded when loading again
-var loaded_objects: Array = []
-@onready var hub_menu: Control = $"../UI/HubMenu"
+var loaded_objects : Array = []
+var main : Node
+var hub_menu : Control
 
-func _ready() -> void:
-	player_node = PlayerManager.player.get_path()
-	main = get_tree().current_scene
-	load_all_items()
+func set_scene(scene: Node) -> void:
+	main = scene
+	hub_menu = main.get_node("UI/HubMenu")
+
+func set_save_slot(slot: int) -> void:
+	save_slot = slot
+	save_path = SAVE_PREFIX + str(save_slot) + ".json"
+	print("Save slot set to: ", slot, " in : ", save_path)
+
+func get_save_slot() -> int:
+	return save_slot
+
+func get_saves() -> Array:
+	var save_slots := []
 	
-func save_game() -> void:
-	var file := FileAccess.open(SAVE_PATH, FileAccess.WRITE)
+	var path = GameSaveManager.SAVE_FOLDER
+	var dir = DirAccess.open(path)
+	
+	if dir:
+		# Scan the folder
+		dir.list_dir_begin() 
+		var file_name = dir.get_next()
+		
+		while file_name != "":
+			if !dir.current_is_dir():
+				save_slots.append(file_name)
+			file_name = dir.get_next()
+		
+		 # End folder scan
+		dir.list_dir_end()
+	else:
+		print("Could not open folder: ", path)
+	return save_slots
+	
+func get_num_slots(save_slots: Array) -> int:
+	return save_slots.size()
 
+func get_save_info(save_file : String) -> Dictionary:
+	
+	var slot_path = SAVE_FOLDER + "/" + save_file
+	
+	var file := FileAccess.open(slot_path, FileAccess.READ)
+	if not file:
+		print("Save file not found!")
+		return {}
+		
+	var json := JSON.new()
+	var error := json.parse(file.get_line())
+	if error != OK:
+		print("Failed to parse JSON: ", json.get_error_message())
+		return {}
+		
+	var save_dict := json.get_data() as Dictionary
+	
+	return save_dict.get("save")
+
+func save_game() -> void:
+	
+	if not get_save_slot() or not save_path:
+		# Get the current number of saves and increment for a new slot
+		var saves = get_saves()
+		var num_slots = get_num_slots(get_saves())
+		set_save_slot(num_slots + 1)
+	
+	if not DirAccess.dir_exists_absolute(SAVE_FOLDER):
+		DirAccess.make_dir_recursive_absolute(SAVE_FOLDER)
+	
+	var file := FileAccess.open(save_path, FileAccess.WRITE)
+	
+	# Save slot name
+	var save_name := "save_slot_" + str(save_slot)
+	
 	var player := PlayerManager.player
 	var player_inventory : InventoryData = player.inventory_data
 	var inventory_slots := player_inventory.get_inventory_slots()
 	# JSON doesn't support many of Godot's types such as Vector2.
 	# var_to_str can be used to convert any Variant to a String.
 	var save_dict := {
+		save = {
+			save_name = save_name,
+			slot = save_slot,
+			duration = 0
+		},
 		player = {
 			position = var_to_str(player.position),
 			direction = var_to_str(player.direction),
@@ -125,7 +196,15 @@ func save_tiles(tiles: Dictionary) -> Dictionary:
 	return serialized_tiles
 
 func load_game() -> void:
-	var file := FileAccess.open(SAVE_PATH, FileAccess.READ)
+	
+	print("Save slot: ", get_save_slot())
+	
+	# Ensure a save slot is set
+	if not get_save_slot() or not save_path:
+		print("Save slot was not set!")
+		return
+	
+	var file := FileAccess.open(save_path, FileAccess.READ)
 	if not file:
 		print("Save file not found!")
 		return
@@ -137,6 +216,9 @@ func load_game() -> void:
 		return
 		
 	var save_dict := json.get_data() as Dictionary
+	
+	var player_node = PlayerManager.player.get_path()
+	load_all_items()
 	
 	var player := get_node(player_node) as Player
 

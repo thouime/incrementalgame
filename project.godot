@@ -20,6 +20,8 @@ config/icon="res://icon.svg"
 PlayerManager="*res://Entities/Player/player_manager.gd"
 CraftingSystem="*res://Utilities/Crafting/crafting_system.gd"
 AudioManager="*res://Utilities/Audio/AudioManager.tscn"
+SettingsManager="*res://Utilities/Saving/SettingsManager.gd"
+GameSaveManager="*res://Utilities/Saving/SaveGameManager.gd"
 
 [debug]
 
