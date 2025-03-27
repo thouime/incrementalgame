@@ -1,12 +1,11 @@
 extends Node
 
-const SAVE_FOLDER = "user://saves"
-const SAVE_PREFIX = SAVE_FOLDER + "/save_slot_"
+const SAVE_FOLDER = "user://saves/"
 
 # Keep a dictionary of all resource items to load them in the game
-var items_by_name : Dictionary = {}
-var save_slot : int
-var save_path : String
+var items_by_name : Dictionary
+var saves_data : Dictionary
+var current_save: String
 # Keep track of any objects that were already loaded when loading again
 var loaded_objects : Array = []
 var main : Node
@@ -15,14 +14,6 @@ var hub_menu : Control
 func set_scene(scene: Node) -> void:
 	main = scene
 	hub_menu = main.get_node("UI/HubMenu")
-
-func set_save_slot(slot: int) -> void:
-	save_slot = slot
-	save_path = SAVE_PREFIX + str(save_slot) + ".json"
-	print("Save slot set to: ", slot, " in : ", save_path)
-
-func get_save_slot() -> int:
-	return save_slot
 
 func get_saves() -> Array:
 	var save_slots := []
@@ -46,6 +37,52 @@ func get_saves() -> Array:
 		print("Could not open folder: ", path)
 	return save_slots
 	
+# Get the saves file which stores information about all the saves
+func get_saves_data() -> Dictionary:
+	
+	var saves_path : String = SAVE_FOLDER + "saves.json"
+	
+	# Create file storing info about saves if it doesn't exist
+	if not FileAccess.file_exists(saves_path):
+		var saves : Array = get_saves()
+		var file = FileAccess.open(saves_path, FileAccess.WRITE)
+		
+		saves_data = {
+			total_saves = 0,
+			save_files = []
+		}
+		
+		# If for some reason the saves.json gets deleted, rebuild it
+		if saves:
+			saves_data = {
+				total_saves = saves.size(),
+				save_files = saves
+			}
+			
+		file.store_line(JSON.stringify(saves_data))
+		file.close()
+	else:
+		var file := FileAccess.open(saves_path, FileAccess.READ)
+		if not file:
+			print("Save file not found!")
+			return saves_data
+			
+		var json := JSON.new()
+		var error := json.parse(file.get_line())
+		if error != OK:
+			print("Failed to parse JSON: ", json.get_error_message())
+			return saves_data
+			
+		saves_data = json.get_data() as Dictionary
+		
+	return saves_data
+
+func update_saves_data():
+	var saves_path : String = SAVE_FOLDER + "saves.json"
+	var file := FileAccess.open(saves_path, FileAccess.WRITE)
+	file.store_line(JSON.stringify(saves_data))
+	file.close()
+
 func get_num_slots(save_slots: Array) -> int:
 	return save_slots.size()
 
@@ -68,21 +105,77 @@ func get_save_info(save_file : String) -> Dictionary:
 	
 	return save_dict.get("save")
 
+func update_save_info(
+	save_file : String, key : String, new_value : Variant
+) -> bool:
+	var slot_path = SAVE_FOLDER + "/" + save_file
+	
+	var file := FileAccess.open(slot_path, FileAccess.READ_WRITE)
+	if not file:
+		print("Save file not found!")
+		return false
+	
+	var json := JSON.new()
+	var error := json.parse(file.get_line())
+	if error != OK:
+		print("Failed to parse JSON: ", json.get_error_message())
+		return false
+	
+	var save_dict := json.get_data() as Dictionary
+	
+	# Check if the "save" key exists
+	if save_dict.has("save"):
+		var save_data = save_dict["save"] as Dictionary
+		
+		# Modify the specified key with the new value
+		if save_data.has(key):
+			save_data[key] = new_value
+		else:
+			print("Key not found!")
+			return false
+		
+		# Update the save dictionary with the modified data
+		save_dict["save"] = save_data
+		
+		# Rewind to the start of the file and save the updated data
+		file.seek(0)
+		file.store_line(JSON.stringify(save_dict))
+		file.close()
+		
+		return true
+	else:
+		print("Save data not found!")
+		return false
+
 func save_game() -> void:
 	
-	if not get_save_slot() or not save_path:
-		# Get the current number of saves and increment for a new slot
-		var saves = get_saves()
-		var num_slots = get_num_slots(get_saves())
-		set_save_slot(num_slots + 1)
-	
+	var save_path : String
+
+	# Create save folder if it doesn't exist
 	if not DirAccess.dir_exists_absolute(SAVE_FOLDER):
 		DirAccess.make_dir_recursive_absolute(SAVE_FOLDER)
 	
-	var file := FileAccess.open(save_path, FileAccess.WRITE)
+	# If a save isn't loaded, create a new one
+	if not current_save:
+		var saves_data = get_saves_data()
+		# Set and increment current save
+		current_save = (
+			"save_file_" + str(saves_data["total_saves"] + 1) + ".json"
+		)
+		
+		# Add the save to the list of saves and increment total saves
+		if not saves_data["save_files"].has(current_save):
+			saves_data["save_files"].append(current_save)
+			saves_data["total_saves"] += 1
+
+	save_path = SAVE_FOLDER + current_save
+		
+	# Check saves data file
+	# If current save isn't loaded, create a new one
 	
-	# Save slot name
-	var save_name := "save_slot_" + str(save_slot)
+	# Add new one to saves data file, increment total saves
+	
+	var file := FileAccess.open(save_path, FileAccess.WRITE)
 	
 	var player := PlayerManager.player
 	var player_inventory : InventoryData = player.inventory_data
@@ -91,9 +184,8 @@ func save_game() -> void:
 	# var_to_str can be used to convert any Variant to a String.
 	var save_dict := {
 		save = {
-			save_name = save_name,
-			slot = save_slot,
-			duration = 0
+			save_name = current_save,
+			duration = PlayerManager.time_played
 		},
 		player = {
 			position = var_to_str(player.position),
@@ -112,6 +204,8 @@ func save_game() -> void:
 	
 	file.store_line(JSON.stringify(save_dict))
 	file.close()
+	
+	update_saves_data()
 	
 	print("Game saved successfully!")
 
@@ -197,12 +291,12 @@ func save_tiles(tiles: Dictionary) -> Dictionary:
 
 func load_game() -> void:
 	
-	print("Save slot: ", get_save_slot())
-	
 	# Ensure a save slot is set
-	if not get_save_slot() or not save_path:
-		print("Save slot was not set!")
+	if not current_save:
+		print("Save was not set!")
 		return
+	
+	var save_path : String = SAVE_FOLDER + current_save
 	
 	var file := FileAccess.open(save_path, FileAccess.READ)
 	if not file:
@@ -241,6 +335,9 @@ func load_game() -> void:
 	# Update inventory with loaded inventory (overwrites default inventory)
 	player_inventory.set_inventory_slots(inventory_data)
 	hub_menu.inventory_interface.set_player_inventory_data(player_inventory)
+	
+	# Load the time from previous playthrough(s)
+	PlayerManager.time_played = save_dict["save"]["duration"]
 	
 	load_objects(save_dict.world.objects)
 	

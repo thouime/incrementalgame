@@ -72,5 +72,7 @@ func set_sfx_volume(new_volume: int) -> void:
 
 # Convert percentage to volume in dB
 func set_percentage_volume(percentage: float) -> float:
+	if percentage <= 0:
+		return -40 
 	var volume_db = 20 * log(percentage / 100.0)
 	return volume_db

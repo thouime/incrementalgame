@@ -1,16 +1,31 @@
-[gd_scene load_steps=3 format=3 uid="uid://dm3a3bjpx8q5x"]
+[gd_scene load_steps=6 format=3 uid="uid://dm3a3bjpx8q5x"]
 
 [ext_resource type="Theme" uid="uid://cvw8pe8ajmv6h" path="res://Common/menu_theme.tres" id="1_fuurq"]
 [ext_resource type="Script" path="res://Utilities/Saving/save_slot.gd" id="2_65sfl"]
+[ext_resource type="Texture2D" uid="uid://dglfq4rf1deo5" path="res://Utilities/Menus/Art/MegaPixelArt32x32pxIcons_SpriteSheet.png" id="3_n42j1"]
 
-[node name="SaveSlot" type="Button"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_qunj1"]
+atlas = ExtResource("3_n42j1")
+region = Rect2(160, 160, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fiiyl"]
+atlas = ExtResource("3_n42j1")
+region = Rect2(96, 128, 32, 32)
+
+[node name="SaveSlotContainer" type="HBoxContainer"]
 custom_minimum_size = Vector2(450, 100)
-offset_right = 155.0
-offset_bottom = 48.0
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 84.0
+grow_horizontal = 2
 theme = ExtResource("1_fuurq")
 script = ExtResource("2_65sfl")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="SaveSlot" type="Button" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SaveSlot"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -18,38 +33,80 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SaveSlot/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="SaveSlot/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_right = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="SaveSlot/HBoxContainer/VBoxContainer/MarginContainer"]
 layout_mode = 2
 theme_override_constants/separation = 50
 
-[node name="Slot" type="Label" parent="HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="Slot" type="Label" parent="SaveSlot/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
 text = "00"
 
-[node name="SaveName" type="Label" parent="HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
+[node name="SaveName" type="Label" parent="SaveSlot/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 theme_override_font_sizes/font_size = 20
 text = "Save Name"
 horizontal_alignment = 2
 
-[node name="MarginContainer2" type="MarginContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="MarginContainer2" type="MarginContainer" parent="SaveSlot/HBoxContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_bottom = 2
 
-[node name="TimePlayed" type="Label" parent="HBoxContainer/VBoxContainer/MarginContainer2"]
+[node name="TimePlayed" type="Label" parent="SaveSlot/HBoxContainer/VBoxContainer/MarginContainer2"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
 text = "Time Played:"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="RenameButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Rename"
+icon = SubResource("AtlasTexture_qunj1")
+
+[node name="DeleteButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+tooltip_text = "Delete"
+icon = SubResource("AtlasTexture_fiiyl")
+
+[node name="RenameDialog" type="AcceptDialog" parent="."]
+title = "Rename Save"
+initial_position = 2
+size = Vector2i(300, 122)
+unresizable = true
+ok_button_text = "Set"
+
+[node name="InputField" type="LineEdit" parent="RenameDialog"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 292.0
+offset_bottom = 56.0
+caret_blink = true
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+title = ""
+initial_position = 2
+size = Vector2i(300, 200)
+unresizable = true
+keep_title_visible = false
+ok_button_text = "Yes"
+dialog_text = "Are you sure you 
+want to delete 
+this save?"
+dialog_autowrap = true
+cancel_button_text = "No"
