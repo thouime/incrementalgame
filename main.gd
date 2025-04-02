@@ -13,7 +13,8 @@ const PICKUP = preload("res://Entities/Item/pickup.tscn")
 	"grass_tiles" : $World.get_node("Grass"),
 	"boundary_tiles" : $World.get_node("Boundary"),
 	"inventory" : PlayerManager.player_inventory,
-	"grid" : $Grid
+	"grid" : $Grid,
+	"hub_menu" : hub_menu
 }
 
 # Called when the node enters the scene tree for the first time.

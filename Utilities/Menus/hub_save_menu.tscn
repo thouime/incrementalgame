@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3 uid="uid://ctm1l62jljjxo"]
+
+[ext_resource type="Script" path="res://Utilities/Menus/hub_save_menu.gd" id="1_0ilmg"]
+[ext_resource type="Theme" uid="uid://cvw8pe8ajmv6h" path="res://Common/menu_theme.tres" id="1_1bm8j"]
+
+[node name="HubSaveMenu" type="PanelContainer"]
+custom_minimum_size = Vector2(336, 56)
+offset_right = 336.0
+offset_bottom = 56.0
+size_flags_horizontal = 3
+script = ExtResource("1_0ilmg")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SaveButton" type="Button" parent="MarginContainer/HBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(75, 25)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme = ExtResource("1_1bm8j")
+text = "Save Now"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="LoadButton" type="Button" parent="MarginContainer/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("1_1bm8j")
+text = "Load"
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/HBoxContainer2/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/HBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]

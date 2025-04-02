@@ -15,6 +15,7 @@ var world : Node2D
 var grass_tiles : TileMapLayer
 var boundary_tiles : TileMapLayer
 var inventory : InventoryData
+var hub_menu : Control
 var grid : Control
 
 func _process(_delta: float) -> void:
@@ -40,6 +41,7 @@ func set_references(references : Dictionary) -> void:
 	boundary_tiles = references["boundary_tiles"]
 	inventory = references["inventory"]
 	grid = references["grid"]
+	hub_menu = references["hub_menu"]
 
 # Check if the player has the required materials in the player inventory
 func try_craft(craft_slot: CraftData) -> void:
@@ -231,7 +233,9 @@ func place_object() -> void:
 		
 		# Any external inventories need to be connected to inventory signal
 		if preview_object.is_in_group("external_inventory"):
-			preview_object.toggle_inventory.connect(main.toggle_inventory_interface)
+			preview_object.toggle_inventory.connect(
+				hub_menu.toggle_inventory_interface
+			)
 		
 		# Object was successfully placed, so we are done building
 		stop_building.emit()

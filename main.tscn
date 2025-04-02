@@ -186,3 +186,4 @@ material = SubResource("ShaderMaterial_5k06o")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="HubMenu" parent="UI" instance=ExtResource("13_3h7c1")]
+process_mode = 3

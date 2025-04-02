@@ -2,17 +2,20 @@ extends Control
 
 const SAVE_SLOT = preload("res://Utilities/Saving/save_slot.tscn")
 
-var game_saves : Array
-
 @onready var save_slot_container: VBoxContainer = $HBoxContainer/ScrollContainer/MarginContainer/VBoxContainer/MarginContainer/HBoxContainer/SaveSlotContainer
 @onready var back: Button = $HBoxContainer/VBoxContainer2/MarginContainer/HBoxContainer/Back
 
 func _ready() -> void:
 	
-	game_saves = GameSaveManager.get_saves()
-	var current_slot : int = 1
+	# Only enable back button if accessed from the main menu
+	if GameSaveManager.game_loaded:
+		back.hide()
 	
-	for slot in game_saves:
+	var game_saves : Dictionary = GameSaveManager.get_saves_data()
+	
+	var current_slot = 1
+	
+	for slot in game_saves["save_files"]:
 		# Create the button
 		var save_slot = SAVE_SLOT.instantiate()
 		# Get the labels from the button
@@ -28,7 +31,6 @@ func _ready() -> void:
 		
 		# Get save file json with info about the save
 		var save_info = GameSaveManager.get_save_info(slot)
-		var slot_id : int = save_info.get("slot")
 		save_slot.slot_id = current_slot
 		save_slot.save_location = slot
 		

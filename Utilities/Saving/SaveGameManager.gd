@@ -10,6 +10,7 @@ var current_save: String
 var loaded_objects : Array = []
 var main : Node
 var hub_menu : Control
+var game_loaded : bool = false
 
 func set_scene(scene: Node) -> void:
 	main = scene
@@ -48,14 +49,15 @@ func get_saves_data() -> Dictionary:
 		var file = FileAccess.open(saves_path, FileAccess.WRITE)
 		
 		saves_data = {
-			total_saves = 0,
+			# Keep track of the index to prevent naming conflicts
+			save_index = 0,
 			save_files = []
 		}
 		
 		# If for some reason the saves.json gets deleted, rebuild it
 		if saves:
 			saves_data = {
-				total_saves = saves.size(),
+				save_index = saves.size(),
 				save_files = saves
 			}
 			
@@ -83,12 +85,15 @@ func update_saves_data():
 	file.store_line(JSON.stringify(saves_data))
 	file.close()
 
+func set_current_save(file_name: String) -> void:
+	current_save = file_name
+
 func get_num_slots(save_slots: Array) -> int:
 	return save_slots.size()
 
 func get_save_info(save_file : String) -> Dictionary:
 	
-	var slot_path = SAVE_FOLDER + "/" + save_file
+	var slot_path = SAVE_FOLDER + save_file
 	
 	var file := FileAccess.open(slot_path, FileAccess.READ)
 	if not file:
@@ -147,6 +152,23 @@ func update_save_info(
 		print("Save data not found!")
 		return false
 
+func delete_save(save_file: String) -> void:
+	
+	var save_path : String = SAVE_FOLDER + save_file
+	
+	if FileAccess.file_exists(save_path):
+		var dir = DirAccess.open(SAVE_FOLDER)
+		if dir:
+			var error = dir.remove(save_path)
+			if error == OK:
+				saves_data["save_files"].erase(save_file)
+				update_saves_data()
+				print("File deleted successfully.")
+			else:
+				print("File deletion failed.")
+	else:
+		print("File does not exist.")
+
 func save_game() -> void:
 	
 	var save_path : String
@@ -160,13 +182,13 @@ func save_game() -> void:
 		var saves_data = get_saves_data()
 		# Set and increment current save
 		current_save = (
-			"save_file_" + str(saves_data["total_saves"] + 1) + ".json"
+			"save_file_" + str(saves_data["save_index"] + 1) + ".json"
 		)
 		
 		# Add the save to the list of saves and increment total saves
 		if not saves_data["save_files"].has(current_save):
 			saves_data["save_files"].append(current_save)
-			saves_data["total_saves"] += 1
+			saves_data["save_index"] += 1
 
 	save_path = SAVE_FOLDER + current_save
 		
@@ -311,6 +333,9 @@ func load_game() -> void:
 		
 	var save_dict := json.get_data() as Dictionary
 	
+	# Pause processing while loading
+	get_tree().paused = true
+	
 	var player_node = PlayerManager.player.get_path()
 	load_all_items()
 	
@@ -342,6 +367,8 @@ func load_game() -> void:
 	load_objects(save_dict.world.objects)
 	
 	load_tiles(save_dict.world.tiles)
+	
+	get_tree().paused = false
 	
 	print("Game loaded successfully!")
 
@@ -450,7 +477,7 @@ func load_tiles(placed_tiles: Dictionary) -> void:
 			boundary = tile_map
 		
 		for atlas_coord_str: String in placed_tiles[tile_map_name].keys():
-			var atlas_coord: Vector2i = str_to_vector2i(atlas_coord_str)
+			var atlas_coord: Vector2i = Helper.str_to_vector2i(atlas_coord_str)
 			var data: Array = placed_tiles[tile_map_name][atlas_coord_str]
 			if tile_map_name == "grass" and atlas_coord == Vector2i(2,1):
 				tiles_to_build = data
@@ -461,7 +488,7 @@ func load_tiles(placed_tiles: Dictionary) -> void:
 				boundary_atlas = atlas_coord
 			# Load tiles
 			for tile_str: String in data:
-				var tile_coord: Vector2i = str_to_vector2i(tile_str)
+				var tile_coord: Vector2i = Helper.str_to_vector2i(tile_str)
 				if tile_map_name == "grass":
 					remove_boundary(tile_coord, boundary)
 				tile_map.set_cell(
@@ -525,7 +552,9 @@ func store_placed_tiles(
 		
 		# Merge main tiles
 		var existing_tiles: Array = existing_data["tiles"]
-		existing_data["tiles"] = merge_array(tiles_to_build, existing_tiles)
+		existing_data["tiles"] = Helper.merge_array(
+			tiles_to_build, existing_tiles
+		)
 		
 		# Merge boundary tiles
 		for new_tile: Vector2 in placed_boundary_tiles:
@@ -535,19 +564,6 @@ func store_placed_tiles(
 		# Update the dictionary
 		placed_tiles[tile_map][atlas_coords] = existing_data
 		placed_tiles[tile_map][boundary_atlas]["boundary"] = existing_boundaries
-
-func merge_array(array_one: Array, array_two: Array) -> Array:
-	var new_array: Array = array_one.duplicate()
-	for item: Variant in array_two:
-		if not array_one.has(item):
-			new_array.append(item)
-	return new_array
-
-func str_to_vector2i(vector_str: String) -> Vector2i:
-	var cleaned_str: String = vector_str.replace("(", "").replace(")", "")
-	var coords: Array = cleaned_str.split(",")
-	var restored_vector := Vector2i(coords[0].to_int(), coords[1].to_int())
-	return restored_vector
 
 # Get references to item resourcef files
 func load_all_items() -> void:

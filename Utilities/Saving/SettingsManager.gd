@@ -8,7 +8,7 @@ var user_settings = {
 	"global_volume" : 25,
 	"music_volume" : 25,
 	"sfx_volume" : 25,
-	"resolution" : Vector2(480, 720),
+	"resolution" : Vector2i(480, 720),
 	"fullscreen" : false
 }
 
@@ -41,12 +41,17 @@ func load_settings() -> void:
 	
 	if parsed_settings is Dictionary:
 		user_settings = parsed_settings
+		user_settings["resolution"] = (
+			Helper.str_to_vector2i(user_settings["resolution"])
+		)
 		print("Settings loaded successfully.")
 		apply_settings()
 	else:
-			print("Failed to parse settings.")
+		print("Failed to parse settings.")
 
 func apply_settings():
 	AudioManager.set_global_volume(user_settings["global_volume"])
 	AudioManager.set_music_volume(user_settings["music_volume"])
 	AudioManager.set_sfx_volume(user_settings["sfx_volume"])
+	DisplayServer.window_set_size(user_settings["resolution"])
+	get_window().move_to_center()

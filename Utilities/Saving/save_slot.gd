@@ -20,8 +20,8 @@ func _ready() -> void:
 	delete_button.pressed.connect(_on_delete_button_pressed)
 
 func _on_button_pressed() -> void:
-	GameSaveManager.set_save_slot(slot_id)
-	GameSaveManager.set_save_path(save_location)
+	GameSaveManager.set_current_save(save_location)
+	GameSaveManager.game_loaded = true
 	AudioManager.play_music("world", 3)
 	get_tree().change_scene_to_file("res://main.tscn")
 	
@@ -45,5 +45,18 @@ func _on_text_entered(_text = ""):
 	GameSaveManager.update_save_info(save_location, "save_name", user_input)
 
 func _on_delete_button_pressed() -> void:
-	print("Delete button pressed")
+	confirmation_dialog.set_exclusive(false)
+	confirmation_dialog.connect("confirmed", _on_confirmed)
+	confirmation_dialog.connect("canceled", _on_canceled)
+	confirmation_dialog.show()
+
+func _on_confirmed() -> void:
+	confirmation_dialog.disconnect("confirmed", _on_confirmed)
+	confirmation_dialog.hide()
+	GameSaveManager.delete_save(save_location)
+	queue_free()
+
+func _on_canceled() -> void:
+	confirmation_dialog.disconnect("confirmed", _on_confirmed)
+	confirmation_dialog.disconnect("canceled", _on_canceled)
 	

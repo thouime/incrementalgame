@@ -1,58 +1,62 @@
-[gd_scene load_steps=16 format=3 uid="uid://bp0gw7kcfe8n3"]
+[gd_scene load_steps=15 format=3 uid="uid://bp0gw7kcfe8n3"]
 
 [ext_resource type="Script" path="res://Utilities/Crafting/crafting_menu.gd" id="1_esne6"]
 [ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="2_jujmr"]
 [ext_resource type="Resource" uid="uid://blampwk84srx8" path="res://Utilities/Crafting/Crafts/composter_craft.tres" id="3_cscr7"]
 [ext_resource type="Script" path="res://Utilities/Crafting/material_slot_data.gd" id="4_hqy1a"]
-[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="5_68ekj"]
-[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="6_1gxn3"]
+[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="6_su32g"]
+[ext_resource type="Script" path="res://Entities/Objects/chest.gd" id="7_5xlh4"]
 [ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="7_omde8"]
-[ext_resource type="PackedScene" uid="uid://by4s6muul7tdg" path="res://Entities/Objects/composter.tscn" id="8_whqcw"]
+[ext_resource type="Texture2D" uid="uid://1kukmo2577le" path="res://Assets/Art/objects/chest_01.png" id="8_8gxi3"]
 
-[sub_resource type="Resource" id="Resource_a5stn"]
-script = ExtResource("4_hqy1a")
-quantity = 30
-item_data = ExtResource("5_68ekj")
-
-[sub_resource type="Resource" id="Resource_8qsce"]
-script = ExtResource("4_hqy1a")
-quantity = 10
-item_data = ExtResource("6_1gxn3")
-
-[sub_resource type="Resource" id="Resource_s8m5e"]
-script = ExtResource("4_hqy1a")
-quantity = 1
-item_data = ExtResource("6_1gxn3")
-
-[sub_resource type="Resource" id="Resource_0uq21"]
-script = ExtResource("4_hqy1a")
-quantity = 50
-item_data = ExtResource("5_68ekj")
-
-[sub_resource type="Resource" id="Resource_kj2nx"]
-script = ExtResource("4_hqy1a")
-quantity = 10
-item_data = ExtResource("5_68ekj")
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_oaa3q"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ygva"]
 atlas = ExtResource("7_omde8")
-region = Rect2(448, 352, 32, 32)
+region = Rect2(352, 352, 32, 32)
 
-[sub_resource type="Resource" id="Resource_bt3ln"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wjxxi"]
+shader = ExtResource("6_su32g")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_llfik"]
+size = Vector2(30, 8.375)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bb5ap"]
+size = Vector2(16.5, 17.5)
+
+[sub_resource type="PackedScene" id="PackedScene_qwvyu"]
+_bundled = {
+"conn_count": 0,
+"conns": PackedInt32Array(),
+"editable_instances": [],
+"names": PackedStringArray("Chest", "StaticBody2D", "material", "position", "script", "metadata/_edit_group_", "Sprite1", "Sprite2D", "use_parent_material", "scale", "texture", "region_enabled", "region_rect", "CollisionShape2D", "CollisionShape2D", "position", "shape", "Selection", "Area2D", "scale", "MouseArea", "CollisionShape2D", "z_index", "position", "shape"),
+"node_count": 5,
+"node_paths": [NodePath("."), NodePath("."), NodePath("."), NodePath("./Selection")],
+"nodes": PackedInt32Array(-1, -1, 1, 0, -1, 4, 2, 0, 3, 1, 4, 2, 5, 3, 0, 1073741824, 0, 7, 6, -1, 5, 8, 4, 9, 5, 10, 6, 11, 7, 12, 8, 0, 1073741825, 0, 14, 13, -1, 2, 15, 9, 16, 10, 0, 1073741826, 0, 18, 17, -1, 1, 19, 11, 0, 1073741827, 0, 21, 20, -1, 3, 22, 12, 23, 13, 24, 14, 0),
+"variants": [SubResource("ShaderMaterial_wjxxi"), Vector2(100, 100), ExtResource("7_5xlh4"), true, true, Vector2(2, 2), ExtResource("8_8gxi3"), true, Rect2(0, 0, 16, 16), Vector2(1, -7.8125), SubResource("RectangleShape2D_llfik"), Vector2(2, 2), 4, Vector2(0.75, 0.25), SubResource("RectangleShape2D_bb5ap")],
+"version": 3
+}
+
+[sub_resource type="Resource" id="Resource_oxbik"]
 script = ExtResource("2_jujmr")
 type = 1
-object_scene = ExtResource("8_whqcw")
-name = "Composter"
-description = "A wooden container that converts organic material into dirt."
-menu_texture = SubResource("AtlasTexture_oaa3q")
-material_slot_datas = Array[ExtResource("4_hqy1a")]([SubResource("Resource_a5stn"), SubResource("Resource_8qsce"), SubResource("Resource_s8m5e"), SubResource("Resource_0uq21"), SubResource("Resource_kj2nx")])
+object_scene = SubResource("PackedScene_qwvyu")
+name = ""
+description = "A wooden container used to store items."
+menu_texture = SubResource("AtlasTexture_0ygva")
+material_slot_datas = Array[ExtResource("4_hqy1a")]([])
 
 [node name="CraftingMenu" type="PanelContainer"]
 custom_minimum_size = Vector2(332, 56)
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_esne6")
-craft_datas = Array[ExtResource("2_jujmr")]([ExtResource("3_cscr7"), SubResource("Resource_bt3ln")])
+craft_datas = Array[ExtResource("2_jujmr")]([ExtResource("3_cscr7"), SubResource("Resource_oxbik")])
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2

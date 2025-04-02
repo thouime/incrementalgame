@@ -55,8 +55,6 @@ func _process(delta: float) -> void:
 		toggle_inventory.emit()
 	if Input.is_action_just_pressed("interact"):
 		interact()
-	if Input.is_action_just_pressed("toggle_menu"):
-		print("Toggle Menu")
 
 	state_machine.process_frame(delta)
 	

@@ -1,13 +1,17 @@
-[gd_scene load_steps=15 format=3 uid="uid://6nrx3gn8vdr3"]
+[gd_scene load_steps=19 format=3 uid="uid://6nrx3gn8vdr3"]
 
 [ext_resource type="Script" path="res://Utilities/Menus/hub_menu.gd" id="1_3ssx7"]
 [ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="1_r02jd"]
 [ext_resource type="StyleBox" uid="uid://c4axf6gnry0wi" path="res://Utilities/Menus/button_style.tres" id="2_otr56"]
+[ext_resource type="PackedScene" uid="uid://c3mu3ua8h8tsj" path="res://Stages/MainMenu/SettingsMenu.tscn" id="3_1ffct"]
 [ext_resource type="PackedScene" uid="uid://bp0gw7kcfe8n3" path="res://Utilities/Crafting/crafting_menu.tscn" id="3_yyee7"]
 [ext_resource type="PackedScene" uid="uid://dw7jp8bpq3h0m" path="res://Utilities/Inventory/inventory_interface.tscn" id="4_2da2w"]
 [ext_resource type="Texture2D" uid="uid://n4ajdqxpoy37" path="res://Utilities/Menus/Art/Dusk's UI Icons.png" id="6_7sq6s"]
 [ext_resource type="PackedScene" uid="uid://bxeoaa7gwg4w" path="res://Utilities/Menus/generic_menu.tscn" id="6_j061h"]
 [ext_resource type="Resource" uid="uid://dech0h7erilx5" path="res://Utilities/Building/Tiles/dirt_tile.tres" id="7_fxp40"]
+[ext_resource type="Script" path="res://Utilities/Menus/hub_save_menu.gd" id="9_iow1x"]
+[ext_resource type="Theme" uid="uid://cvw8pe8ajmv6h" path="res://Common/menu_theme.tres" id="10_jj5pi"]
+[ext_resource type="PackedScene" uid="uid://06qtry678qma" path="res://Utilities/Saving/SaveListMenu.tscn" id="10_xsmpw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nm7tg"]
 atlas = ExtResource("1_r02jd")
@@ -46,29 +50,77 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_3ssx7")
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TopHud" type="VBoxContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MenuPanel" type="Panel" parent="VBoxContainer/MarginContainer/TopHud"]
+process_mode = 3
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SettingsMenu" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer" instance=ExtResource("3_1ffct")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SaveListMenu" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer" instance=ExtResource("10_xsmpw")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="BackButton" type="Button" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("10_jj5pi")
+text = "Back"
+
+[node name="CenterContainer" type="CenterContainer" parent="VBoxContainer/MarginContainer/TopHud"]
+layout_mode = 2
+
+[node name="BottomHud" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/BottomHud"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/BottomHud/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/MarginContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="VBoxContainerLeft" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="VBoxContainerLeft" type="VBoxContainer" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="InventoryButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft"]
+[node name="InventoryButton" type="Button" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft"]
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/hover = ExtResource("2_otr56")
@@ -76,7 +128,7 @@ theme_override_styles/pressed = ExtResource("2_otr56")
 toggle_mode = true
 icon = SubResource("AtlasTexture_nm7tg")
 
-[node name="CraftingButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft"]
+[node name="CraftingButton" type="Button" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft"]
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/hover = ExtResource("2_otr56")
@@ -84,7 +136,7 @@ theme_override_styles/pressed = ExtResource("2_otr56")
 toggle_mode = true
 icon = SubResource("AtlasTexture_y2i8g")
 
-[node name="BuildingButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft"]
+[node name="BuildingButton" type="Button" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft"]
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/hover = ExtResource("2_otr56")
@@ -93,29 +145,72 @@ toggle_mode = true
 icon = SubResource("AtlasTexture_4rb0p")
 icon_alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 
-[node name="InventoryInterface" parent="PanelContainer/MarginContainer/HBoxContainer/PanelContainer" instance=ExtResource("4_2da2w")]
+[node name="InventoryInterface" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer" instance=ExtResource("4_2da2w")]
+process_mode = 3
 visible = false
 layout_mode = 2
 
-[node name="CraftingMenu" parent="PanelContainer/MarginContainer/HBoxContainer/PanelContainer" instance=ExtResource("3_yyee7")]
+[node name="CraftingMenu" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer" instance=ExtResource("3_yyee7")]
 visible = false
 layout_mode = 2
 
-[node name="BuildingMenu2" parent="PanelContainer/MarginContainer/HBoxContainer/PanelContainer" instance=ExtResource("6_j061h")]
+[node name="BuildingMenu" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer" instance=ExtResource("6_j061h")]
 visible = false
 layout_mode = 2
 slot_datas = Array[Resource]([ExtResource("7_fxp40")])
 
-[node name="VBoxContainerRight" type="VBoxContainer" parent="PanelContainer/MarginContainer/HBoxContainer"]
+[node name="HubSaveMenu" type="PanelContainer" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer"]
+visible = false
+custom_minimum_size = Vector2(336, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("9_iow1x")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu"]
+layout_mode = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SaveButton" type="Button" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu/MarginContainer/HBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(75, 25)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme = ExtResource("10_jj5pi")
+text = "Save Now"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="LoadButton" type="Button" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu/MarginContainer/HBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(75, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+theme = ExtResource("10_jj5pi")
+text = "Load"
+
+[node name="VBoxContainerRight" type="VBoxContainer" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer"]
 layout_mode = 2
 alignment = 2
 
-[node name="SaveButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight"]
+[node name="SaveButton" type="Button" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight"]
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/hover = ExtResource("2_otr56")
@@ -124,7 +219,7 @@ toggle_mode = true
 icon = SubResource("AtlasTexture_x5wa0")
 icon_alignment = 2
 
-[node name="AudioButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight"]
+[node name="AudioButton" type="Button" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight"]
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/hover = ExtResource("2_otr56")
@@ -133,7 +228,7 @@ toggle_mode = true
 icon = SubResource("AtlasTexture_w5w8e")
 icon_alignment = 2
 
-[node name="SettingsButton" type="Button" parent="PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight"]
+[node name="SettingsButton" type="Button" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight"]
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/hover = ExtResource("2_otr56")
@@ -142,9 +237,12 @@ toggle_mode = true
 icon = SubResource("AtlasTexture_3prao")
 icon_alignment = 2
 
-[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft/InventoryButton" to="." method="_on_inventory_button_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft/CraftingButton" to="." method="_on_crafting_button_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft/BuildingButton" to="." method="_on_building_button_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight/SaveButton" to="." method="_on_save_button_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight/AudioButton" to="." method="_on_audio_button_pressed"]
-[connection signal="pressed" from="PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft/InventoryButton" to="." method="_on_inventory_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft/CraftingButton" to="." method="_on_crafting_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft/BuildingButton" to="." method="_on_building_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu/MarginContainer/HBoxContainer/HBoxContainer2/SaveButton" to="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu" method="_on_save_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu/MarginContainer/HBoxContainer/HBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight/AudioButton" to="." method="_on_audio_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight/SettingsButton" to="." method="_on_settings_button_pressed"]
