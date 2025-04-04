@@ -19,6 +19,7 @@ var craft_hovering: bool = false
 
 func _ready() -> void:
 	populate_crafting_grid()
+	craft_item_request.connect(CraftingSystem.try_craft)
 
 # Create the crafting grid for each craftable item
 func populate_crafting_grid() -> void:
@@ -71,6 +72,7 @@ func hide_craft_info(craft_slot: int) -> void:
 			
 func on_slot_clicked(craft_slot: int, _button: int) -> void:
 	craft_item_request.emit(craft_datas[craft_slot])
+	print("Crafting slot clicked!")
 
 func on_slot_hovered(index: int) -> void:
 	show_craft_info(index)

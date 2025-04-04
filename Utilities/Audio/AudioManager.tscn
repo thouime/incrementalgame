@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://ddwfax8w1hqbl"]
+
+[ext_resource type="Script" path="res://Utilities/Audio/AudioManager.gd" id="1_oknsc"]
+[ext_resource type="AudioStream" uid="uid://ciim1kl7a8klh" path="res://Stages/World/Retro Music Loop - PV8 - NES Style 01.wav" id="2_qo2y3"]
+[ext_resource type="AudioStream" uid="uid://bpl2v0cbw5mr2" path="res://Stages/MainMenu/Retro Music - ABMU - ChipWave 01.wav" id="3_ip6wq"]
+
+[node name="AudioManager" type="Node2D"]
+process_mode = 3
+script = ExtResource("1_oknsc")
+
+[node name="WorldMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_qo2y3")
+
+[node name="MenuMusic" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_ip6wq")

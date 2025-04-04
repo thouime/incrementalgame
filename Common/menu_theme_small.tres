@@ -1,0 +1,7 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://c31yjir8xvepi"]
+
+[ext_resource type="FontFile" uid="uid://c514dyw4umvhl" path="res://Common/EagleLake-Regular.ttf" id="1_6tbm0"]
+
+[resource]
+default_font = ExtResource("1_6tbm0")
+default_font_size = 15

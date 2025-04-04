@@ -5,37 +5,26 @@ extends Node
 const PICKUP = preload("res://Entities/Item/pickup.tscn")
 
 @onready var player: CharacterBody2D = $Player
-@onready var inventory_interface: Control = $UI/InventoryInterface
-@onready var hot_bar_inventory: PanelContainer = $UI/HotBarInventory
-@onready var crafting_menu: PanelContainer = $UI/CraftingMenu
+@onready var hub_menu: Control = $UI/HubMenu
+@onready var inventory_interface : Control
 @onready var crafting_references : Dictionary = {
 	"main" : self,
 	"world" : $World,
 	"grass_tiles" : $World.get_node("Grass"),
 	"boundary_tiles" : $World.get_node("Boundary"),
 	"inventory" : PlayerManager.player_inventory,
-	"grid" : $Grid
+	"grid" : $Grid,
+	"hub_menu" : hub_menu
 }
-@onready var game_save_manager: Node = $GameSaveManager
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	inventory_interface.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# Inventory Setup
-	player.toggle_inventory.connect(toggle_inventory_interface)
-	inventory_interface.set_player_inventory_data(player.inventory_data)
-	inventory_interface.set_equip_inventory_data(player.equip_inventory_data)
-	inventory_interface.force_close.connect(toggle_inventory_interface)
-	hot_bar_inventory.set_inventory_data(player.inventory_data)
 	
-	for node in get_tree().get_nodes_in_group("external_inventory"):
-		node.toggle_inventory.connect(toggle_inventory_interface)
-		
 	# Initialize references in Singletons
 	CraftingSystem.set_references(crafting_references)
-	crafting_menu.craft_item_request.connect(CraftingSystem.try_craft)
-	game_save_manager.load_game()
-
+	GameSaveManager.set_scene(get_tree().current_scene)
+	GameSaveManager.load_game()
+	
 func update_label(label: Label, material: int) -> void:
 	# Split the label text into prefix and current value
 	var label_text: Array[String] = label.text.split(": ")
@@ -52,32 +41,6 @@ func create_timer(duration: int, _on_timeout: Callable) -> Timer:
 	timer.timeout.connect(_on_timeout)
 	return timer
 
-func toggle_inventory_interface(external_inventory_owner: Node = null) -> void:
-	# Check if opening or closing player inventory
-	if external_inventory_owner:
-		# Always set the external inventory if it's provided
-		inventory_interface.set_external_inventory(external_inventory_owner)
-		inventory_interface.visible = true  # Ensure it opens if interacting with external
-	else:
-		# Toggle only the player's inventory visibility
-		inventory_interface.visible = not inventory_interface.visible
-		# Clear any external inventory if closing or only showing player inventory
-		if not inventory_interface.visible:
-			inventory_interface.clear_external_inventory()
-	
-	# Handle the hot bar based on visibility
-	if inventory_interface.visible:
-		hot_bar_inventory.hide()
-	else:
-		hot_bar_inventory.show()
-
-
-func toggle_external_inventory(external_inventory_owner: Node) -> void:
-	if external_inventory_owner and inventory_interface.visible:
-		inventory_interface.set_external_inventory(external_inventory_owner)
-	else:
-		inventory_interface.clear_external_inventory()
-
 func _on_inventory_interface_drop_slot_data(slot_data: SlotData) -> void:
 	var pick_up: Area2D = PICKUP.instantiate()
 	pick_up.slot_data = slot_data
@@ -87,5 +50,5 @@ func _on_inventory_interface_drop_slot_data(slot_data: SlotData) -> void:
 # Run this code when the game is being closed
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		game_save_manager.save_game()
+		GameSaveManager.save_game()
 		get_tree().quit() # default behavior
