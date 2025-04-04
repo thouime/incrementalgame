@@ -13,11 +13,11 @@ func _ready() -> void:
 	
 	var game_saves : Dictionary = GameSaveManager.get_saves_data()
 	
-	var current_slot = 1
+	var current_slot := 1
 	
-	for slot in game_saves["save_files"]:
+	for slot : String in game_saves["save_files"]:
 		# Create the button
-		var save_slot = SAVE_SLOT.instantiate()
+		var save_slot : HBoxContainer = SAVE_SLOT.instantiate()
 		# Get the labels from the button
 		var slot_label: Label = save_slot.get_node(
 			"SaveSlot/HBoxContainer/VBoxContainer/MarginContainer/HBoxContainer/Slot"
@@ -30,7 +30,7 @@ func _ready() -> void:
 		)
 		
 		# Get save file json with info about the save
-		var save_info = GameSaveManager.get_save_info(slot)
+		var save_info : Dictionary = GameSaveManager.get_save_info(slot)
 		save_slot.slot_id = current_slot
 		save_slot.save_location = slot
 		
@@ -44,10 +44,10 @@ func _ready() -> void:
 		save_slot_container.add_child(save_slot)
 		current_slot += 1
 
-func format_playtime(duration) -> String:
-	var seconds = int(duration) % 60
-	var minutes = (int(duration) / 60) % 60
-	var hours = int(duration) / 3600
+func format_playtime(duration : float) -> String:
+	var seconds := int(duration) % 60
+	var minutes := int(duration / 60 ) % 60
+	var hours := int(duration / 3600)
 	return "%02d:%02d:%02d" % [hours, minutes, seconds]
 	
 func _on_back_pressed() -> void:

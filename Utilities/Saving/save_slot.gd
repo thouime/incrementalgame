@@ -35,8 +35,8 @@ func _on_rename_button_pressed() -> void:
 	input_field.grab_focus()
 	rename_dialog.show()
 
-func _on_text_entered(_text = ""):
-	var user_input = input_field.text
+func _on_text_entered(_text := "") -> void:
+	var user_input := input_field.text
 	rename_dialog.get_ok_button().pressed.disconnect(_on_text_entered)
 	input_field.text_submitted.disconnect(_on_text_entered)
 	save_name.text = user_input

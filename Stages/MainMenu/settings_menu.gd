@@ -14,7 +14,7 @@ extends Control
 # This standard resolution does not work with the default 480, 720
 #{"label" : "640x480", "size" : Vector2i(640, 480)},
 
-var resolutions = [
+var resolutions := [
 	{"label" : "480x720", "size" : Vector2i(480, 720)},
 	{"label" : "1280x720", "size" : Vector2i(1280, 720)},
 	{"label" : "1920x1080", "size" : Vector2i(1920, 1080)},
@@ -32,57 +32,52 @@ func _ready() -> void:
 	load_settings()
 
 func load_settings() -> void:
-	global_slider.value = SettingsManager.user_settings["global_volume"]
-	music_slider.value = SettingsManager.user_settings["music_volume"]
-	sfx_slider.value = SettingsManager.user_settings["sfx_volume"]
-	global_spin_box.value = global_slider.value
-	music_spin_box.value = music_slider.value
-	sfx_spin_box.value = sfx_slider.value
-	AudioManager.set_global_volume(global_slider.value)
-	AudioManager.set_music_volume(music_slider.value)
-	AudioManager.set_sfx_volume(sfx_slider.value)
-	res_button.select(
-		get_resolution_index(SettingsManager.user_settings["resolution"])
-	)
+	global_slider.value = int(SettingsManager.user_settings["global_volume"])
+	music_slider.value = int(SettingsManager.user_settings["music_volume"])
+	sfx_slider.value = int(SettingsManager.user_settings["sfx_volume"])
+	
+	global_spin_box.value = int(global_slider.value)
+	music_spin_box.value = int(music_slider.value)
+	sfx_spin_box.value = int(sfx_slider.value)
+
+	AudioManager.set_global_volume(int(global_slider.value))
+	AudioManager.set_music_volume(int(music_slider.value))
+	AudioManager.set_sfx_volume(int(sfx_slider.value))
+
+	res_button.select(get_resolution_index(SettingsManager.user_settings["resolution"]))
 
 func save_settings() -> void:
-	SettingsManager.user_settings["global_volume"] = global_slider.value
-	SettingsManager.user_settings["music_volume"] = music_slider.value
-	SettingsManager.user_settings["sfx_volume"] = sfx_slider.value
+	SettingsManager.user_settings["global_volume"] = int(global_slider.value)
+	SettingsManager.user_settings["music_volume"] = int(music_slider.value)
+	SettingsManager.user_settings["sfx_volume"] = int(sfx_slider.value)
 	SettingsManager.user_settings["resolution"] = (
 		resolutions[res_button.get_selected_id()].size
 	)
 	SettingsManager.save_settings()
 
 func _on_global_slider_value_changed(value: float) -> void:
-		
-	global_spin_box.value = global_slider.value
-	AudioManager.set_global_volume(global_slider.value)
+	global_spin_box.value = int(value)
+	AudioManager.set_global_volume(int(value))
 
 func _on_global_spin_box_value_changed(value: float) -> void:
-
-	global_slider.value = global_spin_box.value
-	AudioManager.set_global_volume(global_slider.value)
+	global_slider.value = int(value)
+	AudioManager.set_global_volume(int(value))
 
 func _on_music_slider_value_changed(value: float) -> void:
-	
-	music_spin_box.value = music_slider.value
-	AudioManager.set_music_volume(music_slider.value)
+	music_spin_box.value = int(value)
+	AudioManager.set_music_volume(int(value))
 
 func _on_music_spin_box_value_changed(value: float) -> void:
-	
-	music_slider.value = music_spin_box.value
-	AudioManager.set_music_volume(music_slider.value)
+	music_slider.value = int(value)
+	AudioManager.set_music_volume(int(value))
 
 func _on_sfx_slider_value_changed(value: float) -> void:
-	
-	sfx_spin_box.value = sfx_slider.value
-	AudioManager.set_sfx_volume(sfx_slider.value)
+	sfx_spin_box.value = int(value)
+	AudioManager.set_sfx_volume(int(value))
 
 func _on_sfx_spin_box_value_changed(value: float) -> void:
-	
-	sfx_slider.value = sfx_spin_box.value
-	AudioManager.set_sfx_volume(sfx_slider.value)
+	sfx_slider.value = int(value)
+	AudioManager.set_sfx_volume(int(value))
 
 func add_resolutions() -> void:
 	for i in range(resolutions.size()):
@@ -90,14 +85,16 @@ func add_resolutions() -> void:
 	
 	res_button.item_selected.connect(_on_resolution_selected)
 
-func _on_resolution_selected(index) -> void:
-	var new_resolution = resolutions[index].size
+func _on_resolution_selected(index: int) -> void:
+	var new_resolution : Vector2 = resolutions[index].size
 	DisplayServer.window_set_size(new_resolution)
 	get_window().move_to_center()
 
-func get_resolution_index(size: Vector2i) -> int:
+func get_resolution_index(res_size: Vector2i) -> int:
 	return resolutions.find(
-		resolutions.filter(func(res): return res["size"] == size).front()
+		resolutions.filter(func(
+			res: Dictionary) -> bool: return res["size"] == res_size
+		).front()
 	)
 
 func _on_back_pressed() -> void:

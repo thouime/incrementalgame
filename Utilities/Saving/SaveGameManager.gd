@@ -19,13 +19,13 @@ func set_scene(scene: Node) -> void:
 func get_saves() -> Array:
 	var save_slots := []
 	
-	var path = GameSaveManager.SAVE_FOLDER
-	var dir = DirAccess.open(path)
+	var path : String = GameSaveManager.SAVE_FOLDER
+	var dir := DirAccess.open(path)
 	
 	if dir:
 		# Scan the folder
 		dir.list_dir_begin() 
-		var file_name = dir.get_next()
+		var file_name := dir.get_next()
 		
 		while file_name != "":
 			if !dir.current_is_dir():
@@ -46,7 +46,7 @@ func get_saves_data() -> Dictionary:
 	# Create file storing info about saves if it doesn't exist
 	if not FileAccess.file_exists(saves_path):
 		var saves : Array = get_saves()
-		var file = FileAccess.open(saves_path, FileAccess.WRITE)
+		var file := FileAccess.open(saves_path, FileAccess.WRITE)
 		
 		saves_data = {
 			# Keep track of the index to prevent naming conflicts
@@ -79,7 +79,7 @@ func get_saves_data() -> Dictionary:
 		
 	return saves_data
 
-func update_saves_data():
+func update_saves_data() -> void:
 	var saves_path : String = SAVE_FOLDER + "saves.json"
 	var file := FileAccess.open(saves_path, FileAccess.WRITE)
 	file.store_line(JSON.stringify(saves_data))
@@ -93,7 +93,7 @@ func get_num_slots(save_slots: Array) -> int:
 
 func get_save_info(save_file : String) -> Dictionary:
 	
-	var slot_path = SAVE_FOLDER + save_file
+	var slot_path : String = SAVE_FOLDER + save_file
 	
 	var file := FileAccess.open(slot_path, FileAccess.READ)
 	if not file:
@@ -113,7 +113,7 @@ func get_save_info(save_file : String) -> Dictionary:
 func update_save_info(
 	save_file : String, key : String, new_value : Variant
 ) -> bool:
-	var slot_path = SAVE_FOLDER + "/" + save_file
+	var slot_path : String = SAVE_FOLDER + "/" + save_file
 	
 	var file := FileAccess.open(slot_path, FileAccess.READ_WRITE)
 	if not file:
@@ -130,7 +130,7 @@ func update_save_info(
 	
 	# Check if the "save" key exists
 	if save_dict.has("save"):
-		var save_data = save_dict["save"] as Dictionary
+		var save_data := save_dict["save"] as Dictionary
 		
 		# Modify the specified key with the new value
 		if save_data.has(key):
@@ -157,9 +157,9 @@ func delete_save(save_file: String) -> void:
 	var save_path : String = SAVE_FOLDER + save_file
 	
 	if FileAccess.file_exists(save_path):
-		var dir = DirAccess.open(SAVE_FOLDER)
+		var dir := DirAccess.open(SAVE_FOLDER)
 		if dir:
-			var error = dir.remove(save_path)
+			var error : Error = dir.remove(save_path)
 			if error == OK:
 				saves_data["save_files"].erase(save_file)
 				update_saves_data()
@@ -179,7 +179,7 @@ func save_game() -> void:
 	
 	# If a save isn't loaded, create a new one
 	if not current_save:
-		var saves_data = get_saves_data()
+		saves_data = get_saves_data()
 		# Set and increment current save
 		current_save = (
 			"save_file_" + str(saves_data["save_index"] + 1) + ".json"
@@ -288,7 +288,7 @@ func save_tiles(tiles: Dictionary) -> Dictionary:
 		# When static typing the saves break here
 		# Something happens after loading into the tiles dictionary and
 		# Saving over it again. 
-		for atlas_coords in tiles[tile_map].keys():
+		for atlas_coords : Variant in tiles[tile_map].keys():
 			var data = tiles[tile_map][atlas_coords]
 			
 			# If the atlas coordinates don't exist yet in grass or boundary, initialize them
@@ -336,7 +336,7 @@ func load_game() -> void:
 	# Pause processing while loading
 	get_tree().paused = true
 	
-	var player_node = PlayerManager.player.get_path()
+	var player_node : NodePath = PlayerManager.player.get_path()
 	load_all_items()
 	
 	var player := get_node(player_node) as Player

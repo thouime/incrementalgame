@@ -1,10 +1,10 @@
 extends Node
 
 # Path to settings file
-var settings_path = "user://settings.json"
+var settings_path := "user://settings.json"
 
 # Default Settings
-var user_settings = {
+var user_settings := {
 	"global_volume" : 25,
 	"music_volume" : 25,
 	"sfx_volume" : 25,
@@ -14,7 +14,7 @@ var user_settings = {
 
 func save_settings() -> void:
 	
-	var file = FileAccess.open(settings_path, FileAccess.WRITE)
+	var file := FileAccess.open(settings_path, FileAccess.WRITE)
 	
 	if file:
 		file.store_string(JSON.stringify(user_settings))
@@ -49,7 +49,7 @@ func load_settings() -> void:
 	else:
 		print("Failed to parse settings.")
 
-func apply_settings():
+func apply_settings() -> void:
 	AudioManager.set_global_volume(user_settings["global_volume"])
 	AudioManager.set_music_volume(user_settings["music_volume"])
 	AudioManager.set_sfx_volume(user_settings["sfx_volume"])

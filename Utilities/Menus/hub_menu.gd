@@ -1,7 +1,6 @@
 extends Control
 
 signal toggle_inventory
-signal load_saves
 
 @onready var v_box_container_left: VBoxContainer = $VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft
 @onready var v_box_container_right: VBoxContainer = $VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight
@@ -14,9 +13,9 @@ signal load_saves
 @onready var settings_menu: Control = $VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer/SettingsMenu
 @onready var back_button: Button = $VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer/BackButton
 
-var hub_menus = []
-var setting_menus = []
-var buttons = []
+var hub_menus := []
+var setting_menus := []
+var buttons := []
 
 func _ready() -> void:
 	# All the small menus on the bottom screen hud
@@ -47,17 +46,17 @@ func _ready() -> void:
 	inventory_interface.force_close.connect(close_external_inventory)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# Non movement inputs
 	if Input.is_action_just_pressed("inventory"):
 		toggle_inventory.emit()
 	if Input.is_action_just_pressed("toggle_menu"):
-		for current_menu in hub_menus:
+		for current_menu : Variant in hub_menus:
 			current_menu.visible = false
-		for button in buttons:
+		for button : Button in buttons:
 			button.button_pressed = false
 
-func _input(event) -> void:
+func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_menu"):
 		close_settings_menu()
 
@@ -72,14 +71,14 @@ func toggle_hub_menu(menu: Control, clicked_button: Button) -> void:
 		inventory_interface.clear_external_inventory()
 	
 	# Determine if the menu is currently open
-	var is_menu_open = menu and menu.visible
+	var is_menu_open : bool = menu and menu.visible
 	
 	# Hide all menus
-	for current_menu in hub_menus:
+	for current_menu : Variant in hub_menus:
 		current_menu.visible = false
 	
 	# Unpress all buttons
-	for button in buttons:
+	for button : Button in buttons:
 		button.button_pressed = false
 	
 	if menu:
@@ -98,7 +97,7 @@ func open_settings_menu(menu: Control) -> void:
 	):
 		inventory_interface.clear_external_inventory()
 	
-	for current_menu in hub_menus:
+	for current_menu : Variant in hub_menus:
 		current_menu.visible = false
 	
 	# Pause the game
@@ -108,24 +107,24 @@ func open_settings_menu(menu: Control) -> void:
 	menu_panel.show()
 	
 	# Determine if the menu is currently open
-	var is_menu_open = menu and menu.visible
+	var is_menu_open : bool = menu and menu.visible
 	
 	# Hide all menus
-	for current_menu in setting_menus:
+	for current_menu : Variant in setting_menus:
 		current_menu.visible = false
 	
 	if menu:
 		menu.visible = not is_menu_open # Toggle visibility
 
-func close_settings_menu():
+func close_settings_menu() -> void:
 	
 	menu_panel.hide()
 	
 	# Hide all menus
-	for current_menu in setting_menus:
+	for current_menu : Variant in setting_menus:
 		current_menu.visible = false
 	
-	for button in buttons:
+	for button : Button in buttons:
 		button.button_pressed = false
 	
 	# Unpause the game
@@ -161,7 +160,7 @@ func toggle_inventory_interface(external_inventory_owner: Node = null) -> void:
 		if not inventory_interface.visible:
 			close_external_inventory()
 
-func close_external_inventory():
+func close_external_inventory() -> void:
 	inventory_interface.clear_external_inventory()
 
 func _on_inventory_button_pressed() -> void:
