@@ -207,6 +207,7 @@ func add_tile(
 			0,
 			tile_info.tile_map_coordinates
 		)
+		parent.a_star_pathfinding.update_tile(tile_position, true)
 
 # Place 1x1 boundary tiles around each of the newly placed grass tiles individually
 func add_boundary(
@@ -225,7 +226,9 @@ func add_boundary(
 			
 			# Calculate the adjacent position
 			var adjacent_position: Vector2 = tilemap_coordinates + Vector2(x, y)
-			var adjacent_data: TileData = grass_tiles.get_cell_tile_data(adjacent_position)
+			var adjacent_data: TileData = (
+				grass_tiles.get_cell_tile_data(adjacent_position)
+			)
 			
 			# If there's no tile in the adjacent cell, place a boundary tile
 			if !adjacent_data:
@@ -236,6 +239,8 @@ func add_boundary(
 					0,  # Use the correct boundary tile ID here
 					tile_info.tile_boundary.tile_map_coordinates
 				)
+				parent.a_star_pathfinding.update_tile(adjacent_position, false)
+				
 	#print("Added tiles: ", placed_boundary_tiles.size())
 	return placed_boundary_tiles
 

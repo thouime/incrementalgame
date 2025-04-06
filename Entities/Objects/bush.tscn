@@ -44,7 +44,7 @@ unique_chance = 0.25
 common_drops = SubResource("Resource_wphjt")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s1rac"]
-size = Vector2(24, 10.75)
+size = Vector2(24, 23.375)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2edif"]
 size = Vector2(41.5, 55)
@@ -75,7 +75,7 @@ region_rect = Rect2(96, 133, 32, 11)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 z_index = 3
-position = Vector2(0, 7)
+position = Vector2(0, 13.3125)
 shape = SubResource("RectangleShape2D_s1rac")
 
 [node name="Selection" type="Area2D" parent="."]
@@ -87,3 +87,11 @@ position = Vector2(-0.25, 5)
 shape = SubResource("RectangleShape2D_2edif")
 
 [node name="ActivityTimer" parent="." instance=ExtResource("9_co7uq")]
+
+[node name="NotWalkable" type="ColorRect" parent="."]
+visible = false
+offset_left = -16.0
+offset_top = -10.0
+offset_right = 16.0
+offset_bottom = 22.0
+color = Color(1, 0, 0, 0.0980392)

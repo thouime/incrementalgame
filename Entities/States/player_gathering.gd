@@ -9,7 +9,6 @@ var ready_to_build : bool = false
 func enter() -> void:
 	parent.velocity = Vector2(0, 0)
 	parent.target_position = Vector2.ZERO
-	parent.animated_sprite.animation = idle_animations[Vector2.UP]
 	gather_from_target()
 
 func exit() -> void:

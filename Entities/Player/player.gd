@@ -15,10 +15,12 @@ var health : int = 5
 var target_position : Vector2 = Vector2.ZERO
 var interact_target : Node = null
 var placed_tiles : Dictionary
+var world : Node2D
 @onready var animated_sprite : AnimatedSprite2D = $AnimatedSprite2D
 @onready var camera : Camera2D = $Camera2D
 @onready var interact_ray : RayCast2D = $Camera2D/InteractRay
 @onready var state_machine : Node = $StateMachine
+@onready var a_star_pathfinding: Node = $AStarPathfinding
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -28,7 +30,8 @@ func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	set_animation()
 	state_machine.init(self, CraftingSystem)
-	
+	call_deferred("start_a_star")
+
 # Sprite and Animations
 func set_animation() -> void:
 	var current_animation : String = animated_sprite.animation
@@ -41,6 +44,9 @@ func set_animation() -> void:
 	var sprite_size : Vector2 = player_texture.get_size()
 	player_size = sprite_size - sprite_offset
 	animated_sprite.play()
+
+func start_a_star() -> void:
+	a_star_pathfinding.initialize_astar(world)
 
 func _unhandled_input(event: InputEvent) -> void:
 	state_machine.process_input(event)
