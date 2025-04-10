@@ -21,6 +21,7 @@ func process_input(event: InputEvent) -> State:
 			return key_move_state
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			parent.interact_target = null
 			parent.target_position = parent.camera.get_global_mouse_position()
 
 	return null

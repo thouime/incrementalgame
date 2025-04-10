@@ -45,3 +45,10 @@ z_index = 4
 shape = SubResource("RectangleShape2D_fk0x8")
 
 [node name="ActivityTimer" parent="." instance=ExtResource("4_s1rbm")]
+
+[node name="NotWalkable" type="ColorRect" parent="."]
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(1, 0, 0, 0.0980392)

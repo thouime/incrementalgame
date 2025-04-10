@@ -13,7 +13,7 @@ func initialize_astar(world_node: Node2D) -> void:
 	if not world:
 		return
 		
-	tile_map_ground = world.get_node("Grass")
+	tile_map_ground = world.get_node("Ground")
 	tile_map_boundary = world.get_node("Boundary")
 	tile_size = tile_map_ground.tile_set.tile_size
 	get_tiles()

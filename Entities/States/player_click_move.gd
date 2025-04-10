@@ -49,7 +49,10 @@ func process_input(event: InputEvent) -> State:
 	if event is InputEventMouseButton:
 
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-			#clear_position()
+			
+			# Make sure there is no interact target when left is clicked
+			# This will get set with the interact signal anyways
+			parent.interact_target = null
 			set_target_position(cursor_position)
 			# Start path selection
 			is_dragging = true
@@ -251,6 +254,7 @@ func check_interaction() -> State:
 	# If there is a target object that was clicked
 	if parent.interact_target:
 		face_object(parent.interact_target)
+		#if parent.interact_target is GatheringInteract:
 		return gather_state
 	parent.animated_sprite.animation = idle_animations[parent.direction]
 	return idle_state

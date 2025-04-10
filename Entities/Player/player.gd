@@ -79,7 +79,8 @@ func toggle_escape_menu() -> void:
 func interact() -> void:
 	if interact_ray.is_colliding():
 		var collider : Object = interact_ray.get_collider()
-		# Check if collider has player_interact method, if not there may be a custom area
+		# Check if collider has player_interact method, 
+		# if not there may be a custom area
 		# that's a child of the parent. Therefore, check the parent instead.
 		if collider:
 			var parent : Node = collider.get_parent()

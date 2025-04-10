@@ -16,12 +16,16 @@ func exit() -> void:
 	interrupt_state()
 
 # Check for key movement
-func process_input(_event: InputEvent) -> State:
+func process_input(event: InputEvent) -> State:
 	# Check for movement inputs
 	for action : String in directions.keys():
 		if Input.is_action_just_pressed(action):
 			interrupt_state()
 			return key_move_state
+	if event is InputEventMouseButton:
+		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			interrupt_state()
+			parent.target_position = parent.camera.get_global_mouse_position()
 	return null
 	
 func process_physics(_delta: float) -> State:
@@ -53,7 +57,7 @@ func gather_from_target() -> void:
 func interrupt_state() -> void:
 	if parent.interact_target:
 		parent.interact_target.stop_interact_action(parent)
-		#parent.interact_target = null
+		parent.interact_target = null
 
 func _on_interact_signal(
 	pos: Vector2, 
@@ -64,8 +68,7 @@ func _on_interact_signal(
 	if object != parent.interact_target or not object.is_gathering():
 
 		# Interrupt player if they are already gathering
-		if parent.interact_target:
-			parent.interact_target.stop_interact_action(parent)
+		interrupt_state()
 			
 		# Set the interact_target to the new target
 		parent.interact_target = object

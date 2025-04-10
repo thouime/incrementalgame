@@ -281,7 +281,7 @@ func save_type_data(object: StaticBody2D, object_data: Dictionary) -> void:
 
 func save_tiles(tiles: Dictionary) -> Dictionary:
 	var serialized_tiles := {
-		"grass": {},
+		"ground": {},
 		"boundary": {}
 	}
 	for tile_map: TileMapLayer in tiles.keys():
@@ -292,18 +292,18 @@ func save_tiles(tiles: Dictionary) -> Dictionary:
 
 			var data : Variant = tiles[tile_map][atlas_coords]
 			
-			# If the atlas coordinates don't exist yet in grass or boundary, initialize them
-			if not serialized_tiles["grass"].has(str(atlas_coords)):
-				serialized_tiles["grass"][str(atlas_coords)] = []
+			# If the atlas coordinates don't exist yet in ground or boundary, initialize them
+			if not serialized_tiles["ground"].has(str(atlas_coords)):
+				serialized_tiles["ground"][str(atlas_coords)] = []
 			if not serialized_tiles["boundary"].has(str(atlas_coords)):
 				serialized_tiles["boundary"][str(atlas_coords)] = []
 			
-			# Add serialized tile coordinates under "grass"
+			# Add serialized tile coordinates under "ground"
 			if data.has("tiles"):
 				for coord : Variant in data["tiles"]:
 					var atlas_key := str(atlas_coords)
 					var coord_str := str(coord)
-					serialized_tiles["grass"][atlas_key].append(coord_str)
+					serialized_tiles["ground"][atlas_key].append(coord_str)
 			
 			# Check if "boundary" key exists before accessing it
 			if data.has("boundary"):
@@ -313,7 +313,7 @@ func save_tiles(tiles: Dictionary) -> Dictionary:
 					var coord_str := str(coord)
 					serialized_tiles["boundary"][atlas_key].append(coord_str)
 	
-	# Return the final dictionary with "grass" and "boundary" directly under "tiles"
+	# Return the final dictionary with "ground" and "boundary" directly under "tiles"
 	return serialized_tiles
 
 func load_game() -> void:
@@ -469,11 +469,11 @@ func add_shaders(new_object: StaticBody2D) -> void:
 
 func load_tiles(placed_tiles: Dictionary) -> void:
 	var world: Node2D = get_node("/root/Main/World")
-	var grass: TileMapLayer
+	var ground: TileMapLayer
 	var boundary: TileMapLayer
 	var tiles_to_build: Array
 	var boundary_tiles: Array
-	var grass_atlas: Vector2
+	var ground_atlas: Vector2
 	var boundary_atlas: Vector2
 	
 	for tile_map_name: String in placed_tiles.keys():
@@ -484,17 +484,17 @@ func load_tiles(placed_tiles: Dictionary) -> void:
 		for atlas_coord_str: String in placed_tiles[tile_map_name].keys():
 			var atlas_coord: Vector2i = Helper.str_to_vector2i(atlas_coord_str)
 			var data: Array = placed_tiles[tile_map_name][atlas_coord_str]
-			if tile_map_name == "grass" and atlas_coord == Vector2i(2,1):
+			if tile_map_name == "ground" and atlas_coord == Vector2i(2,1):
 				tiles_to_build = data
-				grass = tile_map
-				grass_atlas = atlas_coord
+				ground = tile_map
+				ground_atlas = atlas_coord
 			if tile_map_name == "boundary" and atlas_coord == Vector2i(0,1):
 				boundary_tiles = data
 				boundary_atlas = atlas_coord
 			# Load tiles
 			for tile_str: String in data:
 				var tile_coord: Vector2i = Helper.str_to_vector2i(tile_str)
-				if tile_map_name == "grass":
+				if tile_map_name == "ground":
 					remove_boundary(tile_coord, boundary)
 				tile_map.set_cell(
 					tile_coord,
@@ -503,10 +503,10 @@ func load_tiles(placed_tiles: Dictionary) -> void:
 				)
 	store_placed_tiles(
 		tiles_to_build,
-		grass,
+		ground,
 		boundary_tiles,
 		[],
-		grass_atlas,
+		ground_atlas,
 		boundary_atlas
 	)
 

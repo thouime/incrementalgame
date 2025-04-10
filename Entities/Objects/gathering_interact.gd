@@ -1,3 +1,4 @@
+class_name  GatheringInteract
 extends "object.gd"
 
 @export var gather_time: float = 2.0
