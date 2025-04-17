@@ -2,7 +2,6 @@ extends Node
 
 var world : Node2D
 var tile_map_ground : TileMapLayer
-var tile_map_boundary : TileMapLayer
 var astar := AStar2D.new()
 var tile_size: Vector2
 var restricted_tiles : Array[Vector2i] = []
@@ -14,7 +13,6 @@ func initialize_astar(world_node: Node2D) -> void:
 		return
 		
 	tile_map_ground = world.get_node("Ground")
-	tile_map_boundary = world.get_node("Boundary")
 	tile_size = tile_map_ground.tile_set.tile_size
 	get_tiles()
 	
@@ -23,10 +21,17 @@ func initialize_astar(world_node: Node2D) -> void:
 	
 	mark_restricted_tiles(restricted_tiles)
 
+func reset_astar() -> void:
+	astar.clear()
+	restricted_tiles.clear()
+
 func get_tiles() -> void:
 	var used_tiles : Array[Vector2i] = tile_map_ground.get_used_cells() 
-	for tile : Vector2i in used_tiles:
-		add_point(tile)
+		
+	for tile in used_tiles:
+		var tile_data := tile_map_ground.get_cell_tile_data(tile)
+		if tile_data != null and not tile_has_collision(tile_data):
+			add_point(tile)
 
 	# Connect neighboring tiles
 	for tile : Vector2i in used_tiles:
@@ -38,6 +43,18 @@ func get_tiles() -> void:
 				# Check if neighbor exists
 				if tile_map_ground.get_cell_source_id(neighbor) != -1: 
 					connect_points(tile, neighbor)
+
+func tile_has_collision(tile_data: TileData) -> bool:
+	
+	var tile_set := tile_map_ground.tile_set
+	var layer_count := tile_set.get_physics_layers_count()
+	
+	for layer_id in range(layer_count):
+		if tile_data.get_collision_polygons_count(layer_id) > 0:
+			return true
+			
+	return false
+
 
 func add_point(tile: Vector2) -> void:
 	var point_id : int = get_point_id(tile)

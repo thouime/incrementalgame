@@ -316,25 +316,25 @@ func save_tiles(tiles: Dictionary) -> Dictionary:
 	# Return the final dictionary with "ground" and "boundary" directly under "tiles"
 	return serialized_tiles
 
-func load_game() -> void:
+func load_game() -> bool:
 	
 	# Ensure a save slot is set
 	if not current_save:
 		print("Save was not set!")
-		return
+		return false
 	
 	var save_path : String = SAVE_FOLDER + current_save
 	
 	var file := FileAccess.open(save_path, FileAccess.READ)
 	if not file:
 		print("Save file not found!")
-		return
+		return false
 		
 	var json := JSON.new()
 	var error := json.parse(file.get_line())
 	if error != OK:
 		print("Failed to parse JSON: ", json.get_error_message())
-		return
+		return false
 		
 	var save_dict := json.get_data() as Dictionary
 	
@@ -376,6 +376,8 @@ func load_game() -> void:
 	get_tree().paused = false
 	
 	print("Game loaded successfully!")
+	
+	return true
 
 func deserialize_inventory(
 	serialized_inventory: Array
@@ -468,7 +470,7 @@ func add_shaders(new_object: StaticBody2D) -> void:
 		new_object.material = new_material
 
 func load_tiles(placed_tiles: Dictionary) -> void:
-	var world: Node2D = get_node("/root/Main/MainWorldVisual/MainWorldRoot/World")
+	var world: Node2D = get_node("/root/Main/MainWorldVisual/MainWorld/World")
 	var ground: TileMapLayer
 	var boundary: TileMapLayer
 	var tiles_to_build: Array

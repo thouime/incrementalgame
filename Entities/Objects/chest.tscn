@@ -15,7 +15,7 @@ shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_llfik"]
-size = Vector2(30, 8.375)
+size = Vector2(30, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bb5ap"]
 size = Vector2(16.5, 17.5)
@@ -34,7 +34,7 @@ region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1, -7.8125)
+position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_llfik")
 
 [node name="Selection" type="Area2D" parent="."]

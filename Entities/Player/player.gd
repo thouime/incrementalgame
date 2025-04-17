@@ -30,7 +30,7 @@ func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	set_animation()
 	state_machine.init(self, CraftingSystem)
-	call_deferred("start_a_star")
+	start_a_star.call_deferred()
 
 # Sprite and Animations
 func set_animation() -> void:

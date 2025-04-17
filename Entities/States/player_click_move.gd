@@ -117,6 +117,7 @@ func get_a_star() -> Node:
 	
 	if pathfinder == null and parent != null:
 		pathfinder = parent.a_star_pathfinding
+		
 	return pathfinder
 
 func set_target_position(position: Vector2) -> void:
