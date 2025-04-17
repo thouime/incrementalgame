@@ -10,7 +10,7 @@ var timer_done : bool = false
 @onready var timer_circle: ColorRect = $TimerCircle
 
 func _ready() -> void:
-	#progress_bar.hide()
+	progress_bar.hide()
 	setup_timer()
 	set_new_position()
 
@@ -21,32 +21,33 @@ func _process(_delta: float) -> void:
 
 func set_new_position() -> void:
 	var parent : Node = get_parent()
-	var object_position := Vector2(parent.position)
 	if parent is Node2D:
 		# Calculate the combined height of each sprite
 		var combined_height : float
+		var width : float
 		for child in parent.get_children():
 			if child is Sprite2D:
 				var sprite_height := float(child.get_rect().size.y)
 				combined_height = combined_height + sprite_height
+				if not width:
+					width = float(child.get_rect().size.x)
 		
 		# Calculate new positions
 		var timer_circle_size : Vector2 = timer_circle.get_rect().size
-		var progress_bar_size : Vector2 = progress_bar.get_rect().size
-		var padding : float = 12
+		var padding : float = 4
 		
+		print("Combined Height Size: ", combined_height)
+		
+		# Center the timer circle horizontally above the parent object 
 		var timer_circle_new_position := Vector2(
-			object_position.x - timer_circle_size.x / 2,
-			object_position.y - combined_height / 2  
-				- timer_circle_size.y 
-				- padding
+			- timer_circle_size.x / 2, 
+			- padding - timer_circle_size.y - combined_height / 2
 		)
 		
-		var progress_bar_new_position : Vector2 = Vector2(
-			object_position.x - progress_bar_size.x / 2,
-			object_position.y - combined_height / 2 
-				- progress_bar_size.y 
-				- padding
+		# Position the progress bar below the timer circle
+		var progress_bar_new_position := Vector2(
+			- width / 2, 
+			- timer_circle_size.y - combined_height / 2
 		)
 
 		timer_circle.set_position(timer_circle_new_position)
