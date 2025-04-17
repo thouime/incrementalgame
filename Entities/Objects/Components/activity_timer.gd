@@ -36,8 +36,6 @@ func set_new_position() -> void:
 		var timer_circle_size : Vector2 = timer_circle.get_rect().size
 		var padding : float = 4
 		
-		print("Combined Height Size: ", combined_height)
-		
 		# Center the timer circle horizontally above the parent object 
 		var timer_circle_new_position := Vector2(
 			- timer_circle_size.x / 2, 

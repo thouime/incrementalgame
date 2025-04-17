@@ -26,8 +26,8 @@ func init(parent: Player, crafting_system_ref: Node) -> void:
 	# Initialize to the default state
 	change_state(initial_state)
 	
-	call_deferred("_connect_interact_signals")
-	call_deferred("_connect_crafting_signal")
+	_connect_interact_signals.call_deferred()
+	_connect_crafting_signal.call_deferred()
 
 func change_state(new_state: State) -> void:
 	if current_state:

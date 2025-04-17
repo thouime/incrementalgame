@@ -5,6 +5,7 @@ extends State
 @export var click_move_state: State
 @export var build_state : State
 var ready_to_build : bool = false
+var is_interacting : bool = false
 
 func enter() -> void:
 	parent.velocity = Vector2(0, 0)
@@ -13,9 +14,9 @@ func enter() -> void:
 
 func exit() -> void:
 	ready_to_build = false
-	interrupt_state()
+	is_interacting = false
 
-# Check for key movement
+# Check for inputs
 func process_input(event: InputEvent) -> State:
 	# Check for movement inputs
 	for action : String in directions.keys():
@@ -24,8 +25,12 @@ func process_input(event: InputEvent) -> State:
 			return key_move_state
 	if event is InputEventMouseButton:
 		if event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			if is_interacting:
+				return null
 			interrupt_state()
+			parent.interact_target = null
 			parent.target_position = parent.camera.get_global_mouse_position()
+			
 	return null
 	
 func process_physics(_delta: float) -> State:
@@ -57,13 +62,14 @@ func gather_from_target() -> void:
 func interrupt_state() -> void:
 	if parent.interact_target:
 		parent.interact_target.stop_interact_action(parent)
-		parent.interact_target = null
 
 func _on_interact_signal(
 	pos: Vector2, 
 	offset: float,
 	object: StaticBody2D
 ) -> void:
+	
+	is_interacting = true
 	# Check if they are already interacting with the same object
 	if object != parent.interact_target or not object.is_gathering():
 
