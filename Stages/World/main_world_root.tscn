@@ -1,6 +1,6 @@
 [gd_scene load_steps=31 format=3 uid="uid://bb20s8yg8iuot"]
 
-[ext_resource type="Script" path="res://Stages/World/main_world_root.gd" id="1_7ovk2"]
+[ext_resource type="Script" path="res://Stages/World/main.gd" id="1_34dg6"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="2_8kqxf"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="3_5f3hq"]
 [ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="4_msd3p"]
@@ -252,15 +252,15 @@ loot_table = Array[String]([])
 completions = 0
 dungeon = ExtResource("14_n5nsx")
 
-[node name="Main" type="Node"]
+[node name="MainWorldRoot" type="Node"]
 
 [node name="MainWorldVisual" type="CanvasLayer" parent="."]
 follow_viewport_enabled = true
 
-[node name="MainWorldRoot" type="Node2D" parent="MainWorldVisual"]
-script = ExtResource("1_7ovk2")
+[node name="Main" type="Node2D" parent="MainWorldVisual"]
+script = ExtResource("1_34dg6")
 
-[node name="Grid" type="Control" parent="MainWorldVisual/MainWorldRoot"]
+[node name="Grid" type="Control" parent="MainWorldVisual/Main"]
 light_mask = 0
 visibility_layer = 512
 z_index = 100
@@ -268,45 +268,45 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("2_8kqxf")
 
-[node name="Cursor" type="Sprite2D" parent="MainWorldVisual/MainWorldRoot/Grid"]
+[node name="Cursor" type="Sprite2D" parent="MainWorldVisual/Main/Grid"]
 visible = false
 z_index = 1
 texture = ExtResource("3_5f3hq")
 region_enabled = true
 region_rect = Rect2(80, 0, 16, 16)
 
-[node name="Player" parent="MainWorldVisual/MainWorldRoot" instance=ExtResource("4_msd3p")]
+[node name="Player" parent="MainWorldVisual/Main" instance=ExtResource("4_msd3p")]
 z_index = 2
-position = Vector2(0, 0)
+position = Vector2(250, 450)
 scale = Vector2(1, 1)
 inventory_data = SubResource("Resource_66drq")
 equip_inventory_data = SubResource("Resource_0msbn")
 
-[node name="Tree" parent="MainWorldVisual/MainWorldRoot" instance=ExtResource("10_kww62")]
+[node name="Tree" parent="MainWorldVisual/Main" instance=ExtResource("10_kww62")]
 material = SubResource("ShaderMaterial_5c6pj")
 collision_layer = 8
 collision_mask = 4
 
-[node name="World" parent="MainWorldVisual/MainWorldRoot" instance=ExtResource("11_i0pyk")]
+[node name="World" parent="MainWorldVisual/Main" instance=ExtResource("11_i0pyk")]
 position = Vector2(64, 160)
 metadata/_edit_lock_ = true
 
-[node name="Bush" parent="MainWorldVisual/MainWorldRoot" instance=ExtResource("12_ia3yv")]
+[node name="Bush" parent="MainWorldVisual/Main" instance=ExtResource("12_ia3yv")]
 material = SubResource("ShaderMaterial_5k06o")
 collision_layer = 8
 collision_mask = 4
 
-[node name="DungeonEntrance" parent="MainWorldVisual/MainWorldRoot" instance=ExtResource("13_krnir")]
+[node name="DungeonEntrance" parent="MainWorldVisual/Main" instance=ExtResource("13_krnir")]
 material = SubResource("ShaderMaterial_jkhk1")
 position = Vector2(480, -272)
 dungeon_data = SubResource("Resource_y1gps")
 
-[node name="Composter" parent="MainWorldVisual/MainWorldRoot" instance=ExtResource("16_fw8px")]
+[node name="Composter" parent="MainWorldVisual/Main" instance=ExtResource("16_fw8px")]
 position = Vector2(337, 527)
 
-[node name="UI" type="CanvasLayer" parent="MainWorldVisual/MainWorldRoot"]
+[node name="UI" type="CanvasLayer" parent="MainWorldVisual/Main"]
 
-[node name="HubMenu" parent="MainWorldVisual/MainWorldRoot/UI" instance=ExtResource("15_hgfex")]
+[node name="HubMenu" parent="MainWorldVisual/Main/UI" instance=ExtResource("15_hgfex")]
 process_mode = 3
 metadata/_edit_lock_ = true
 

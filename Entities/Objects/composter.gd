@@ -1,6 +1,8 @@
 extends "object.gd"
 
-const ITEM_FEEDBACK_EFFECT = preload("res://Entities/Objects/Components/ItemFeedbackEffect.tscn")
+const ITEM_FEEDBACK_EFFECT = preload(
+	"res://Entities/Objects/Components/ItemFeedbackEffect.tscn"
+)
 
 @export var compost_duration : int
 @export var dirt_received : int = 1

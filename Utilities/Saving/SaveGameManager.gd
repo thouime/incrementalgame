@@ -468,7 +468,7 @@ func add_shaders(new_object: StaticBody2D) -> void:
 		new_object.material = new_material
 
 func load_tiles(placed_tiles: Dictionary) -> void:
-	var world: Node2D = get_node("/root/Main/MainWorldVisual/MainWorldRoot/World")
+	var world: Node2D = get_node("/root/MainWorldRoot/MainWorldVisual/Main/World")
 	var ground: TileMapLayer
 	var boundary: TileMapLayer
 	var tiles_to_build: Array
