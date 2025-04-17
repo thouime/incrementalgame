@@ -1,5 +1,6 @@
-[gd_resource type="Resource" script_class="DungeonResource" load_steps=2 format=3 uid="uid://dobbxi1y5rej1"]
+[gd_resource type="Resource" script_class="DungeonResource" load_steps=3 format=3 uid="uid://dobbxi1y5rej1"]
 
+[ext_resource type="PackedScene" uid="uid://cftvtb33kjqt7" path="res://Stages/Dungeons/GoblinCave/GoblinCave.tscn" id="1_d6qar"]
 [ext_resource type="Script" path="res://Stages/Dungeons/dungeon_resource.gd" id="1_yg8y8"]
 
 [resource]
@@ -10,3 +11,4 @@ estimated_completion = 0
 enemy_count = 10
 loot_table = Array[String]([])
 completions = 0
+dungeon = ExtResource("1_d6qar")

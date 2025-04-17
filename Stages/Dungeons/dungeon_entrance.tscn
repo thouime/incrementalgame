@@ -98,7 +98,7 @@ size = Vector2(64, 28)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jr2fc"]
 size = Vector2(64, 32)
 
-[node name="DungeonEntrance" type="StaticBody2D"]
+[node name="DungeonEntrance" type="StaticBody2D" groups=["dungeon_entrance"]]
 material = SubResource("ShaderMaterial_kxg17")
 script = ExtResource("1_xn4hr")
 

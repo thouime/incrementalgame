@@ -1,54 +1,56 @@
-[gd_scene load_steps=28 format=3 uid="uid://bb20s8yg8iuot"]
+[gd_scene load_steps=31 format=3 uid="uid://bb20s8yg8iuot"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_xtwid"]
-[ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="2_h00hh"]
-[ext_resource type="Script" path="res://Utilities/Inventory/inventory_data_equip.gd" id="4_2dnpy"]
-[ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="5_b2i4h"]
-[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="7_8rb2x"]
-[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="7_jfsv6"]
-[ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="8_0h1cl"]
-[ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://Stages/World/world.tscn" id="8_8lnwa"]
-[ext_resource type="PackedScene" uid="uid://cednyx6i43tlg" path="res://Entities/Objects/tree.tscn" id="8_73jjx"]
-[ext_resource type="PackedScene" uid="uid://6nrx3gn8vdr3" path="res://Utilities/Menus/hub_menu.tscn" id="13_3h7c1"]
-[ext_resource type="Resource" uid="uid://dobbxi1y5rej1" path="res://Stages/Dungeons/GoblinCave/goblin_cave.tres" id="14_05wwf"]
-[ext_resource type="PackedScene" uid="uid://bsgr3kae0gnej" path="res://Stages/Dungeons/dungeon_entrance.tscn" id="14_g31e3"]
-[ext_resource type="PackedScene" uid="uid://byoflltw01rq5" path="res://Entities/Objects/bush.tscn" id="14_h5qyt"]
-[ext_resource type="Script" path="res://Stages/World/grid.gd" id="23_rhjmk"]
-[ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="24_xf1d2"]
+[ext_resource type="Script" path="res://Stages/World/main_world_root.gd" id="1_7ovk2"]
+[ext_resource type="Script" path="res://Stages/World/grid.gd" id="2_8kqxf"]
+[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="3_5f3hq"]
+[ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="4_msd3p"]
+[ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="5_6wr8f"]
+[ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="6_q5bg7"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="7_7ykeq"]
+[ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="8_pn2st"]
+[ext_resource type="Script" path="res://Utilities/Inventory/inventory_data_equip.gd" id="9_usacc"]
+[ext_resource type="PackedScene" uid="uid://cednyx6i43tlg" path="res://Entities/Objects/tree.tscn" id="10_kww62"]
+[ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://Stages/World/world.tscn" id="11_i0pyk"]
+[ext_resource type="PackedScene" uid="uid://byoflltw01rq5" path="res://Entities/Objects/bush.tscn" id="12_ia3yv"]
+[ext_resource type="PackedScene" uid="uid://bsgr3kae0gnej" path="res://Stages/Dungeons/dungeon_entrance.tscn" id="13_krnir"]
+[ext_resource type="Script" path="res://Stages/Dungeons/dungeon_resource.gd" id="14_htvxc"]
+[ext_resource type="PackedScene" uid="uid://cftvtb33kjqt7" path="res://Stages/Dungeons/GoblinCave/GoblinCave.tscn" id="14_n5nsx"]
+[ext_resource type="PackedScene" uid="uid://6nrx3gn8vdr3" path="res://Utilities/Menus/hub_menu.tscn" id="15_hgfex"]
+[ext_resource type="PackedScene" uid="uid://by4s6muul7tdg" path="res://Entities/Objects/composter.tscn" id="16_fw8px"]
 
 [sub_resource type="Resource" id="Resource_2t8m8"]
-script = ExtResource("5_b2i4h")
-item_data = ExtResource("7_jfsv6")
+script = ExtResource("6_q5bg7")
+item_data = ExtResource("7_7ykeq")
 quantity = 90
 
 [sub_resource type="Resource" id="Resource_cw7xb"]
-script = ExtResource("5_b2i4h")
-item_data = ExtResource("8_0h1cl")
+script = ExtResource("6_q5bg7")
+item_data = ExtResource("8_pn2st")
 quantity = 90
 
 [sub_resource type="Resource" id="Resource_cdcud"]
-script = ExtResource("5_b2i4h")
-item_data = ExtResource("7_jfsv6")
+script = ExtResource("6_q5bg7")
+item_data = ExtResource("7_7ykeq")
 quantity = 90
 
 [sub_resource type="Resource" id="Resource_17kvy"]
-script = ExtResource("5_b2i4h")
-item_data = ExtResource("7_jfsv6")
+script = ExtResource("6_q5bg7")
+item_data = ExtResource("7_7ykeq")
 quantity = 85
 
 [sub_resource type="Resource" id="Resource_v6a5q"]
-script = ExtResource("5_b2i4h")
-item_data = ExtResource("7_jfsv6")
+script = ExtResource("6_q5bg7")
+item_data = ExtResource("7_7ykeq")
 quantity = 1
 
 [sub_resource type="Resource" id="Resource_66drq"]
-script = ExtResource("24_xf1d2")
-slot_datas = Array[ExtResource("5_b2i4h")]([SubResource("Resource_2t8m8"), SubResource("Resource_cw7xb"), null, null, null, null, null, null, SubResource("Resource_cdcud"), SubResource("Resource_17kvy"), null, null, null, null, SubResource("Resource_v6a5q")])
+script = ExtResource("5_6wr8f")
+slot_datas = Array[ExtResource("6_q5bg7")]([SubResource("Resource_2t8m8"), SubResource("Resource_cw7xb"), null, null, null, null, null, null, SubResource("Resource_cdcud"), SubResource("Resource_17kvy"), null, null, null, null, SubResource("Resource_v6a5q")])
 inventory_size = 15
 
 [sub_resource type="Resource" id="Resource_0msbn"]
-script = ExtResource("4_2dnpy")
-slot_datas = Array[ExtResource("5_b2i4h")]([null])
+script = ExtResource("9_usacc")
+slot_datas = Array[ExtResource("6_q5bg7")]([null])
 inventory_size = 10
 
 [sub_resource type="Shader" id="Shader_htk2q"]
@@ -240,52 +242,72 @@ shader_parameter/add_margins = true
 shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
 
-[node name="Main" type="Node"]
-script = ExtResource("1_xtwid")
+[sub_resource type="Resource" id="Resource_y1gps"]
+script = ExtResource("14_htvxc")
+name = "Goblin Cave"
+difficulty = 1
+estimated_completion = 0
+enemy_count = 10
+loot_table = Array[String]([])
+completions = 0
+dungeon = ExtResource("14_n5nsx")
 
-[node name="Grid" type="Control" parent="."]
+[node name="Main" type="Node"]
+
+[node name="MainWorldVisual" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="MainWorldRoot" type="Node2D" parent="MainWorldVisual"]
+script = ExtResource("1_7ovk2")
+
+[node name="Grid" type="Control" parent="MainWorldVisual/MainWorldRoot"]
 light_mask = 0
 visibility_layer = 512
 z_index = 100
 layout_mode = 3
 anchors_preset = 0
-script = ExtResource("23_rhjmk")
+script = ExtResource("2_8kqxf")
 
-[node name="Cursor" type="Sprite2D" parent="Grid"]
+[node name="Cursor" type="Sprite2D" parent="MainWorldVisual/MainWorldRoot/Grid"]
 visible = false
 z_index = 1
-texture = ExtResource("7_8rb2x")
+texture = ExtResource("3_5f3hq")
 region_enabled = true
 region_rect = Rect2(80, 0, 16, 16)
 
-[node name="Player" parent="." instance=ExtResource("2_h00hh")]
+[node name="Player" parent="MainWorldVisual/MainWorldRoot" instance=ExtResource("4_msd3p")]
 z_index = 2
-position = Vector2(360, 472)
+position = Vector2(0, 0)
 scale = Vector2(1, 1)
 inventory_data = SubResource("Resource_66drq")
 equip_inventory_data = SubResource("Resource_0msbn")
 
-[node name="Tree" parent="." instance=ExtResource("8_73jjx")]
+[node name="Tree" parent="MainWorldVisual/MainWorldRoot" instance=ExtResource("10_kww62")]
 material = SubResource("ShaderMaterial_5c6pj")
 collision_layer = 8
 collision_mask = 4
 
-[node name="World" parent="." instance=ExtResource("8_8lnwa")]
+[node name="World" parent="MainWorldVisual/MainWorldRoot" instance=ExtResource("11_i0pyk")]
 position = Vector2(64, 160)
 metadata/_edit_lock_ = true
 
-[node name="Bush" parent="." instance=ExtResource("14_h5qyt")]
+[node name="Bush" parent="MainWorldVisual/MainWorldRoot" instance=ExtResource("12_ia3yv")]
 material = SubResource("ShaderMaterial_5k06o")
 collision_layer = 8
 collision_mask = 4
 
-[node name="DungeonEntrance" parent="." instance=ExtResource("14_g31e3")]
+[node name="DungeonEntrance" parent="MainWorldVisual/MainWorldRoot" instance=ExtResource("13_krnir")]
 material = SubResource("ShaderMaterial_jkhk1")
 position = Vector2(480, -272)
-dungeon_data = ExtResource("14_05wwf")
+dungeon_data = SubResource("Resource_y1gps")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="Composter" parent="MainWorldVisual/MainWorldRoot" instance=ExtResource("16_fw8px")]
+position = Vector2(337, 527)
 
-[node name="HubMenu" parent="UI" instance=ExtResource("13_3h7c1")]
+[node name="UI" type="CanvasLayer" parent="MainWorldVisual/MainWorldRoot"]
+
+[node name="HubMenu" parent="MainWorldVisual/MainWorldRoot/UI" instance=ExtResource("15_hgfex")]
 process_mode = 3
 metadata/_edit_lock_ = true
+
+[node name="DungeonWorld" type="Node2D" parent="MainWorldVisual"]

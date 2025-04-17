@@ -97,7 +97,8 @@ shader_parameter/width_in = 0.5
 shader_parameter/width_out = 0.95
 shader_parameter/border_width = 0.1
 
-[node name="ActivityTimer" type="Node"]
+[node name="ActivityTimer" type="Node2D"]
+z_index = 3
 script = ExtResource("1_tks2k")
 
 [node name="ProgressBar" type="ProgressBar" parent="."]

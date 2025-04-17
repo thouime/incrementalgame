@@ -37,6 +37,10 @@ window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 window/stretch/scale_mode="integer"
 
+[global_group]
+
+dungeon_entrance="Entrance to a dungeon."
+
 [input]
 
 move_right={
@@ -101,6 +105,8 @@ cancel={
 2d_physics/layer_2="Player Feet"
 2d_physics/layer_3="Player"
 2d_physics/layer_4="Objects"
+2d_physics/layer_5="Walls"
+2d_physics/layer_9="Layer 9"
 
 [rendering]
 

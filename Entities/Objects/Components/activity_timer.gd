@@ -1,4 +1,4 @@
-extends Node 
+extends Node2D
 class_name ActivityTimer
 
 signal timer_finished
@@ -10,16 +10,16 @@ var timer_done : bool = false
 @onready var timer_circle: ColorRect = $TimerCircle
 
 func _ready() -> void:
-	progress_bar.hide()
+	#progress_bar.hide()
 	setup_timer()
-	set_position()
+	set_new_position()
 
 func _process(_delta: float) -> void:
 	if is_running():
 		var progress: float = (timer.wait_time - timer.time_left) / timer.wait_time
 		add_timer_value(progress)
 
-func set_position() -> void:
+func set_new_position() -> void:
 	var parent : Node = get_parent()
 	var object_position := Vector2(parent.position)
 	if parent is Node2D:
