@@ -20,6 +20,8 @@ var last_tile : Vector2i
 var tile_path : Array = []
 var pathfinder : Node 
 
+@onready var waypoint: Node2D = $Waypoint
+
 func enter() -> void:
 	
 	pathfinder = get_a_star()
@@ -30,6 +32,7 @@ func exit() -> void:
 	
 	clear_position()
 	ready_to_build = false
+	hide_waypoint()
 
 func clear_position() -> void:
 	
@@ -185,6 +188,9 @@ func find_closest_tile_index(
 
 func move_towards_target(_delta: float, target_position: Vector2) -> Vector2:
 	
+	# Display an indicator on the target grid position
+	show_waypoint(target_position)
+	
 	# Calculate a new path if there isn't one
 	if tile_path.size() == 0:
 		get_tile_path(target_position)
@@ -207,6 +213,7 @@ func move_towards_target(_delta: float, target_position: Vector2) -> Vector2:
 		if current_target_index >= tile_path.size():
 			# Ensure final snap to tile center
 			parent.position = tile_path[-1]
+			hide_waypoint()
 			return Vector2.ZERO  # Stop moving
 		
 		current_target = tile_path[current_target_index]
@@ -218,6 +225,19 @@ func move_towards_target(_delta: float, target_position: Vector2) -> Vector2:
 	# Calculate the velocity
 	var velocity: Vector2 = direction * parent.player_speed
 	return velocity
+
+func show_waypoint(target_position: Vector2) -> void:
+	# Get the tile position of the grid from the target position
+	var tile_pos : Vector2 = pathfinder.world_to_grid(target_position)
+	# Get the world position from the center tile position
+	var cursor_pos : Vector2 = pathfinder.grid_to_world(tile_pos)
+	waypoint.set_position(cursor_pos)
+	waypoint.start_animation()
+	waypoint.show()
+
+func hide_waypoint() -> void:
+	waypoint.stop_animation()
+	waypoint.hide()
 
 func face_object(target: Node2D) -> void:
 	# Get the direction vector form the player to the target

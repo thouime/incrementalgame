@@ -1,16 +1,17 @@
-[gd_scene load_steps=60 format=3 uid="uid://dn215u4niu0ji"]
+[gd_scene load_steps=61 format=3 uid="uid://dn215u4niu0ji"]
 
 [ext_resource type="Script" path="res://Entities/Player/player.gd" id="1_87i8y"]
 [ext_resource type="Texture2D" uid="uid://c4ifn1fjbi2ye" path="res://Assets/Art/characters/player.png" id="2_qrrvf"]
 [ext_resource type="Script" path="res://Entities/States/state_machine.gd" id="3_677he"]
 [ext_resource type="Script" path="res://Entities/States/player_idle.gd" id="4_26u2a"]
 [ext_resource type="Script" path="res://Entities/States/player_key_move.gd" id="5_kcpsp"]
+[ext_resource type="PackedScene" uid="uid://db4r8dj87dret" path="res://Utilities/Movement/Waypoint.tscn" id="5_vd2q4"]
 [ext_resource type="Script" path="res://Entities/States/player_click_move.gd" id="6_doxm0"]
 [ext_resource type="Script" path="res://Entities/States/player_gathering.gd" id="7_5ajlj"]
 [ext_resource type="Script" path="res://Entities/States/player_building.gd" id="8_gbgay"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="9_2som8"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="10_n6sx7"]
-[ext_resource type="PackedScene" uid="uid://mc3ml700wv2h" path="res://Utilities/Movement/AStarPathfinding.tscn" id="11_q3ijd"]
+[ext_resource type="PackedScene" uid="uid://73u8lvnx86f2" path="res://Utilities/Movement/a_star_pathfinding.tscn" id="11_q3ijd"]
 [ext_resource type="PackedScene" uid="uid://cnxox67ix0cs4" path="res://Utilities/Movement/show_tile_path.tscn" id="12_fyjvd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ojwf"]
@@ -452,6 +453,9 @@ idle_state = NodePath("../PlayerIdle")
 gather_state = NodePath("../PlayerGathering")
 build_state = NodePath("../PlayerBuilding")
 key_move_state = NodePath("../PlayerKeyMove")
+
+[node name="Waypoint" parent="StateMachine/PlayerClickMove" instance=ExtResource("5_vd2q4")]
+visible = false
 
 [node name="PlayerGathering" type="Node" parent="StateMachine" node_paths=PackedStringArray("key_move_state", "click_move_state", "build_state")]
 script = ExtResource("7_5ajlj")

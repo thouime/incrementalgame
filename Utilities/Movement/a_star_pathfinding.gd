@@ -5,7 +5,7 @@ var tile_map_ground : TileMapLayer
 var astar := AStar2D.new()
 var tile_size: Vector2
 var restricted_tiles : Array[Vector2i] = []
-@onready var mark_tile_path: Node2D = $MarkTilePath
+@export var debugging : bool = false
 
 func initialize_astar(world_node: Node2D) -> void:
 	world = world_node
@@ -104,7 +104,8 @@ func get_tile_path(start: Vector2, end: Vector2) -> Array:
 			path_world.append(grid_to_world(tile))
 			
 		# Draw tile path
-		show_tile_path(path_world)
+		if debugging:
+			show_tile_path(path_world)
 		
 		return path_world
 	return []
