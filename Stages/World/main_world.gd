@@ -1,6 +1,6 @@
 # Incremental Game
 
-extends Node
+extends Node2D
 
 const PICKUP = preload("res://Entities/Item/pickup.tscn")
 
@@ -30,27 +30,11 @@ func _ready() -> void:
 	player.world = world
 	
 	connect_dungeons.call_deferred()
-
+	
 func new_game() -> void:
 	print("New Game Started")
 	var player_spawn : Vector2 = world.get_node("PlayerSpawn").global_position
 	player.set_position(player_spawn)
-
-func update_label(label: Label, material: int) -> void:
-	# Split the label text into prefix and current value
-	var label_text: Array[String] = label.text.split(": ")
-	if label_text.size() > 1:
-		var prefix: String = label_text[0]
-		label.text = prefix + ": "+ str(material)
-
-func create_timer(duration: int, _on_timeout: Callable) -> Timer:
-	var timer: Timer = Timer.new()
-	timer.wait_time = duration
-	timer.autostart = false
-	timer.one_shot = false
-	add_child(timer)
-	timer.timeout.connect(_on_timeout)
-	return timer
 
 func _on_inventory_interface_drop_slot_data(slot_data: SlotData) -> void:
 	var pick_up: Area2D = PICKUP.instantiate()

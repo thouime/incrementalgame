@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Incremental Game"
+config/name="Skydle"
 run/main_scene="res://Stages/MainMenu/MainMenu.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
@@ -106,6 +106,7 @@ cancel={
 2d_physics/layer_3="Player"
 2d_physics/layer_4="Objects"
 2d_physics/layer_5="Walls"
+2d_physics/layer_8="Selection"
 2d_physics/layer_9="Layer 9"
 
 [rendering]

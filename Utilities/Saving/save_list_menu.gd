@@ -15,6 +15,10 @@ func _ready() -> void:
 	
 	var current_slot := 1
 	
+	# If the dictionary is empty, there aren't any saves
+	if not game_saves:
+		return
+		
 	for slot : String in game_saves["save_files"]:
 		# Create the button
 		var save_slot : HBoxContainer = SAVE_SLOT.instantiate()

@@ -133,7 +133,7 @@ func get_object_tiles(object: Node2D) -> Array:
 	
 	if unwalkable_shape:
 		var global_pos : Vector2 = unwalkable_shape.global_position
-		var size : Vector2 = unwalkable_shape.size * 2 # Objects are scaled
+		var size : Vector2 = unwalkable_shape.size * object.scale
 		var top_left : Vector2i = world_to_grid(global_pos)
 		var bottom_right : Vector2i = world_to_grid(global_pos + size)
 	

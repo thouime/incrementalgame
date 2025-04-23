@@ -43,6 +43,10 @@ func get_saves_data() -> Dictionary:
 	
 	var saves_path : String = SAVE_FOLDER + "saves.json"
 	
+	if not DirAccess.dir_exists_absolute(SAVE_FOLDER):
+		printerr("No save directory found.")
+		return {}
+	
 	# Create file storing info about saves if it doesn't exist
 	if not FileAccess.file_exists(saves_path):
 		var saves : Array = get_saves()
@@ -470,7 +474,7 @@ func add_shaders(new_object: StaticBody2D) -> void:
 		new_object.material = new_material
 
 func load_tiles(placed_tiles: Dictionary) -> void:
-	var world: Node2D = get_node("/root/Main/MainWorldVisual/MainWorld/World")
+	var world: Node2D = get_node("/root/Main/MainWorld/World")
 	var ground: TileMapLayer
 	var boundary: TileMapLayer
 	var tiles_to_build: Array

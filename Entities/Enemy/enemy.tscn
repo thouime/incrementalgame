@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://deeehp18tgi2d"]
+
+[ext_resource type="Script" path="res://Entities/Enemy/enemy.gd" id="1_rut03"]
+
+[node name="Enemy" type="Node2D"]
+script = ExtResource("1_rut03")

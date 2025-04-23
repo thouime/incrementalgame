@@ -1,6 +1,9 @@
 class_name PlayerClickMove
 extends State
 
+# Number of pixels to check for new positions while dragging LMB
+const DRAG_THRESHOLD := 150
+
 @export var idle_state : State
 @export var gather_state : State
 @export var build_state : State
@@ -8,7 +11,7 @@ extends State
 
 # Keep track of the target tile in a tile path array
 var current_target_index : int = 0
-var ready_to_build : bool = false
+var ready_to_build : bool = false 
 
 # Detect if the player is dragging the mouse after clicking
 var is_dragging : bool = false
@@ -25,6 +28,10 @@ var pathfinder : Node
 func enter() -> void:
 	
 	pathfinder = get_a_star()
+	
+	# Display an indicator on the target grid position
+	show_waypoint(parent.target_position)
+	
 	# Detect if the player is still holding left mouse button
 	is_dragging = Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)
 
@@ -57,19 +64,19 @@ func process_input(event: InputEvent) -> State:
 			# This will get set with the interact signal anyways
 			parent.interact_target = null
 			set_target_position(cursor_position)
+			
 			# Start path selection
 			is_dragging = true
 			start_tile = get_cursor_tile(event.position)
 			last_tile = start_tile
 			get_tile_path(parent.target_position)
 
-			#parent.target_position = parent.camera.get_global_mouse_position()
 		elif not event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 			# Stop updating path as mouse is released
 			is_dragging = false
 			
 	return null
-	
+
 func process_physics(delta: float) -> State:
 	
 	var velocity : Vector2  = move_towards_target(delta, parent.target_position)
@@ -77,6 +84,7 @@ func process_physics(delta: float) -> State:
 	# If the mouse is still being held down,
 	# prevent state change but update animation
 	if is_dragging:
+		
 		if velocity == Vector2.ZERO:
 			parent.animated_sprite.animation = idle_animations[parent.direction]
 		else:
@@ -104,9 +112,17 @@ func process_frame(_delta: float) -> State:
 	if ready_to_build:
 		return build_state
 		
+	# Need to check if cursor moved from original position by a threshold
 	# If the mouse is being dragged, update cursor position
 	if is_dragging:
 		cursor_position = parent.camera.get_global_mouse_position()
+		var drag_distance : float = (
+			parent.target_position.distance_to(cursor_position)
+		)
+		# Only update tile path if the cursor moves more than the threshold
+		if drag_distance < DRAG_THRESHOLD:
+			return
+		parent.interact_target = null
 		var current_tile : Vector2i = get_cursor_tile(cursor_position)
 
 		if current_tile != last_tile and current_tile.distance_to(last_tile) > 5:
@@ -188,8 +204,8 @@ func find_closest_tile_index(
 
 func move_towards_target(_delta: float, target_position: Vector2) -> Vector2:
 	
-	# Display an indicator on the target grid position
-	show_waypoint(target_position)
+	# Update waypoint
+	show_waypoint(parent.target_position)
 	
 	# Calculate a new path if there isn't one
 	if tile_path.size() == 0:
@@ -213,7 +229,6 @@ func move_towards_target(_delta: float, target_position: Vector2) -> Vector2:
 		if current_target_index >= tile_path.size():
 			# Ensure final snap to tile center
 			parent.position = tile_path[-1]
-			hide_waypoint()
 			return Vector2.ZERO  # Stop moving
 		
 		current_target = tile_path[current_target_index]
@@ -272,6 +287,7 @@ func get_closest_direction(direction: Vector2) -> Vector2:
 		return Vector2.DOWN
 
 func check_interaction() -> State:
+	
 	# If there is a target object that was clicked
 	if parent.interact_target:
 		face_object(parent.interact_target)
@@ -286,7 +302,9 @@ func _on_interact_signal(
 	offset: float,
 	object: StaticBody2D
 ) -> void:
-		
+
+	if is_dragging:
+		return
 	# Check if they are already interacting with the same object
 	if object != parent.interact_target:
 		parent.interact_target = object

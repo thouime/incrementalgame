@@ -31,7 +31,7 @@ func _ready() -> void:
 	set_animation()
 	state_machine.init(self, CraftingSystem)
 	start_a_star.call_deferred()
-
+	
 # Sprite and Animations
 func set_animation() -> void:
 	var current_animation : String = animated_sprite.animation
@@ -101,3 +101,28 @@ func get_drop_position() -> Vector2:
 
 func heal(heal_value: int) -> void:
 	health += heal_value
+
+# Check for collisions at the given point and collision mask
+func intersect_point(pos: Vector2, mask: int) -> Node2D:
+	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
+	var query: PhysicsPointQueryParameters2D = PhysicsPointQueryParameters2D.new()
+	query.position = pos
+	query.collide_with_areas = true
+	query.collide_with_bodies = true
+	query.collision_mask = mask
+	
+	var results: Array[Dictionary] = space_state.intersect_point(query, 32)
+	
+	for result: Dictionary in results:
+		var collider: Object = result["collider"]
+		if collider is Node2D and is_in_group_recursive(collider as Node, "interactables"):
+			return collider as Node2D
+
+	return null
+
+func is_in_group_recursive(node: Node, group: String) -> bool:
+	while node:
+		if node.is_in_group(group):
+			return true
+		node = node.get_parent()
+	return false
