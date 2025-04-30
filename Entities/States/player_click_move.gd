@@ -2,7 +2,7 @@ class_name PlayerClickMove
 extends State
 
 # Number of pixels to check for new positions while dragging LMB
-const DRAG_THRESHOLD := 150
+const DRAG_THRESHOLD := 50
 
 @export var idle_state : State
 @export var gather_state : State

@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=4 uid="uid://cftvtb33kjqt7"]
+[gd_scene load_steps=8 format=4 uid="uid://cftvtb33kjqt7"]
 
 [ext_resource type="Texture2D" uid="uid://dlxicdtjk25fb" path="res://Stages/Dungeons/Art/Dungeon_Tileset.png" id="1_h0nrj"]
+[ext_resource type="Script" path="res://Stages/Dungeons/GoblinCave/goblin_cave.gd" id="1_jfqik"]
 [ext_resource type="PackedScene" uid="uid://cqxkf0rt3anyd" path="res://Entities/Objects/ladder.tscn" id="2_pyhmx"]
 [ext_resource type="Script" path="res://Stages/Dungeons/GoblinCave/player_spawn.gd" id="2_txgom"]
 [ext_resource type="Script" path="res://Stages/Dungeons/GoblinCave/enemy_spawn.gd" id="3_q3heu"]
@@ -359,6 +360,7 @@ terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_v4w23")
 
 [node name="GoblinCave" type="Node2D"]
+script = ExtResource("1_jfqik")
 
 [node name="Ground" type="TileMapLayer" parent="."]
 position = Vector2(128, 160)
@@ -379,7 +381,7 @@ color = Color(0.117647, 1, 1, 0.243137)
 [node name="EnemySpawns" type="Node2D" parent="."]
 
 [node name="EnemySpawn1" type="Marker2D" parent="EnemySpawns"]
-position = Vector2(624, 64)
+position = Vector2(608, 32)
 script = ExtResource("3_q3heu")
 metadata/_edit_group_ = true
 
@@ -389,7 +391,7 @@ offset_bottom = 16.0
 color = Color(1, 0.152941, 0.0980392, 0.243137)
 
 [node name="EnemySpawn2" type="Marker2D" parent="EnemySpawns"]
-position = Vector2(576, 144)
+position = Vector2(640, 64)
 script = ExtResource("3_q3heu")
 metadata/_edit_group_ = true
 
@@ -399,7 +401,7 @@ offset_bottom = 16.0
 color = Color(1, 0.152941, 0.0980392, 0.243137)
 
 [node name="EnemySpawn3" type="Marker2D" parent="EnemySpawns"]
-position = Vector2(720, 160)
+position = Vector2(736, 88)
 script = ExtResource("3_q3heu")
 metadata/_edit_group_ = true
 
@@ -409,7 +411,7 @@ offset_bottom = 16.0
 color = Color(1, 0.152941, 0.0980392, 0.243137)
 
 [node name="EnemySpawn4" type="Marker2D" parent="EnemySpawns"]
-position = Vector2(672, 184)
+position = Vector2(688, 88)
 script = ExtResource("3_q3heu")
 metadata/_edit_group_ = true
 
@@ -419,7 +421,7 @@ offset_bottom = 16.0
 color = Color(1, 0.152941, 0.0980392, 0.243137)
 
 [node name="EnemySpawn5" type="Marker2D" parent="EnemySpawns"]
-position = Vector2(800, 80)
+position = Vector2(784, 64)
 script = ExtResource("3_q3heu")
 metadata/_edit_group_ = true
 
@@ -428,8 +430,28 @@ offset_right = 16.0
 offset_bottom = 16.0
 color = Color(1, 0.152941, 0.0980392, 0.243137)
 
+[node name="EnemySpawn11" type="Marker2D" parent="EnemySpawns"]
+position = Vector2(816, 32)
+script = ExtResource("3_q3heu")
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn11"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(1, 0.152941, 0.0980392, 0.243137)
+
+[node name="EnemySpawn12" type="Marker2D" parent="EnemySpawns"]
+position = Vector2(712, 32)
+script = ExtResource("3_q3heu")
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn12"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(1, 0.152941, 0.0980392, 0.243137)
+
 [node name="EnemySpawn6" type="Marker2D" parent="EnemySpawns"]
-position = Vector2(512, 480)
+position = Vector2(592, 496)
 script = ExtResource("3_q3heu")
 metadata/_edit_group_ = true
 
@@ -437,6 +459,27 @@ metadata/_edit_group_ = true
 offset_right = 16.0
 offset_bottom = 16.0
 color = Color(1, 0.152941, 0.0980392, 0.243137)
+
+[node name="PatrolPoints" type="Node2D" parent="EnemySpawns/EnemySpawn6"]
+position = Vector2(-592, -496)
+
+[node name="PatrolPoint" type="Marker2D" parent="EnemySpawns/EnemySpawn6/PatrolPoints"]
+position = Vector2(528, 464)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn6/PatrolPoints/PatrolPoint"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
+[node name="PatrolPoint2" type="Marker2D" parent="EnemySpawns/EnemySpawn6/PatrolPoints"]
+position = Vector2(704, 496)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn6/PatrolPoints/PatrolPoint2"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
 
 [node name="EnemySpawn7" type="Marker2D" parent="EnemySpawns"]
 position = Vector2(384, 480)
@@ -448,8 +491,29 @@ offset_right = 16.0
 offset_bottom = 16.0
 color = Color(1, 0.152941, 0.0980392, 0.243137)
 
+[node name="PatrolPoints" type="Node2D" parent="EnemySpawns/EnemySpawn7"]
+position = Vector2(-384, -480)
+
+[node name="PatrolPoint" type="Marker2D" parent="EnemySpawns/EnemySpawn7/PatrolPoints"]
+position = Vector2(368, 448)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn7/PatrolPoints/PatrolPoint"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
+[node name="PatrolPoint2" type="Marker2D" parent="EnemySpawns/EnemySpawn7/PatrolPoints"]
+position = Vector2(512, 512)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn7/PatrolPoints/PatrolPoint2"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
 [node name="EnemySpawn8" type="Marker2D" parent="EnemySpawns"]
-position = Vector2(624, 480)
+position = Vector2(704, 400)
 script = ExtResource("3_q3heu")
 metadata/_edit_group_ = true
 
@@ -458,8 +522,46 @@ offset_right = 16.0
 offset_bottom = 16.0
 color = Color(1, 0.152941, 0.0980392, 0.243137)
 
+[node name="PatrolPoints" type="Node2D" parent="EnemySpawns/EnemySpawn8"]
+
+[node name="PatrolPoint" type="Marker2D" parent="EnemySpawns/EnemySpawn8/PatrolPoints"]
+position = Vector2(672, 416)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn8/PatrolPoints/PatrolPoint"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
+[node name="PatrolPoint2" type="Marker2D" parent="EnemySpawns/EnemySpawn8/PatrolPoints"]
+position = Vector2(752, 416)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn8/PatrolPoints/PatrolPoint2"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
+[node name="PatrolPoint3" type="Marker2D" parent="EnemySpawns/EnemySpawn8/PatrolPoints"]
+position = Vector2(752, 240)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn8/PatrolPoints/PatrolPoint3"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
+[node name="PatrolPoint4" type="Marker2D" parent="EnemySpawns/EnemySpawn8/PatrolPoints"]
+position = Vector2(672, 240)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn8/PatrolPoints/PatrolPoint4"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
 [node name="EnemySpawn9" type="Marker2D" parent="EnemySpawns"]
-position = Vector2(576, 496)
+position = Vector2(720, 256)
 script = ExtResource("3_q3heu")
 metadata/_edit_group_ = true
 
@@ -468,8 +570,46 @@ offset_right = 16.0
 offset_bottom = 16.0
 color = Color(1, 0.152941, 0.0980392, 0.243137)
 
+[node name="PatrolPoints" type="Node2D" parent="EnemySpawns/EnemySpawn9"]
+
+[node name="PatrolPoint" type="Marker2D" parent="EnemySpawns/EnemySpawn9/PatrolPoints"]
+position = Vector2(672, 416)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn9/PatrolPoints/PatrolPoint"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
+[node name="PatrolPoint2" type="Marker2D" parent="EnemySpawns/EnemySpawn9/PatrolPoints"]
+position = Vector2(752, 416)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn9/PatrolPoints/PatrolPoint2"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
+[node name="PatrolPoint3" type="Marker2D" parent="EnemySpawns/EnemySpawn9/PatrolPoints"]
+position = Vector2(752, 240)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn9/PatrolPoints/PatrolPoint3"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
+[node name="PatrolPoint4" type="Marker2D" parent="EnemySpawns/EnemySpawn9/PatrolPoints"]
+position = Vector2(672, 240)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn9/PatrolPoints/PatrolPoint4"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
 [node name="EnemySpawn10" type="Marker2D" parent="EnemySpawns"]
-position = Vector2(208, 304)
+position = Vector2(256, 400)
 script = ExtResource("3_q3heu")
 metadata/_edit_group_ = true
 
@@ -478,5 +618,37 @@ offset_right = 16.0
 offset_bottom = 16.0
 color = Color(1, 0.152941, 0.0980392, 0.243137)
 
+[node name="PatrolPoints" type="Node2D" parent="EnemySpawns/EnemySpawn10"]
+position = Vector2(-256, -400)
+
+[node name="PatrolPoint" type="Marker2D" parent="EnemySpawns/EnemySpawn10/PatrolPoints"]
+position = Vector2(256, 288)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn10/PatrolPoints/PatrolPoint"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
+[node name="PatrolPoint2" type="Marker2D" parent="EnemySpawns/EnemySpawn10/PatrolPoints"]
+position = Vector2(160, 400)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn10/PatrolPoints/PatrolPoint2"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
+[node name="PatrolPoint3" type="Marker2D" parent="EnemySpawns/EnemySpawn10/PatrolPoints"]
+position = Vector2(288, 448)
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="EnemySpawns/EnemySpawn10/PatrolPoints/PatrolPoint3"]
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(0.715831, 0.361756, 0.163783, 0.243137)
+
 [node name="Ladder" parent="." instance=ExtResource("2_pyhmx")]
 position = Vector2(109, 204)
+
+[node name="PatrolPoints" type="Node2D" parent="."]

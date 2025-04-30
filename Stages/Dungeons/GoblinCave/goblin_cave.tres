@@ -5,7 +5,7 @@
 
 [resource]
 script = ExtResource("1_yg8y8")
-dungeon_name = "Goblin Cave"
+name = "Goblin Cave"
 difficulty = 1
 estimated_completion = 0
 enemy_count = 10

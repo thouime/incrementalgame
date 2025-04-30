@@ -1,6 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://deeehp18tgi2d"]
+[gd_scene load_steps=3 format=3 uid="uid://deeehp18tgi2d"]
 
 [ext_resource type="Script" path="res://Entities/Enemy/enemy.gd" id="1_rut03"]
 
-[node name="Enemy" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hu42a"]
+
+[node name="Enemy" type="CharacterBody2D"]
+z_index = 3
 script = ExtResource("1_rut03")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_hu42a")

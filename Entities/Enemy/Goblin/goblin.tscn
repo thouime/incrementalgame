@@ -1,7 +1,11 @@
-[gd_scene load_steps=42 format=3 uid="uid://cvs7h2d6kjk5g"]
+[gd_scene load_steps=47 format=3 uid="uid://cvs7h2d6kjk5g"]
 
 [ext_resource type="Script" path="res://Entities/Enemy/Goblin/goblin.gd" id="1_exp43"]
 [ext_resource type="Texture2D" uid="uid://dgoei6ltb7ed2" path="res://Entities/Enemy/Goblin/Art/Torch_Red.png" id="2_b30ch"]
+[ext_resource type="Script" path="res://Entities/Enemy/StateMachine/ai_state_machine.gd" id="3_l4asc"]
+[ext_resource type="PackedScene" uid="uid://cxhslr7musn0q" path="res://Entities/Enemy/StateMachine/wander.tscn" id="4_5bqax"]
+[ext_resource type="PackedScene" uid="uid://33t0n5w1dix" path="res://Entities/Enemy/StateMachine/enemy_idle.tscn" id="5_arvjo"]
+[ext_resource type="PackedScene" uid="uid://by85hgvr7gewi" path="res://Entities/Enemy/StateMachine/chase.tscn" id="6_mlfi2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1hysl"]
 atlas = ExtResource("2_b30ch")
@@ -302,9 +306,33 @@ animations = [{
 "speed": 10.0
 }]
 
-[node name="Goblin" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pjqho"]
+size = Vector2(32, 42)
+
+[node name="Goblin" type="CharacterBody2D"]
+z_index = 2
+scale = Vector2(0.4, 0.4)
+collision_layer = 256
+collision_mask = 28
 script = ExtResource("1_exp43")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_xl4n4")
-animation = &"Attack_Left"
+animation = &"Idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.25, 3.75)
+shape = SubResource("RectangleShape2D_pjqho")
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("3_l4asc")
+initial_state = NodePath("EnemyIdle")
+
+[node name="Wander" parent="StateMachine" node_paths=PackedStringArray("idle_state", "chase_state") instance=ExtResource("4_5bqax")]
+idle_state = NodePath("../EnemyIdle")
+chase_state = NodePath("../Chase")
+
+[node name="EnemyIdle" parent="StateMachine" node_paths=PackedStringArray("wander_state") instance=ExtResource("5_arvjo")]
+wander_state = NodePath("../Wander")
+
+[node name="Chase" parent="StateMachine" instance=ExtResource("6_mlfi2")]

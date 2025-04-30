@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bb20s8yg8iuot"]
+[gd_scene load_steps=32 format=3 uid="uid://bb20s8yg8iuot"]
 
 [ext_resource type="Script" path="res://Stages/World/main_world.gd" id="1_j4arc"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="2_ncyc6"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://bsgr3kae0gnej" path="res://Stages/Dungeons/dungeon_entrance.tscn" id="13_ia6bm"]
 [ext_resource type="PackedScene" uid="uid://cftvtb33kjqt7" path="res://Stages/Dungeons/GoblinCave/GoblinCave.tscn" id="14_a630w"]
 [ext_resource type="Script" path="res://Stages/Dungeons/dungeon_resource.gd" id="15_tvy4p"]
+[ext_resource type="PackedScene" uid="uid://cvs7h2d6kjk5g" path="res://Entities/Enemy/Goblin/goblin.tscn" id="15_utjb4"]
 [ext_resource type="PackedScene" uid="uid://by4s6muul7tdg" path="res://Entities/Objects/composter.tscn" id="16_dod5n"]
 [ext_resource type="PackedScene" uid="uid://6nrx3gn8vdr3" path="res://Utilities/Menus/hub_menu.tscn" id="17_3ra2a"]
 
@@ -245,16 +246,15 @@ shader_parameter/focus = 0
 [sub_resource type="Resource" id="Resource_y1gps"]
 script = ExtResource("15_tvy4p")
 name = "Goblin Cave"
+dungeon_scene = ExtResource("14_a630w")
+enemy_count = 0
 difficulty = 1
 estimated_completion = 0
-enemy_count = 10
 loot_table = Array[String]([])
 completions = 0
-dungeon = ExtResource("14_a630w")
+enemy_types = Array[PackedScene]([ExtResource("15_utjb4")])
 
 [node name="Main" type="Node"]
-
-[node name="DungeonWorld" type="Node2D" parent="."]
 
 [node name="MainWorld" type="Node2D" parent="."]
 script = ExtResource("1_j4arc")
@@ -278,6 +278,7 @@ region_rect = Rect2(80, 0, 16, 16)
 z_index = 2
 position = Vector2(0, 0)
 scale = Vector2(1, 1)
+collision_layer = 6
 inventory_data = SubResource("Resource_66drq")
 equip_inventory_data = SubResource("Resource_0msbn")
 
@@ -307,3 +308,5 @@ position = Vector2(337, 527)
 [node name="HubMenu" parent="MainWorld/UI" instance=ExtResource("17_3ra2a")]
 process_mode = 3
 metadata/_edit_lock_ = true
+
+[node name="DungeonWorld" type="Node2D" parent="."]

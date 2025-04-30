@@ -59,21 +59,30 @@ func _on_enter_dungeon(dungeon_data: DungeonResource) -> void:
 	hub_menu.close_settings_menu()
 	main_world.hide()
 	set_dungeon_collisions()
-	var dungeon : Node = dungeon_data.dungeon.instantiate()
+	var dungeon : Node = dungeon_data.dungeon_scene.instantiate()
 	if dungeon:
 		dungeon_world.add_child(dungeon)
-		player.reparent(dungeon)
-		connect_ladder_exit(dungeon)
-		player.a_star_pathfinding.reset_astar()
-		player.a_star_pathfinding.initialize_astar(dungeon)
-		player.state_machine._connect_interact_signals()
-		player.position = dungeon.get_node("PlayerSpawn").position
-		player.show()
+		setup_dungeon(dungeon, dungeon_data)
+		move_to_dungeon(dungeon)
 	else:
 		printerr("Warning: Dungeon Scene not set on ", dungeon_data.name)
 
 	print("Entering Dungeon...")
 
+func setup_dungeon(dungeon: Node, dungeon_data: DungeonResource) -> void:
+	dungeon.dungeon_data = dungeon_data
+	dungeon.spawn_enemies()
+
+func move_to_dungeon(dungeon: Node) -> void:
+	player.reparent(dungeon)
+	connect_ladder_exit(dungeon)
+	player.a_star_pathfinding.reset_astar()
+	player.a_star_pathfinding.initialize_astar(dungeon)
+	player.state_machine._connect_interact_signals()
+	player.world_position = player.position
+	player.position = dungeon.get_node("PlayerSpawn").position
+	player.show()
+	
 func _on_dungeon_menu_closed() -> void:
 
 	if hub_menu.dungeon_start.is_connected(_on_enter_dungeon):
@@ -96,7 +105,8 @@ func _on_exit_dungeon(dungeon: Node2D) -> void:
 		player.a_star_pathfinding.reset_astar()
 		player.a_star_pathfinding.initialize_astar(world)
 		# store player position that was entered from and move them here
-		player.position = world.get_node("PlayerSpawn").position
+		player.position = player.world_position
+		player.world_position = world.get_node("PlayerSpawn").position
 		print("Spawn Position: ", world.get_node("PlayerSpawn").position)
 		main_world.show()
 	else:
@@ -113,6 +123,7 @@ func set_dungeon_collisions() -> void:
 	
 	# set dungeon collisions
 	player.set_collision_mask_value(5, true) # Walls
+	player.set_collision_mask_value(9, true) # Enemies
 
 # Set collisions for world interactions
 func set_world_collisions() -> void:
@@ -120,6 +131,7 @@ func set_world_collisions() -> void:
 	player.set_collision_mask_value(4, true) # Objects
 	
 	player.set_collision_mask_value(5, false) # Walls
+	player.set_collision_mask_value(9, false) # Enemies
 
 # Run this code when the game is being closed
 func _notification(what: int) -> void:

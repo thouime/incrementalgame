@@ -1,4 +1,4 @@
-extends Node2D
+extends CharacterBody2D
 class_name Enemy
 
 var health : int :
@@ -11,3 +11,6 @@ var attack : int :
 		return attack
 	set(value):
 		attack = value
+
+var speed : int = 75
+var enemy_name : String = "Enemy"
