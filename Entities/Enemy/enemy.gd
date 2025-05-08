@@ -1,6 +1,8 @@
 extends CharacterBody2D
 class_name Enemy
 
+@export var speed : int = 75
+
 var health : int :
 	get():
 		return health
@@ -12,5 +14,4 @@ var attack : int :
 	set(value):
 		attack = value
 
-var speed : int = 75
 var enemy_name : String = "Enemy"

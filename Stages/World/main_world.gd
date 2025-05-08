@@ -123,7 +123,6 @@ func set_dungeon_collisions() -> void:
 	
 	# set dungeon collisions
 	player.set_collision_mask_value(5, true) # Walls
-	player.set_collision_mask_value(9, true) # Enemies
 
 # Set collisions for world interactions
 func set_world_collisions() -> void:

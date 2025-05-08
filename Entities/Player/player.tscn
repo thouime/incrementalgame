@@ -1,4 +1,4 @@
-[gd_scene load_steps=61 format=3 uid="uid://dn215u4niu0ji"]
+[gd_scene load_steps=62 format=3 uid="uid://dn215u4niu0ji"]
 
 [ext_resource type="Script" path="res://Entities/Player/player.gd" id="1_87i8y"]
 [ext_resource type="Texture2D" uid="uid://c4ifn1fjbi2ye" path="res://Assets/Art/characters/player.png" id="2_qrrvf"]
@@ -398,6 +398,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bas63"]
 size = Vector2(14, 4)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_avowd"]
+size = Vector2(14, 24)
+
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(321, 514)
 scale = Vector2(0.5, 0.5)
@@ -416,6 +419,14 @@ offset = Vector2(0, -16)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_bas63")
+
+[node name="BodyCollision" type="CharacterBody2D" parent="."]
+collision_layer = 4
+collision_mask = 24
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BodyCollision"]
+position = Vector2(1, -10)
+shape = SubResource("RectangleShape2D_avowd")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 

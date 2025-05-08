@@ -17,16 +17,20 @@ func enter() -> void:
 	wait_timer.timeout.connect(_on_wait_finished)
 
 func exit() -> void:
+	parent.direction = Vector2.ZERO
+	parent.velocity = Vector2.ZERO
+	is_waiting = false
+	wait_timer.stop()
 	wait_timer.timeout.disconnect(_on_wait_finished)
 	
 func process_physics(_delta: float) -> EnemyState:
 	
+	# Check if target is close enough to start chasing
+	if target_in_range(parent.chase_range):
+		return chase_state
+	
 	if is_waiting or parent.positions.is_empty():
 		return
-	
-	# Check if target is close enough to start chasing
-	if target_in_range(500):
-		return chase_state
 	
 	if parent.global_position.distance_to(parent.current_position) < 36:
 		parent.direction = Vector2.ZERO
