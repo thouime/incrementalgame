@@ -6,12 +6,14 @@ signal toggle_inventory()
 @export var player_speed: int = 400
 @export var inventory_data: InventoryData
 @export var equip_inventory_data: InventoryDataEquip
+@export var chase_range : float
+@export var attack_range : float
 #var state = State.IDLE
 var screen_size : Vector2
 var player_size : Vector2
 var sprite_offset : Vector2 = Vector2(144, 144)
 var direction: Vector2 = Vector2.UP
-var health : int = 5
+var health : int = 100
 var target_position : Vector2 = Vector2.ZERO
 var interact_target : Node = null
 var placed_tiles : Dictionary
@@ -22,6 +24,7 @@ var world_position : Vector2
 @onready var interact_ray : RayCast2D = $Camera2D/InteractRay
 @onready var state_machine : Node = $StateMachine
 @onready var a_star_pathfinding: Node = $AStarPathfinding
+@onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -102,6 +105,16 @@ func get_drop_position() -> Vector2:
 
 func heal(heal_value: int) -> void:
 	health += heal_value
+
+func take_damage(damage: int) -> void:
+	print("Player took damage!")
+	health -= damage
+	print("Current Health: ", health)
+	if health <= 0:
+		death()
+
+func death() -> void:
+	print("The player is dead!")
 
 # Check for collisions at the given point and collision mask
 func intersect_point(pos: Vector2, mask: int) -> Node2D:

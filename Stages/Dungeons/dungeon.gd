@@ -1,5 +1,5 @@
 extends Node
-class_name dungeon
+class_name Dungeon
 
 var dungeon_data: DungeonResource:
 	

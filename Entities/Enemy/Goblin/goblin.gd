@@ -1,9 +1,12 @@
 extends "res://Entities/Enemy/enemy.gd"
 
-@export var chase_range : float
+# Combat values
 @export var attack_range : float
 # How many attacks per second
 @export var attack_speed : float
+
+@export var chase_range : float
+# Debugging enemy chase range
 @export var draw_range : bool = false
 
 var current_position : Vector2
@@ -38,7 +41,11 @@ func _draw() -> void:
 		draw_circle(Vector2.ZERO, chase_range / scale.x, Color(1, 0, 0, 0.5))
 		var d = global_position.distance_to(target.global_position)
 		if d < chase_range:
-			draw_line(to_local(global_position), to_local(target.global_position), Color.GREEN)
+			draw_line(
+				to_local(global_position), 
+				to_local(target.global_position), 
+				Color.GREEN
+			)
 
 func get_direction(direction: Vector2) -> String:
 	if abs(direction.x) > abs(direction.y):

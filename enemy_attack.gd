@@ -61,8 +61,12 @@ func perform_attack() -> void:
 	# atttack animation
 	parent.animated_sprite.play(get_attack_direction())
 	# reduce health
+	var damage : int = parent.get_attack_damage()
+	print("Enemy Damage: ", damage)
+	if damage > 0:
+		parent.target.take_damage(damage)
 
 func _on_animation_finished() -> void:
-	print("animation finished")
+
 	if parent.animated_sprite.animation.begins_with("Attack"):
 		parent.animated_sprite.play("Idle")

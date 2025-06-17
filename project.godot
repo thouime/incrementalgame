@@ -17,12 +17,13 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-PlayerManager="*res://Entities/Player/player_manager.gd"
+PlayerManager="*res://Entities/Player/PlayerManager.gd"
 CraftingSystem="*res://Utilities/Crafting/crafting_system.gd"
 AudioManager="*res://Utilities/Audio/AudioManager.tscn"
 SettingsManager="*res://Utilities/Saving/SettingsManager.gd"
 GameSaveManager="*res://Utilities/Saving/SaveGameManager.gd"
 Helper="*res://Utilities/Misc/helper.gd"
+DungeonManager="*res://Stages/Dungeons/DungeonManager.gd"
 
 [debug]
 

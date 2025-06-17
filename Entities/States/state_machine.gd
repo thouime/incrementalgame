@@ -3,6 +3,7 @@ extends Node
 signal state_changed(state: State)
 
 @export var initial_state : State
+@export var dungeon_state : State
 var current_state : State
 # Keep track of the last direction the player was facing for animations
 var last_direction : Vector2 = Vector2.UP

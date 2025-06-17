@@ -316,9 +316,10 @@ scale = Vector2(0.4, 0.4)
 collision_layer = 256
 collision_mask = 24
 script = ExtResource("1_exp43")
-chase_range = 100.0
 attack_range = 24.0
 attack_speed = 0.25
+chase_range = 100.0
+attack = 1
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_xl4n4")

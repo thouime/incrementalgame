@@ -72,6 +72,7 @@ func _on_enter_dungeon(dungeon_data: DungeonResource) -> void:
 func setup_dungeon(dungeon: Node, dungeon_data: DungeonResource) -> void:
 	dungeon.dungeon_data = dungeon_data
 	dungeon.spawn_enemies()
+	DungeonManager.set_dungeon(dungeon, dungeon_data)
 
 func move_to_dungeon(dungeon: Node) -> void:
 	player.reparent(dungeon)
@@ -81,6 +82,7 @@ func move_to_dungeon(dungeon: Node) -> void:
 	player.state_machine._connect_interact_signals()
 	player.world_position = player.position
 	player.position = dungeon.get_node("PlayerSpawn").position
+	player.state_machine.change_state(player.state_machine.dungeon_state)
 	player.show()
 	
 func _on_dungeon_menu_closed() -> void:
