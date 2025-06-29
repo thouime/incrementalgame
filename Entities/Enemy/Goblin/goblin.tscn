@@ -319,11 +319,12 @@ script = ExtResource("1_exp43")
 attack_range = 24.0
 attack_speed = 0.25
 chase_range = 100.0
-attack = 1
+health = 10
+attack_power = 3
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_xl4n4")
-animation = &"Walking"
+animation = &"Attack_Down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1.25, 3.75)
@@ -343,8 +344,9 @@ initial_state = NodePath("EnemyIdle")
 idle_state = NodePath("../EnemyIdle")
 chase_state = NodePath("../Chase")
 
-[node name="EnemyIdle" parent="StateMachine" node_paths=PackedStringArray("wander_state") instance=ExtResource("5_arvjo")]
+[node name="EnemyIdle" parent="StateMachine" node_paths=PackedStringArray("wander_state", "chase_state") instance=ExtResource("5_arvjo")]
 wander_state = NodePath("../Wander")
+chase_state = NodePath("../Chase")
 
 [node name="Chase" parent="StateMachine" node_paths=PackedStringArray("idle_state", "attack_state") instance=ExtResource("6_mlfi2")]
 idle_state = NodePath("../EnemyIdle")

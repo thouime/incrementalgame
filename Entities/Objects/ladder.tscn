@@ -51,3 +51,4 @@ offset_bottom = 16.0
 color = Color(1, 0, 0, 0.0980392)
 
 [node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+radius = 26.67

@@ -12,3 +12,19 @@ func str_to_vector2i(vector_str: String) -> Vector2i:
 	var coords: Array = cleaned_str.split(",")
 	var restored_vector := Vector2i(coords[0].to_int(), coords[1].to_int())
 	return restored_vector
+
+func get_animation_duration(
+	anim_sprite: AnimatedSprite2D, anim_name: String
+) -> float:
+	var frames : SpriteFrames = anim_sprite.sprite_frames
+	if not frames or not frames.has_animation(anim_name):
+		printerr("No frames or animation for given animation name!")
+		return 0.0
+	
+	var frame_count : int = frames.get_frame_count(anim_name)
+	var fps : float = frames.get_animation_speed(anim_name)
+	
+	if fps == 0:
+		return 0.0
+		
+	return frame_count / fps

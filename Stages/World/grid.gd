@@ -54,7 +54,7 @@ func set_cursor(sprite: Sprite2D) -> void:
 			texture_size = build_cursor.texture.get_size()
 		
 		# Scale the cursor size in the case of different sized textures
-		var scale_factor = CURSOR_SIZE / texture_size
+		var scale_factor : Vector2 = CURSOR_SIZE / texture_size
 		build_cursor.set_scale(scale_factor)
 
 func set_cursor_texture(

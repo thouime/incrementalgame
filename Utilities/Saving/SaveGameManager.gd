@@ -208,15 +208,19 @@ func save_game() -> void:
 	var inventory_slots := player_inventory.get_inventory_slots()
 	# JSON doesn't support many of Godot's types such as Vector2.
 	# var_to_str can be used to convert any Variant to a String.
+	# Keep track of the player's world position, if the player is in a dungeon
+	var world_position : Vector2 = player.global_position
+	if DungeonManager.current_dungeon:
+		world_position = player.world_position
+	
 	var save_dict := {
 		save = {
 			save_name = current_save,
 			duration = PlayerManager.time_played
 		},
 		player = {
-			position = var_to_str(player.position),
+			position = var_to_str(world_position),
 			direction = var_to_str(player.direction),
-			animation = player.animated_sprite.animation,
 			health = var_to_str(player.health),
 			inventory = serialize_inventory(inventory_slots)
 		},
@@ -353,12 +357,6 @@ func load_game() -> bool:
 	# JSON doesn't support many of Godot's types such as Vector2.
 	# str_to_var can be used to convert a String to the corresponding 
 	player.position = str_to_var(save_dict.player.position)
-	if save_dict["player"].has("animation"):
-		player.animated_sprite.animation = save_dict.player.animation
-		player.direction = str_to_var(save_dict.player.direction)
-		# Flip the sprite if facing left
-		if player.velocity.x != 0:
-			player.animated_sprite.flip_h = player.velocity.x < 0
 	player.health = str_to_var(save_dict.player.health)
 	
 	var player_inventory : InventoryData = player.inventory_data

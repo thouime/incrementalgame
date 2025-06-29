@@ -28,6 +28,8 @@ func _ready() -> void:
 	if not GameSaveManager.load_game():
 		new_game.call_deferred()
 	player.world = world
+	player.main_world = main_world
+	player.exit_dungeon.connect(_on_exit_dungeon)
 	
 	connect_dungeons.call_deferred()
 	
@@ -109,8 +111,8 @@ func _on_exit_dungeon(dungeon: Node2D) -> void:
 		# store player position that was entered from and move them here
 		player.position = player.world_position
 		player.world_position = world.get_node("PlayerSpawn").position
-		print("Spawn Position: ", world.get_node("PlayerSpawn").position)
 		main_world.show()
+		player.health = 100
 	else:
 		printerr("Warning: dungeon does not exist!")
 	

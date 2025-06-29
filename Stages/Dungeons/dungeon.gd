@@ -16,17 +16,16 @@ func spawn_enemies() -> void:
 		printerr("Warning: Dungeon Scene not set on: ", dungeon_data.name)
 		return
 	
-	var enemy_types = dungeon_data.enemy_types
+	var enemy_types : Array = dungeon_data.enemy_types
 	if not enemy_types.size() > 0:
 		printerr("Warning: No Enemy scenes set on: ", dungeon_data.name)
 	
 	# Instantiate enemy scenes using marker nodes in a dungeon
-	var enemy_scene = enemy_types[0]
-	var enemy_spawns = get_node("EnemySpawns")
+	var enemy_scene : PackedScene = enemy_types[0]
+	var enemy_spawns : Node2D = get_node("EnemySpawns")
 	create_enemies(enemy_scene, enemy_spawns)
-	
 
-func create_enemies(enemy_scene: PackedScene, spawns: Node2D):
+func create_enemies(enemy_scene: PackedScene, spawns: Node2D) -> void:
 	
 	if not spawns:
 		printerr("No enemy marker spawns found in ", dungeon_data.name)
@@ -36,12 +35,12 @@ func create_enemies(enemy_scene: PackedScene, spawns: Node2D):
 		if child is not Marker2D:
 			continue
 		
-		var enemy = enemy_scene.instantiate()
+		var enemy : Enemy = enemy_scene.instantiate()
 		enemy.position = child.position
 		
 		# If the enemy has a patrol points Node, setup wandering
 		if child.has_node("PatrolPoints"):
-			var patrol_group = child.get_node("PatrolPoints")
+			var patrol_group : Node2D = child.get_node("PatrolPoints")
 			set_wander(enemy, patrol_group)
 			
 		add_child(enemy)
@@ -50,6 +49,6 @@ func set_wander(enemy: Node2D, patrol_group : Node2D) -> void:
 	var patrol_points : Array = []
 	
 	for patrol_point in patrol_group.get_children():
-		patrol_points.append(patrol_point.position)
+		patrol_points.append(patrol_point.global_position)
 	
 	enemy.positions = patrol_points

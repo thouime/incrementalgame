@@ -11,8 +11,15 @@ func initialize_astar(world_node: Node2D) -> void:
 	world = world_node
 	if not world:
 		return
+	
+	if world.has_node("NavigationRegion2D"):
+		var nav_region : NavigationRegion2D = world.get_node(
+			"NavigationRegion2D"
+		)
+		tile_map_ground = nav_region.get_node("Ground")
+	else:
+		tile_map_ground = world.get_node("Ground")
 		
-	tile_map_ground = world.get_node("Ground")
 	tile_size = tile_map_ground.tile_set.tile_size
 	get_tiles()
 	

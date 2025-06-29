@@ -104,7 +104,7 @@ cancel={
 [layer_names]
 
 2d_physics/layer_1="Boundary"
-2d_navigation/layer_1="Enemy"
+2d_navigation/layer_1="Layer 1"
 2d_physics/layer_2="Player Feet"
 2d_physics/layer_3="Player"
 2d_physics/layer_4="Objects"

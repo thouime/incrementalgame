@@ -274,7 +274,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ofvvy")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_down",
 "speed": 5.0
 }, {
@@ -291,7 +291,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_1tr3q")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_left",
 "speed": 5.0
 }, {
@@ -308,7 +308,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_csm0j")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_right",
 "speed": 5.0
 }, {
@@ -325,7 +325,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_su4fx")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack_up",
 "speed": 5.0
 }, {
@@ -339,7 +339,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_03f0h")
 }],
-"loop": true,
+"loop": false,
 "name": &"death",
 "speed": 5.0
 }, {
@@ -543,12 +543,14 @@ script = ExtResource("1_87i8y")
 player_speed = 200
 chase_range = 200.0
 attack_range = 24.0
+attack_speed = 1.0
+attack_power = 5.0
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_j0kbs")
-animation = &"attack_left"
+animation = &"idle_down"
 offset = Vector2(0, -16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -572,6 +574,10 @@ collision_mask = 5
 collide_with_areas = true
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 10.0
+avoidance_enabled = true
+avoidance_layers = 0
+debug_path_custom_color = Color(0.011953, 0.0980029, 0.124912, 1)
 
 [node name="AStarPathfinding" parent="." instance=ExtResource("11_q3ijd")]
 
@@ -632,5 +638,6 @@ texture = ExtResource("10_n6sx7")
 region_enabled = true
 region_rect = Rect2(80, 0, 16, 16)
 
-[node name="PlayerDungeon" type="Node" parent="StateMachine"]
+[node name="PlayerDungeon" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state")]
 script = ExtResource("14_sq8v8")
+idle_state = NodePath("../PlayerIdle")

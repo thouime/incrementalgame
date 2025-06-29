@@ -4,7 +4,6 @@ extends "res://Entities/Enemy/StateMachine/enemy_state.gd"
 @export var attack_state : EnemyState
 
 func enter() -> void:
-	print("Entered chase state")
 	set_animation()
 
 func exit() -> void:
@@ -20,13 +19,13 @@ func process_physics(_delta: float) -> EnemyState:
 	if not target_in_range(parent.chase_range * 2):
 		return idle_state
 	
-	var target_position = parent.target.global_position
+	var target_position : Vector2 = parent.target.global_position
 	parent.nav_agent.target_position = target_position
 	
-	var next_point = parent.nav_agent.get_next_path_position()
-	var direction = (next_point - parent.global_position).normalized()
-	var push_force = get_separation_force()
-	var movement_velocity = direction * parent.speed
+	var next_point : Vector2 = parent.nav_agent.get_next_path_position()
+	var direction : Vector2 = (next_point - parent.global_position).normalized()
+	var push_force : Vector2 = get_separation_force()
+	var movement_velocity : Vector2 = direction * parent.speed
 	parent.velocity = movement_velocity + push_force
 	
 	parent.move_and_slide()
@@ -42,7 +41,7 @@ func process_frame(_delta: float) -> EnemyState:
 
 func set_animation() -> void:
 	
-	var direction = parent.velocity
+	var direction : Vector2 = parent.velocity
 	if direction:
 		parent.animated_sprite.play("Walking")
 		parent.animated_sprite.flip_h = direction.x < 0
@@ -53,7 +52,7 @@ func target_in_range(distance: float) -> bool:
 		printerr("This is no target!")
 		return false
 	
-	var target_position = parent.target.global_position
+	var target_position : Vector2 = parent.target.global_position
 	
 	if parent.global_position.distance_to(target_position) <= distance:
 		return true
@@ -61,7 +60,7 @@ func target_in_range(distance: float) -> bool:
 	return false
 
 # A force that keeps enemies from bunching up on top of eachother
-func get_separation_force():
+func get_separation_force() -> Vector2:
 	
 	var push_force := Vector2.ZERO
 	var separation_radius := 32
@@ -75,7 +74,7 @@ func get_separation_force():
 		
 		var distance := offset.length()
 		
-		var repulsion = (separation_radius - distance) / separation_radius
+		var repulsion : float = (separation_radius - distance) / separation_radius
 		if distance > 0 and distance < separation_radius:
 			push_force += offset.normalized() * repulsion
 	

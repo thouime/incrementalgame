@@ -2,13 +2,18 @@ class_name Player
 extends CharacterBody2D
 
 signal toggle_inventory()
+signal death
+signal exit_dungeon
+
 #enum State { IDLE, MOVING, GATHERING }
 @export var player_speed: int = 400
 @export var inventory_data: InventoryData
 @export var equip_inventory_data: InventoryDataEquip
 @export var chase_range : float
 @export var attack_range : float
-#var state = State.IDLE
+@export var attack_speed : float
+@export var attack_power : float
+
 var screen_size : Vector2
 var player_size : Vector2
 var sprite_offset : Vector2 = Vector2(144, 144)
@@ -17,6 +22,7 @@ var health : int = 100
 var target_position : Vector2 = Vector2.ZERO
 var interact_target : Node = null
 var placed_tiles : Dictionary
+var main_world : Node2D
 var world : Node2D
 var world_position : Vector2
 @onready var animated_sprite : AnimatedSprite2D = $AnimatedSprite2D
@@ -35,6 +41,7 @@ func _ready() -> void:
 	set_animation()
 	state_machine.init(self, CraftingSystem)
 	start_a_star.call_deferred()
+	death.connect(_on_death)
 	
 # Sprite and Animations
 func set_animation() -> void:
@@ -111,10 +118,31 @@ func take_damage(damage: int) -> void:
 	health -= damage
 	print("Current Health: ", health)
 	if health <= 0:
-		death()
+		death.emit()
 
-func death() -> void:
+func _on_death() -> void:
 	print("The player is dead!")
+	
+	animated_sprite.play("death")
+	
+	# Wait time before exiting dungeon in seconds
+	var death_timer := 2
+	
+	await get_tree().create_timer(death_timer).timeout
+	
+	after_death()
+	
+
+func after_death() -> void:
+	print("Death animation finished")
+	
+	if DungeonManager.current_dungeon:
+		exit_dungeon.emit(DungeonManager.current_dungeon)
+	
+	state_machine.change_state(state_machine.initial_state)
+	
+	# Death animation doesn't loop, so restart animation
+	animated_sprite.play()
 
 # Check for collisions at the given point and collision mask
 func intersect_point(pos: Vector2, mask: int) -> Node2D:
@@ -140,3 +168,8 @@ func is_in_group_recursive(node: Node, group: String) -> bool:
 			return true
 		node = node.get_parent()
 	return false
+
+func get_attack_damage() -> int:
+	var min_damage := int(attack_power * 0.8)
+	var max_damage := int(attack_power * 1.2)
+	return randi_range(min_damage, max_damage)

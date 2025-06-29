@@ -24,15 +24,17 @@ func exit() -> void:
 	wait_timer.timeout.disconnect(_on_wait_finished)
 	
 func process_physics(_delta: float) -> EnemyState:
-	
-	# Check if target is close enough to start chasing
 	if target_in_range(parent.chase_range):
 		return chase_state
 	
 	if is_waiting or parent.positions.is_empty():
 		return
 	
-	if parent.global_position.distance_to(parent.current_position) < 36:
+	var distance : float = parent.global_position.distance_to(
+		parent.goal_position
+	)
+	
+	if distance < 36:
 		parent.direction = Vector2.ZERO
 		parent.velocity = Vector2.ZERO
 		set_animation()
@@ -41,11 +43,9 @@ func process_physics(_delta: float) -> EnemyState:
 		wait_timer.start()
 	
 	set_animation()
-	
 	parent.velocity = parent.direction * parent.speed
-	
 	parent.move_and_slide()
-	
+
 	return null
 
 func process_frame(_delta: float) -> EnemyState:
@@ -54,7 +54,7 @@ func process_frame(_delta: float) -> EnemyState:
 
 func set_animation() -> void:
 	
-	var direction = parent.velocity
+	var direction : Vector2 = parent.velocity
 	if direction:
 		parent.animated_sprite.play("Walking")
 		parent.animated_sprite.flip_h = direction.x < 0
@@ -63,7 +63,7 @@ func set_animation() -> void:
 
 func get_positions() -> Array:
 	
-	var new_positions = parent.positions.duplicate()
+	var new_positions : Array = parent.positions.duplicate()
 	new_positions.shuffle()
 	return new_positions
 	
@@ -71,12 +71,14 @@ func get_next_position() -> void:
 	
 	if rand_positions.is_empty():
 		rand_positions = get_positions()
-	parent.current_position = rand_positions.pop_front()
-	parent.direction = parent.to_local(parent.current_position).normalized()
+	parent.goal_position = rand_positions.pop_front()
+	# Direction vector from enemy position to goal
+	parent.direction = (
+		parent.goal_position - parent.global_position
+	).normalized()
 	direction_updated.emit(parent.direction)
 
 func _on_wait_finished() -> void:
-	
 	is_waiting = false
 	get_next_position()
 	
@@ -86,7 +88,7 @@ func target_in_range(distance: float) -> bool:
 		printerr("This is no target!")
 		return false
 	
-	var target_position = parent.target.global_position
+	var target_position : Vector2 = parent.target.global_position
 	
 	if parent.global_position.distance_to(target_position) <= distance:
 		return true

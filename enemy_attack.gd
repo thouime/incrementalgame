@@ -6,7 +6,6 @@ extends "res://Entities/Enemy/StateMachine/enemy_state.gd"
 var attack_cooldown := 0.0
 
 func enter() -> void:
-	print("Entered enemy attack state!")
 	parent.animated_sprite.play("Idle")
 	parent.animated_sprite.animation_finished.connect(_on_animation_finished)
 
@@ -37,7 +36,7 @@ func target_in_range(distance: float) -> bool:
 		printerr("This is no target!")
 		return false
 	
-	var target_position = parent.target.global_position
+	var target_position : Vector2 = parent.target.global_position
 	
 	if parent.global_position.distance_to(target_position) <= distance:
 		return true
@@ -46,7 +45,7 @@ func target_in_range(distance: float) -> bool:
 
 func get_attack_direction() -> String:
 	
-	var target = parent.target
+	var target : CharacterBody2D = parent.target
 	# Get direction to target (player)
 	var direction : Vector2 = (
 		target.global_position - parent.global_position

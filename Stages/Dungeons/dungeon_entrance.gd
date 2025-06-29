@@ -17,18 +17,20 @@ func interact_action(_player: CharacterBody2D) -> void:
 	
 	# possible loading menu
 
-func get_enemy_count(dungeon_data) -> int:
-	var dungeon_scene = dungeon_data.dungeon_scene
+func get_enemy_count(dungeon_resource: DungeonResource) -> int:
+	var dungeon_scene : PackedScene = dungeon_resource.dungeon_scene
 	if not dungeon_scene:
 		printerr("Warning Dungeon Scene not set on ", self.name)
 	
-	var dungeon = dungeon_scene.instantiate()
+	var dungeon : Dungeon = dungeon_scene.instantiate()
 	
-	var count = 0
-	var enemy_spawns = dungeon.get_node("EnemySpawns")
+	var count := 0
+	var enemy_spawns : Node2D = dungeon.get_node("EnemySpawns")
 	if enemy_spawns:
-		for child in enemy_spawns.get_children():
+		for child: Variant in enemy_spawns.get_children():
 			if child is Marker2D:
+				if not child.visible:
+					continue
 				count += 1
 	
 	dungeon.queue_free()
