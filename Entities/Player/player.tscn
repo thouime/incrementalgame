@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://Entities/States/state_machine.gd" id="3_677he"]
 [ext_resource type="Script" path="res://Entities/States/player_idle.gd" id="4_26u2a"]
 [ext_resource type="Script" path="res://Entities/States/player_key_move.gd" id="5_kcpsp"]
-[ext_resource type="PackedScene" uid="uid://db4r8dj87dret" path="res://Utilities/Movement/Waypoint.tscn" id="5_vd2q4"]
+[ext_resource type="PackedScene" path="res://Utilities/Movement/Waypoint.tscn" id="5_vd2q4"]
 [ext_resource type="Script" path="res://Entities/States/player_click_move.gd" id="6_doxm0"]
 [ext_resource type="Script" path="res://Entities/States/player_gathering.gd" id="7_5ajlj"]
 [ext_resource type="Script" path="res://Entities/States/player_building.gd" id="8_gbgay"]
