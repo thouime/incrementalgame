@@ -10,19 +10,20 @@ config_version=5
 
 [application]
 
-config/name="Incremental Game"
+config/name="Skydle"
 run/main_scene="res://Stages/MainMenu/MainMenu.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
-PlayerManager="*res://Entities/Player/player_manager.gd"
+PlayerManager="*res://Entities/Player/PlayerManager.gd"
 CraftingSystem="*res://Utilities/Crafting/crafting_system.gd"
 AudioManager="*res://Utilities/Audio/AudioManager.tscn"
 SettingsManager="*res://Utilities/Saving/SettingsManager.gd"
 GameSaveManager="*res://Utilities/Saving/SaveGameManager.gd"
 Helper="*res://Utilities/Misc/helper.gd"
+DungeonManager="*res://Stages/Dungeons/DungeonManager.gd"
 
 [debug]
 
@@ -40,6 +41,7 @@ window/stretch/scale_mode="integer"
 [global_group]
 
 dungeon_entrance="Entrance to a dungeon."
+enemy="Group for all enemies"
 
 [input]
 
@@ -102,11 +104,13 @@ cancel={
 [layer_names]
 
 2d_physics/layer_1="Boundary"
+2d_navigation/layer_1="Layer 1"
 2d_physics/layer_2="Player Feet"
 2d_physics/layer_3="Player"
 2d_physics/layer_4="Objects"
 2d_physics/layer_5="Walls"
-2d_physics/layer_9="Layer 9"
+2d_physics/layer_8="Selection"
+2d_physics/layer_9="Enemy"
 
 [rendering]
 

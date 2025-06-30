@@ -43,6 +43,10 @@ func get_saves_data() -> Dictionary:
 	
 	var saves_path : String = SAVE_FOLDER + "saves.json"
 	
+	if not DirAccess.dir_exists_absolute(SAVE_FOLDER):
+		printerr("No save directory found.")
+		return {}
+	
 	# Create file storing info about saves if it doesn't exist
 	if not FileAccess.file_exists(saves_path):
 		var saves : Array = get_saves()
@@ -204,15 +208,19 @@ func save_game() -> void:
 	var inventory_slots := player_inventory.get_inventory_slots()
 	# JSON doesn't support many of Godot's types such as Vector2.
 	# var_to_str can be used to convert any Variant to a String.
+	# Keep track of the player's world position, if the player is in a dungeon
+	var world_position : Vector2 = player.global_position
+	if DungeonManager.current_dungeon:
+		world_position = player.world_position
+	
 	var save_dict := {
 		save = {
 			save_name = current_save,
 			duration = PlayerManager.time_played
 		},
 		player = {
-			position = var_to_str(player.position),
+			position = var_to_str(world_position),
 			direction = var_to_str(player.direction),
-			animation = player.animated_sprite.animation,
 			health = var_to_str(player.health),
 			inventory = serialize_inventory(inventory_slots)
 		},
@@ -316,25 +324,25 @@ func save_tiles(tiles: Dictionary) -> Dictionary:
 	# Return the final dictionary with "ground" and "boundary" directly under "tiles"
 	return serialized_tiles
 
-func load_game() -> void:
+func load_game() -> bool:
 	
 	# Ensure a save slot is set
 	if not current_save:
 		print("Save was not set!")
-		return
+		return false
 	
 	var save_path : String = SAVE_FOLDER + current_save
 	
 	var file := FileAccess.open(save_path, FileAccess.READ)
 	if not file:
 		print("Save file not found!")
-		return
+		return false
 		
 	var json := JSON.new()
 	var error := json.parse(file.get_line())
 	if error != OK:
 		print("Failed to parse JSON: ", json.get_error_message())
-		return
+		return false
 		
 	var save_dict := json.get_data() as Dictionary
 	
@@ -349,12 +357,6 @@ func load_game() -> void:
 	# JSON doesn't support many of Godot's types such as Vector2.
 	# str_to_var can be used to convert a String to the corresponding 
 	player.position = str_to_var(save_dict.player.position)
-	if save_dict["player"].has("animation"):
-		player.animated_sprite.animation = save_dict.player.animation
-		player.direction = str_to_var(save_dict.player.direction)
-		# Flip the sprite if facing left
-		if player.velocity.x != 0:
-			player.animated_sprite.flip_h = player.velocity.x < 0
 	player.health = str_to_var(save_dict.player.health)
 	
 	var player_inventory : InventoryData = player.inventory_data
@@ -376,6 +378,8 @@ func load_game() -> void:
 	get_tree().paused = false
 	
 	print("Game loaded successfully!")
+	
+	return true
 
 func deserialize_inventory(
 	serialized_inventory: Array
@@ -468,7 +472,7 @@ func add_shaders(new_object: StaticBody2D) -> void:
 		new_object.material = new_material
 
 func load_tiles(placed_tiles: Dictionary) -> void:
-	var world: Node2D = get_node("/root/MainWorldRoot/MainWorldVisual/Main/World")
+	var world: Node2D = get_node("/root/Main/MainWorld/World")
 	var ground: TileMapLayer
 	var boundary: TileMapLayer
 	var tiles_to_build: Array

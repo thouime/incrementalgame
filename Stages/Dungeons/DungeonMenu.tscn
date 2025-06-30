@@ -1,0 +1,79 @@
+[gd_scene load_steps=3 format=3 uid="uid://sdqto1qgblty"]
+
+[ext_resource type="Script" path="res://Stages/Dungeons/dungeon_menu.gd" id="1_ioyaj"]
+[ext_resource type="Theme" uid="uid://cvw8pe8ajmv6h" path="res://Common/menu_theme.tres" id="2_tv1a0"]
+
+[node name="DungeonMenu" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ioyaj")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="NameLabel" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_tv1a0")
+text = "Dungeon Name"
+horizontal_alignment = 1
+
+[node name="DifficultyLabel" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_tv1a0")
+text = "Difficulty: 1"
+
+[node name="EnemyCountLabel" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_tv1a0")
+text = "Enemy Count: 10"
+
+[node name="CompletionsLabel" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_tv1a0")
+text = "Completions: 0"
+
+[node name="CompletionTimeLabel" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_tv1a0")
+text = "Estimated Time: 1h30s"
+
+[node name="LootTableContainer" type="HBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LootTableLabel" type="Label" parent="HBoxContainer/MarginContainer/VBoxContainer/LootTableContainer"]
+layout_mode = 2
+theme = ExtResource("2_tv1a0")
+text = "Loot Table: "
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+
+[node name="Start" type="Button" parent="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_tv1a0")
+text = "Start Dungeon"
+
+[connection signal="pressed" from="HBoxContainer/MarginContainer/VBoxContainer/VBoxContainer/Start" to="." method="_on_back_pressed"]

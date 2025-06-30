@@ -13,7 +13,7 @@ func _ready() -> void:
 
 func _on_new_game_pressed() -> void:
 	AudioManager.play_music("world", 3)
-	get_tree().change_scene_to_file("res://Stages/World/main_world_root.tscn")
+	get_tree().change_scene_to_file("res://Stages/World/Main.tscn")
 
 func _on_load_game_pressed() -> void:
 	get_tree().change_scene_to_file("res://Utilities/Saving/SaveListMenu.tscn")

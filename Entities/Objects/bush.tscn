@@ -53,6 +53,8 @@ size = Vector2(41.5, 55)
 material = SubResource("ShaderMaterial_51lhn")
 position = Vector2(370, 398)
 scale = Vector2(2, 2)
+collision_layer = 8
+collision_mask = 4
 script = ExtResource("2_m1yxg")
 drop_table = SubResource("Resource_57j8k")
 gather_time = 1.5
@@ -79,6 +81,8 @@ position = Vector2(0, 13.3125)
 shape = SubResource("RectangleShape2D_s1rac")
 
 [node name="Selection" type="Area2D" parent="."]
+collision_layer = 128
+collision_mask = 0
 
 [node name="MouseArea" type="CollisionShape2D" parent="Selection"]
 visible = false

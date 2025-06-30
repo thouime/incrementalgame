@@ -1,6 +1,8 @@
 extends Control
 
 signal toggle_inventory
+signal dungeon_start
+signal settings_menu_closed
 
 @onready var v_box_container_left: VBoxContainer = $VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft
 @onready var v_box_container_right: VBoxContainer = $VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight
@@ -11,6 +13,7 @@ signal toggle_inventory
 @onready var menu_panel: Panel = $VBoxContainer/MarginContainer/TopHud/MenuPanel
 @onready var save_list_menu: Control = $VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer/SaveListMenu
 @onready var settings_menu: Control = $VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer/SettingsMenu
+@onready var dungeon_menu: Control = $VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer/DungeonMenu
 @onready var back_button: Button = $VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer/BackButton
 
 var hub_menus := []
@@ -29,7 +32,8 @@ func _ready() -> void:
 	# Popup menus that will show if the user clicks certain setting buttons
 	setting_menus = [
 		save_list_menu,
-		settings_menu
+		settings_menu,
+		dungeon_menu
 	]
 	
 	for button in v_box_container_left.get_children():
@@ -44,6 +48,8 @@ func _ready() -> void:
 	inventory_interface.set_equip_inventory_data(
 		PlayerManager.player.equip_inventory_data)
 	inventory_interface.force_close.connect(close_external_inventory)
+	
+	dungeon_menu.dungeon_start.connect(_on_dungeon_start)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -129,6 +135,12 @@ func close_settings_menu() -> void:
 	
 	# Unpause the game
 	get_tree().paused = false
+	
+	settings_menu_closed.emit()
+
+func open_dungeon_menu(dungeon_data: DungeonResource) -> void:
+	dungeon_menu.set_labels(dungeon_data)
+	open_settings_menu(dungeon_menu)
 
 func toggle_inventory_interface(external_inventory_owner: Node = null) -> void:
 	# Check if opening or closing player inventory
@@ -202,3 +214,6 @@ func _on_settings_button_pressed() -> void:
 
 func _on_back_button_pressed() -> void:
 	close_settings_menu()
+
+func _on_dungeon_start() -> void:
+	dungeon_start.emit()

@@ -2,25 +2,35 @@ class_name Player
 extends CharacterBody2D
 
 signal toggle_inventory()
+signal death
+signal exit_dungeon
+
 #enum State { IDLE, MOVING, GATHERING }
 @export var player_speed: int = 400
 @export var inventory_data: InventoryData
 @export var equip_inventory_data: InventoryDataEquip
-#var state = State.IDLE
+@export var chase_range : float
+@export var attack_range : float
+@export var attack_speed : float
+@export var attack_power : float
+
 var screen_size : Vector2
 var player_size : Vector2
 var sprite_offset : Vector2 = Vector2(144, 144)
 var direction: Vector2 = Vector2.UP
-var health : int = 5
+var health : int = 100
 var target_position : Vector2 = Vector2.ZERO
 var interact_target : Node = null
 var placed_tiles : Dictionary
+var main_world : Node2D
 var world : Node2D
+var world_position : Vector2
 @onready var animated_sprite : AnimatedSprite2D = $AnimatedSprite2D
 @onready var camera : Camera2D = $Camera2D
 @onready var interact_ray : RayCast2D = $Camera2D/InteractRay
 @onready var state_machine : Node = $StateMachine
 @onready var a_star_pathfinding: Node = $AStarPathfinding
+@onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -30,8 +40,9 @@ func _ready() -> void:
 	screen_size = get_viewport_rect().size
 	set_animation()
 	state_machine.init(self, CraftingSystem)
-	call_deferred("start_a_star")
-
+	start_a_star.call_deferred()
+	death.connect(_on_death)
+	
 # Sprite and Animations
 func set_animation() -> void:
 	var current_animation : String = animated_sprite.animation
@@ -101,3 +112,64 @@ func get_drop_position() -> Vector2:
 
 func heal(heal_value: int) -> void:
 	health += heal_value
+
+func take_damage(damage: int) -> void:
+	print("Player took damage!")
+	health -= damage
+	print("Current Health: ", health)
+	if health <= 0:
+		death.emit()
+
+func _on_death() -> void:
+	print("The player is dead!")
+	
+	animated_sprite.play("death")
+	
+	# Wait time before exiting dungeon in seconds
+	var death_timer := 2
+	
+	await get_tree().create_timer(death_timer).timeout
+	
+	after_death()
+	
+
+func after_death() -> void:
+	print("Death animation finished")
+	
+	if DungeonManager.current_dungeon:
+		exit_dungeon.emit(DungeonManager.current_dungeon)
+	
+	state_machine.change_state(state_machine.initial_state)
+	
+	# Death animation doesn't loop, so restart animation
+	animated_sprite.play()
+
+# Check for collisions at the given point and collision mask
+func intersect_point(pos: Vector2, mask: int) -> Node2D:
+	var space_state: PhysicsDirectSpaceState2D = get_world_2d().direct_space_state
+	var query: PhysicsPointQueryParameters2D = PhysicsPointQueryParameters2D.new()
+	query.position = pos
+	query.collide_with_areas = true
+	query.collide_with_bodies = true
+	query.collision_mask = mask
+	
+	var results: Array[Dictionary] = space_state.intersect_point(query, 32)
+	
+	for result: Dictionary in results:
+		var collider: Object = result["collider"]
+		if collider is Node2D and is_in_group_recursive(collider as Node, "interactables"):
+			return collider as Node2D
+
+	return null
+
+func is_in_group_recursive(node: Node, group: String) -> bool:
+	while node:
+		if node.is_in_group(group):
+			return true
+		node = node.get_parent()
+	return false
+
+func get_attack_damage() -> int:
+	var min_damage := int(attack_power * 0.8)
+	var max_damage := int(attack_power * 1.2)
+	return randi_range(min_damage, max_damage)

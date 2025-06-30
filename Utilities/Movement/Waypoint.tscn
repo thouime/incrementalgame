@@ -1,0 +1,49 @@
+[gd_scene load_steps=8 format=3 uid="uid://db4r8dj87dret"]
+
+[ext_resource type="Script" path="res://Utilities/Movement/waypoint.gd" id="1_2vyyi"]
+[ext_resource type="Texture2D" uid="uid://c5mpnks5xbnks" path="res://Utilities/Movement/07.png" id="1_epn8x"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rxp71"]
+atlas = ExtResource("1_epn8x")
+region = Rect2(0, 208, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tf6ug"]
+atlas = ExtResource("1_epn8x")
+region = Rect2(32, 208, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7hreb"]
+atlas = ExtResource("1_epn8x")
+region = Rect2(64, 208, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f5pn4"]
+atlas = ExtResource("1_epn8x")
+region = Rect2(96, 208, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_13q2e"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rxp71")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tf6ug")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7hreb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f5pn4")
+}],
+"loop": true,
+"name": &"Indicator",
+"speed": 8.0
+}]
+
+[node name="Waypoint" type="Node2D"]
+script = ExtResource("1_2vyyi")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+modulate = Color(1, 0.980392, 0.803922, 0.501961)
+sprite_frames = SubResource("SpriteFrames_13q2e")
+animation = &"Indicator"
+frame_progress = 0.864608

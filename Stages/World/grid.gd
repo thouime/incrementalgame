@@ -33,16 +33,29 @@ func center_cursor() -> void:
 	Input.warp_mouse(center_position)
 
 func set_cursor(sprite: Sprite2D) -> void:
+	
+	const CURSOR_SIZE = Vector2(32, 32)
+	
 	# Texture is a default
 	if sprite:
 		build_cursor.texture = sprite.texture
+		
+		var texture_size : Vector2
+		
 		# Check if the passed sprite uses a region
 		if sprite.region_enabled:
 			build_cursor.region_enabled = true
 			build_cursor.region_rect = sprite.region_rect  # Set the same region
+			texture_size = build_cursor.region_rect.size
 		else:
-			build_cursor.region_enabled = false  # If no region, use the full texture
+			# If no region, use the full texture
+			build_cursor.region_enabled = false
 			build_cursor.region_rect = Rect2()  # Reset region rectangle
+			texture_size = build_cursor.texture.get_size()
+		
+		# Scale the cursor size in the case of different sized textures
+		var scale_factor : Vector2 = CURSOR_SIZE / texture_size
+		build_cursor.set_scale(scale_factor)
 
 func set_cursor_texture(
 	texture: Texture2D,

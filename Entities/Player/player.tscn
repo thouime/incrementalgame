@@ -1,17 +1,83 @@
-[gd_scene load_steps=60 format=3 uid="uid://dn215u4niu0ji"]
+[gd_scene load_steps=79 format=3 uid="uid://dn215u4niu0ji"]
 
 [ext_resource type="Script" path="res://Entities/Player/player.gd" id="1_87i8y"]
 [ext_resource type="Texture2D" uid="uid://c4ifn1fjbi2ye" path="res://Assets/Art/characters/player.png" id="2_qrrvf"]
 [ext_resource type="Script" path="res://Entities/States/state_machine.gd" id="3_677he"]
 [ext_resource type="Script" path="res://Entities/States/player_idle.gd" id="4_26u2a"]
 [ext_resource type="Script" path="res://Entities/States/player_key_move.gd" id="5_kcpsp"]
+[ext_resource type="PackedScene" uid="uid://db4r8dj87dret" path="res://Utilities/Movement/Waypoint.tscn" id="5_vd2q4"]
 [ext_resource type="Script" path="res://Entities/States/player_click_move.gd" id="6_doxm0"]
 [ext_resource type="Script" path="res://Entities/States/player_gathering.gd" id="7_5ajlj"]
 [ext_resource type="Script" path="res://Entities/States/player_building.gd" id="8_gbgay"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="9_2som8"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="10_n6sx7"]
-[ext_resource type="PackedScene" uid="uid://mc3ml700wv2h" path="res://Utilities/Movement/AStarPathfinding.tscn" id="11_q3ijd"]
+[ext_resource type="PackedScene" uid="uid://73u8lvnx86f2" path="res://Utilities/Movement/a_star_pathfinding.tscn" id="11_q3ijd"]
 [ext_resource type="PackedScene" uid="uid://cnxox67ix0cs4" path="res://Utilities/Movement/show_tile_path.tscn" id="12_fyjvd"]
+[ext_resource type="Script" path="res://Entities/Player/player_dungeon.gd" id="14_sq8v8"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x7l2r"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(0, 288, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_56sgp"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(48, 288, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sxk4y"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(96, 288, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ofvvy"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(144, 288, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jqaa8"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(0, 336, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h87q4"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(48, 336, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6fd0"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(96, 336, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1tr3q"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(144, 336, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eukqd"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(0, 336, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_naylg"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(48, 336, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_va3l7"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(96, 336, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_csm0j"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(144, 336, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6i47l"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(0, 384, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dvlo8"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(48, 384, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5t8u3"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(96, 384, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_su4fx"]
+atlas = ExtResource("2_qrrvf")
+region = Rect2(144, 384, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ojwf"]
 atlas = ExtResource("2_qrrvf")
@@ -197,6 +263,74 @@ region = Rect2(240, 240, 48, 48)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_x7l2r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_56sgp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sxk4y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ofvvy")
+}],
+"loop": false,
+"name": &"attack_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jqaa8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h87q4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e6fd0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1tr3q")
+}],
+"loop": false,
+"name": &"attack_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eukqd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_naylg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_va3l7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_csm0j")
+}],
+"loop": false,
+"name": &"attack_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6i47l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dvlo8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5t8u3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_su4fx")
+}],
+"loop": false,
+"name": &"attack_up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_7ojwf")
 }, {
 "duration": 1.0,
@@ -205,7 +339,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_03f0h")
 }],
-"loop": true,
+"loop": false,
 "name": &"death",
 "speed": 5.0
 }, {
@@ -397,6 +531,9 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bas63"]
 size = Vector2(14, 4)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_avowd"]
+size = Vector2(14, 24)
+
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(321, 514)
 scale = Vector2(0.5, 0.5)
@@ -404,17 +541,29 @@ collision_layer = 2
 collision_mask = 9
 script = ExtResource("1_87i8y")
 player_speed = 200
+chase_range = 200.0
+attack_range = 24.0
+attack_speed = 1.0
+attack_power = 5.0
 metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(1.5, 1.5)
 sprite_frames = SubResource("SpriteFrames_j0kbs")
-animation = &"idle_up"
+animation = &"idle_down"
 offset = Vector2(0, -16)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_bas63")
+
+[node name="BodyCollision" type="CharacterBody2D" parent="."]
+collision_layer = 4
+collision_mask = 24
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BodyCollision"]
+position = Vector2(1, -10)
+shape = SubResource("RectangleShape2D_avowd")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -424,15 +573,22 @@ target_position = Vector2(35, 1)
 collision_mask = 5
 collide_with_areas = true
 
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+path_desired_distance = 10.0
+avoidance_enabled = true
+avoidance_layers = 0
+debug_path_custom_color = Color(0.011953, 0.0980029, 0.124912, 1)
+
 [node name="AStarPathfinding" parent="." instance=ExtResource("11_q3ijd")]
 
 [node name="MarkTilePath" parent="AStarPathfinding" instance=ExtResource("12_fyjvd")]
 z_index = 1
 z_as_relative = false
 
-[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state", "dungeon_state")]
 script = ExtResource("3_677he")
 initial_state = NodePath("PlayerIdle")
+dungeon_state = NodePath("PlayerDungeon")
 
 [node name="PlayerIdle" type="Node" parent="StateMachine" node_paths=PackedStringArray("key_move_state", "click_move_state", "gather_state", "build_state")]
 script = ExtResource("4_26u2a")
@@ -452,6 +608,9 @@ idle_state = NodePath("../PlayerIdle")
 gather_state = NodePath("../PlayerGathering")
 build_state = NodePath("../PlayerBuilding")
 key_move_state = NodePath("../PlayerKeyMove")
+
+[node name="Waypoint" parent="StateMachine/PlayerClickMove" instance=ExtResource("5_vd2q4")]
+visible = false
 
 [node name="PlayerGathering" type="Node" parent="StateMachine" node_paths=PackedStringArray("key_move_state", "click_move_state", "build_state")]
 script = ExtResource("7_5ajlj")
@@ -478,3 +637,7 @@ scale = Vector2(2, 2)
 texture = ExtResource("10_n6sx7")
 region_enabled = true
 region_rect = Rect2(80, 0, 16, 16)
+
+[node name="PlayerDungeon" type="Node" parent="StateMachine" node_paths=PackedStringArray("idle_state")]
+script = ExtResource("14_sq8v8")
+idle_state = NodePath("../PlayerIdle")

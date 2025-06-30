@@ -10,20 +10,31 @@ func _ready() -> void:
 
 func interact_action(_player: CharacterBody2D) -> void:
 	if dungeon_data:
-		show_dungeon_info()
+		dungeon_data.enemy_count = get_enemy_count(dungeon_data)
 		enter_dungeon.emit(dungeon_data)
 	else:
 		printerr("Warning Dungeon data not set on ", self.name)
 	
 	# possible loading menu
 
-func show_dungeon_info() -> void:
-	print("Dungeon: ", dungeon_data.name)
-	print("Difficulty: ", dungeon_data.difficulty)
-	print("Enemy Count: ", dungeon_data.enemy_count)
-	print("Estimated Completion: ", dungeon_data.estimated_completion)
-	print("Completions: ", dungeon_data.completions)
-	print("Loot Table: ", dungeon_data.loot_table)
+func get_enemy_count(dungeon_resource: DungeonResource) -> int:
+	var dungeon_scene : PackedScene = dungeon_resource.dungeon_scene
+	if not dungeon_scene:
+		printerr("Warning Dungeon Scene not set on ", self.name)
+	
+	var dungeon : Dungeon = dungeon_scene.instantiate()
+	
+	var count := 0
+	var enemy_spawns : Node2D = dungeon.get_node("EnemySpawns")
+	if enemy_spawns:
+		for child: Variant in enemy_spawns.get_children():
+			if child is Marker2D:
+				if not child.visible:
+					continue
+				count += 1
+	
+	dungeon.queue_free()
+	return count
 
 func stop_interact_action(_player: CharacterBody2D) -> void:
 	pass

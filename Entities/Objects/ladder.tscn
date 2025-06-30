@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=3 uid="uid://cqxkf0rt3anyd"]
+
+[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="1_3m61y"]
+[ext_resource type="Script" path="res://Entities/Objects/ladder.gd" id="1_3rkol"]
+[ext_resource type="Texture2D" uid="uid://dlxicdtjk25fb" path="res://Stages/Dungeons/Art/Dungeon_Tileset.png" id="1_4ehpe"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pjunw"]
+shader = ExtResource("1_3m61y")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_000oq"]
+size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_366rr"]
+size = Vector2(32, 32)
+
+[node name="Ladder" type="StaticBody2D"]
+material = SubResource("ShaderMaterial_pjunw")
+collision_layer = 16
+collision_mask = 4
+script = ExtResource("1_3rkol")
+
+[node name="Sprite1" type="Sprite2D" parent="."]
+use_parent_material = true
+scale = Vector2(2, 2)
+texture = ExtResource("1_4ehpe")
+region_enabled = true
+region_rect = Rect2(144, 48, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_000oq")
+
+[node name="Selection" type="Area2D" parent="."]
+
+[node name="MouseArea" type="CollisionShape2D" parent="Selection"]
+z_index = 4
+shape = SubResource("RectangleShape2D_366rr")
+
+[node name="NotWalkable" type="ColorRect" parent="."]
+visible = false
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+color = Color(1, 0, 0, 0.0980392)
+
+[node name="NavigationObstacle2D" type="NavigationObstacle2D" parent="."]
+radius = 26.67
