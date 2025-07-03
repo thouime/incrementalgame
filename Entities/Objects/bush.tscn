@@ -7,7 +7,7 @@
 [ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="5_c1xyq"]
 [ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="6_rgu2s"]
 [ext_resource type="Script" path="res://Entities/Item/Drop Table/drop_table.gd" id="7_x7esn"]
-[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="8_lqk3r"]
+[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Common/Assets/Art/objects/objects.png" id="8_lqk3r"]
 [ext_resource type="PackedScene" uid="uid://dlrmxq4bnsyvu" path="res://Entities/Objects/Components/activity_timer.tscn" id="9_co7uq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_51lhn"]

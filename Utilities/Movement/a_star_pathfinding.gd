@@ -136,7 +136,11 @@ func update_tile(tile: Vector2, walkable: bool) -> void:
 
 func get_object_tiles(object: Node2D) -> Array:
 	var tiles := []
-	var unwalkable_shape := object.get_node("NotWalkable")
+	
+	var unwalkable_shape : ColorRect
+	
+	if object.has_node("NotWalkable"):
+		unwalkable_shape = object.get_node("NotWalkable")
 	
 	if unwalkable_shape:
 		var global_pos : Vector2 = unwalkable_shape.global_position

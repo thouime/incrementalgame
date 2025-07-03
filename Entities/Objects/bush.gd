@@ -1,6 +1,8 @@
 extends "res://Entities/Objects/gathering_interact.gd"
 
-const ITEM_FEEDBACK_EFFECT = preload("res://Entities/Objects/Components/ItemFeedbackEffect.tscn")
+const ITEM_FEEDBACK_EFFECT = preload(
+	"res://Entities/Objects/Components/ItemFeedbackEffect.tscn"
+)
 
 @export var drop_table : DropTable
 @export var max_drop_quantity : int = 3

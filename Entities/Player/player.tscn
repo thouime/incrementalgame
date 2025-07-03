@@ -1,7 +1,7 @@
 [gd_scene load_steps=79 format=3 uid="uid://dn215u4niu0ji"]
 
 [ext_resource type="Script" path="res://Entities/Player/player.gd" id="1_87i8y"]
-[ext_resource type="Texture2D" uid="uid://c4ifn1fjbi2ye" path="res://Assets/Art/characters/player.png" id="2_qrrvf"]
+[ext_resource type="Texture2D" uid="uid://c4ifn1fjbi2ye" path="res://Common/Assets/Art/characters/player.png" id="2_qrrvf"]
 [ext_resource type="Script" path="res://Entities/States/state_machine.gd" id="3_677he"]
 [ext_resource type="Script" path="res://Entities/States/player_idle.gd" id="4_26u2a"]
 [ext_resource type="Script" path="res://Entities/States/player_key_move.gd" id="5_kcpsp"]
@@ -10,7 +10,7 @@
 [ext_resource type="Script" path="res://Entities/States/player_gathering.gd" id="7_5ajlj"]
 [ext_resource type="Script" path="res://Entities/States/player_building.gd" id="8_gbgay"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="9_2som8"]
-[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="10_n6sx7"]
+[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Common/Assets/Art/objects/objects.png" id="10_n6sx7"]
 [ext_resource type="PackedScene" uid="uid://73u8lvnx86f2" path="res://Utilities/Movement/a_star_pathfinding.tscn" id="11_q3ijd"]
 [ext_resource type="PackedScene" uid="uid://cnxox67ix0cs4" path="res://Utilities/Movement/show_tile_path.tscn" id="12_fyjvd"]
 [ext_resource type="Script" path="res://Entities/Player/player_dungeon.gd" id="14_sq8v8"]

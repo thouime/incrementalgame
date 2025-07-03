@@ -2,6 +2,8 @@ class_name  GatheringInteract
 extends "object.gd"
 
 @export var gather_time: float = 2.0
+# Number of interactions before depletion
+@export var interact_limit: int = 10
 var timer: Timer
 
 func _ready() -> void:

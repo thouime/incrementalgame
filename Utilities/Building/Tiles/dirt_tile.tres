@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="TileInfo" load_steps=11 format=3 uid="uid://dech0h7erilx5"]
 
 [ext_resource type="Script" path="res://Utilities/Building/Tiles/tile_info.gd" id="1_0mkke"]
-[ext_resource type="Texture2D" uid="uid://dcymbv1v6ockq" path="res://Assets/Art/tilesets/plains.png" id="2_2baj5"]
-[ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="2_hguid"]
+[ext_resource type="Texture2D" uid="uid://dcymbv1v6ockq" path="res://Common/Assets/Art/tilesets/plains.png" id="2_2baj5"]
+[ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Common/Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="2_hguid"]
 [ext_resource type="Script" path="res://Entities/Item/item_data.gd" id="2_sj4nt"]
 [ext_resource type="Texture2D" uid="uid://bulp7tkpnj8vn" path="res://Entities/Item/#1 - Transparent Icons.png" id="3_u3b7v"]
 [ext_resource type="Resource" uid="uid://b2lxbd7ntp5qk" path="res://Utilities/Building/Tiles/boundary_tile.tres" id="4_3lb88"]

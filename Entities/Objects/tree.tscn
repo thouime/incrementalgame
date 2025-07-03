@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://cednyx6i43tlg"]
 
 [ext_resource type="Script" path="res://Entities/Objects/tree.gd" id="1_pwwmb"]
-[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Assets/Art/objects/objects.png" id="2_ftg84"]
+[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Common/Assets/Art/objects/objects.png" id="2_ftg84"]
 
 [sub_resource type="Shader" id="Shader_tr10c"]
 code = "shader_type canvas_item;

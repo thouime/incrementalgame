@@ -2,12 +2,15 @@ extends Node2D
 class_name ActivityTimer
 
 signal timer_finished
+signal regen_finished
 
 var timer_done : bool = false
+var regen_complete : bool = true
 
 @onready var progress_bar: ProgressBar = $ProgressBar
 @onready var timer: Timer = $Timer
 @onready var timer_circle: ColorRect = $TimerCircle
+@onready var regen_timer: Timer = $RegenTimer
 
 func _ready() -> void:
 	progress_bar.hide()
@@ -83,6 +86,15 @@ func stop() -> void:
 	timer_done = true
 	timer_circle.hide()
 	timer.stop()
+
+func set_regen_time(duration: float) -> void:
+	regen_timer.wait_time = duration
+	regen_timer.one_shot = true
+	regen_timer.timeout.connect(_on_timer_timeout)
+
+func start_regen() -> void:
+	regen_complete = false
+	regen_timer.start()
 
 func end() -> void:
 	timer_done = true

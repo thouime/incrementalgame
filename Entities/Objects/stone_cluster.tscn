@@ -1,0 +1,144 @@
+[gd_scene load_steps=15 format=3 uid="uid://cegfrcv0cewvw"]
+
+[ext_resource type="Script" path="res://Entities/Objects/stone_cluster.gd" id="1_qacki"]
+[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Common/Assets/Art/objects/objects.png" id="1_yjujc"]
+[ext_resource type="PackedScene" uid="uid://dlrmxq4bnsyvu" path="res://Entities/Objects/Components/activity_timer.tscn" id="2_213bf"]
+[ext_resource type="Script" path="res://Entities/Item/Drop Table/common_drops.gd" id="2_ltc1j"]
+[ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="3_smnfi"]
+[ext_resource type="Resource" uid="uid://bhvnyyfbu2grs" path="res://Entities/Item/Items/basic/stone_item.tres" id="4_fkipj"]
+[ext_resource type="Script" path="res://Entities/Item/Drop Table/drop_table.gd" id="4_ryl4p"]
+
+[sub_resource type="Shader" id="Shader_opyij"]
+code = "shader_type canvas_item;
+
+uniform vec4 color : source_color = vec4(1.0);
+uniform float width : hint_range(0, 10) = 1.0;
+uniform int pattern : hint_range(0, 2) = 0; // diamond, circle, square
+uniform bool inside = true;
+uniform bool add_margins = true; // only useful when inside is false
+uniform vec2 number_of_images = vec2(1.0); // number of horizontal and vertical images in the sprite sheet
+uniform int focus = 0; // 0 for false, 1 for true
+
+void vertex() {
+    if (add_margins) {
+        VERTEX += sign(VERTEX) * width; // replace sign(VERTEX) by (sign(VERTEX) * 2.0 - 1.0) if not Centered
+    }
+}
+
+bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, vec2 image_top_left, vec2 image_bottom_right, sampler2D texture) {
+    for (float i = -ceil(width); i <= ceil(width); i++) {
+        float x = abs(i) > width ? width * sign(i) : i;
+        float offset;
+
+        if (pattern == 0) {
+            offset = width - abs(x);
+        } else if (pattern == 1) {
+            offset = floor(sqrt(pow(width + 0.5, 2) - x * x));
+        } else if (pattern == 2) {
+            offset = width;
+        }
+
+        for (float j = -ceil(offset); j <= ceil(offset); j++) {
+            float y = abs(j) > offset ? offset * sign(j) : j;
+            vec2 xy = uv + texture_pixel_size * vec2(x, y);
+
+            if ((xy != clamp(xy, image_top_left, image_bottom_right) || texture(texture, xy).a <= 0.0) == inside) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void fragment() {
+	COLOR = vec4(UV, 0.0, 1.0); // visualize UV
+    vec2 uv = UV;
+    vec2 image_top_left = floor(uv * number_of_images) / number_of_images;
+    vec2 image_bottom_right = image_top_left + vec2(1.0) / number_of_images;
+
+    if (add_margins) {
+        vec2 texture_pixel_size = vec2(1.0) / (vec2(1.0) / TEXTURE_PIXEL_SIZE + vec2(width * 2.0) * number_of_images);
+
+        // Calculate the UV coordinates while adding margins
+        uv = (uv - texture_pixel_size * width - image_top_left) * TEXTURE_PIXEL_SIZE / texture_pixel_size + image_top_left;
+
+        // Clamp UV to ensure we don't sample outside the intended area
+        uv = clamp(uv, image_top_left, image_bottom_right);
+
+        // Only sample if the UV is within the bounds
+        if (uv == image_top_left || uv == image_bottom_right) {
+            COLOR.a = 0.0; // Make it fully transparent if clamped to edges
+        } else {
+            COLOR = texture(TEXTURE, uv);
+        }
+    } else {
+        COLOR = texture(TEXTURE, uv);
+    }
+
+	// Use shader if the object is being focused
+	if (focus == 1) {
+	    if ((COLOR.a > 0.0) == inside && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, image_top_left, image_bottom_right, TEXTURE)) {
+	        COLOR.rgb = inside ? mix(COLOR.rgb, color.rgb, color.a) : color.rgb;
+	        COLOR.a += (1.0 - COLOR.a) * color.a;
+	    }
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fn076"]
+resource_local_to_scene = true
+shader = SubResource("Shader_opyij")
+shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[sub_resource type="Resource" id="Resource_04kci"]
+script = ExtResource("3_smnfi")
+item_data = ExtResource("4_fkipj")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_yycf0"]
+script = ExtResource("2_ltc1j")
+slot_datas = Array[ExtResource("3_smnfi")]([SubResource("Resource_04kci")])
+
+[sub_resource type="Resource" id="Resource_48m23"]
+script = ExtResource("4_ryl4p")
+common_chance = 0.6
+rare_chance = 0.25
+ultra_rare_chance = 0.1
+unique_chance = 0.05
+common_drops = SubResource("Resource_yycf0")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n8nby"]
+size = Vector2(6, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_snbsg"]
+
+[node name="StoneCluster" type="StaticBody2D"]
+material = SubResource("ShaderMaterial_fn076")
+scale = Vector2(2, 2)
+script = ExtResource("1_qacki")
+drop_table = SubResource("Resource_48m23")
+
+[node name="Sprite1" type="Sprite2D" parent="."]
+use_parent_material = true
+texture = ExtResource("1_yjujc")
+region_enabled = true
+region_rect = Rect2(0, 16, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_n8nby")
+disabled = true
+
+[node name="Selection" type="Area2D" parent="."]
+collision_layer = 128
+collision_mask = 0
+
+[node name="MouseArea" type="CollisionShape2D" parent="Selection"]
+shape = SubResource("RectangleShape2D_snbsg")
+
+[node name="ActivityTimer" parent="." instance=ExtResource("2_213bf")]

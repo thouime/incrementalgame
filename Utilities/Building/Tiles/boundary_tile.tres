@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="TileInfo" load_steps=6 format=3 uid="uid://b2lxbd7ntp5qk"]
 
 [ext_resource type="Script" path="res://Utilities/Building/Tiles/tile_info.gd" id="1_ks3sg"]
-[ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="1_rodyh"]
-[ext_resource type="Texture2D" uid="uid://bvvg2wlc68jns" path="res://Assets/Art/tilesets/walls/walls.png" id="3_r5sku"]
+[ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Common/Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="1_rodyh"]
+[ext_resource type="Texture2D" uid="uid://bvvg2wlc68jns" path="res://Common/Assets/Art/tilesets/walls/walls.png" id="3_r5sku"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mdwxd"]
 atlas = ExtResource("1_rodyh")
