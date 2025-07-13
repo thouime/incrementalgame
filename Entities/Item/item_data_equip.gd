@@ -2,4 +2,12 @@ extends ItemData
 
 class_name ItemDataEquip
 
-@export var defence: int
+enum EquipType {
+	ITEM,
+	ARMOR,
+	AXES,
+	PICKAXES
+}
+
+@export var equipment_type: EquipType = EquipType.ITEM
+@export var defense: int

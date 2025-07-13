@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://bb20s8yg8iuot"]
+[gd_scene load_steps=34 format=3 uid="uid://bb20s8yg8iuot"]
 
 [ext_resource type="Script" path="res://Stages/World/main_world.gd" id="1_j4arc"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="2_ncyc6"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="4_6g8ar"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="5_j4u63"]
 [ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="6_j7yip"]
+[ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="7_mnwyd"]
+[ext_resource type="Script" path="res://Entities/Item/item_data_equip.gd" id="9_bt23d"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data_equip.gd" id="9_v6ygq"]
 [ext_resource type="PackedScene" uid="uid://cednyx6i43tlg" path="res://Entities/Objects/tree.tscn" id="10_gg8qg"]
 [ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://Stages/World/world.tscn" id="11_34ehe"]
@@ -17,15 +19,35 @@
 [ext_resource type="PackedScene" uid="uid://6nrx3gn8vdr3" path="res://Utilities/Menus/hub_menu.tscn" id="17_3ra2a"]
 [ext_resource type="PackedScene" uid="uid://cegfrcv0cewvw" path="res://Entities/Objects/stone_cluster.tscn" id="19_owva6"]
 
+[sub_resource type="Resource" id="Resource_2luon"]
+script = ExtResource("6_j7yip")
+item_data = ExtResource("7_mnwyd")
+slot_type = 0
+quantity = 99
+
 [sub_resource type="Resource" id="Resource_66drq"]
 script = ExtResource("5_j4u63")
-slot_datas = Array[ExtResource("6_j7yip")]([null, null, null, null, null, null, null, null])
+slot_datas = Array[ExtResource("6_j7yip")]([SubResource("Resource_2luon"), null, null, null, null, null, null, null])
 inventory_size = 15
+
+[sub_resource type="Resource" id="Resource_jsd2a"]
+script = ExtResource("9_bt23d")
+equipment_type = 0
+defense = 0
+name = ""
+description = ""
+_stackable = false
+
+[sub_resource type="Resource" id="Resource_jjkp5"]
+script = ExtResource("6_j7yip")
+item_data = SubResource("Resource_jsd2a")
+slot_type = 0
+quantity = 1
 
 [sub_resource type="Resource" id="Resource_0msbn"]
 script = ExtResource("9_v6ygq")
-slot_datas = Array[ExtResource("6_j7yip")]([null, null, null, null])
-inventory_size = 10
+slot_datas = Array[ExtResource("6_j7yip")]([SubResource("Resource_jjkp5"), null, null, null, null, null, null])
+inventory_size = 7
 
 [sub_resource type="Shader" id="Shader_htk2q"]
 code = "shader_type canvas_item;
@@ -227,7 +249,18 @@ loot_table = Array[String]([])
 completions = 0
 enemy_types = Array[PackedScene]([ExtResource("15_utjb4")])
 
-[sub_resource type="Shader" id="Shader_opyij"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pfw2x"]
+resource_local_to_scene = true
+shader = SubResource("Shader_s2hej")
+shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = true
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[sub_resource type="Shader" id="Shader_v10ab"]
 code = "shader_type canvas_item;
 
 uniform vec4 color : source_color = vec4(1.0);
@@ -271,29 +304,10 @@ bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, vec2 image_top_left,
 }
 
 void fragment() {
-	COLOR = vec4(UV, 0.0, 1.0); // visualize UV
+	//COLOR = vec4(UV, 0.0, 1.0); // visualize UV
     vec2 uv = UV;
     vec2 image_top_left = floor(uv * number_of_images) / number_of_images;
     vec2 image_bottom_right = image_top_left + vec2(1.0) / number_of_images;
-
-    if (add_margins) {
-        vec2 texture_pixel_size = vec2(1.0) / (vec2(1.0) / TEXTURE_PIXEL_SIZE + vec2(width * 2.0) * number_of_images);
-
-        // Calculate the UV coordinates while adding margins
-        uv = (uv - texture_pixel_size * width - image_top_left) * TEXTURE_PIXEL_SIZE / texture_pixel_size + image_top_left;
-
-        // Clamp UV to ensure we don't sample outside the intended area
-        uv = clamp(uv, image_top_left, image_bottom_right);
-
-        // Only sample if the UV is within the bounds
-        if (uv == image_top_left || uv == image_bottom_right) {
-            COLOR.a = 0.0; // Make it fully transparent if clamped to edges
-        } else {
-            COLOR = texture(TEXTURE, uv);
-        }
-    } else {
-        COLOR = texture(TEXTURE, uv);
-    }
 
 	// Use shader if the object is being focused
 	if (focus == 1) {
@@ -306,12 +320,23 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_clgik"]
 resource_local_to_scene = true
-shader = SubResource("Shader_opyij")
-shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
+shader = SubResource("Shader_v10ab")
+shader_parameter/color = Color(1, 1, 1, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
 shader_parameter/inside = true
-shader_parameter/add_margins = true
+shader_parameter/add_margins = false
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ncb18"]
+resource_local_to_scene = true
+shader = SubResource("Shader_v10ab")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = false
 shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
 
@@ -363,6 +388,11 @@ material = SubResource("ShaderMaterial_jkhk1")
 position = Vector2(704, -288)
 dungeon_data = SubResource("Resource_y1gps")
 
+[node name="DungeonEntrance2" parent="MainWorld" instance=ExtResource("13_ia6bm")]
+material = SubResource("ShaderMaterial_pfw2x")
+position = Vector2(704, -288)
+dungeon_data = SubResource("Resource_y1gps")
+
 [node name="UI" type="CanvasLayer" parent="MainWorld"]
 
 [node name="HubMenu" parent="MainWorld/UI" instance=ExtResource("17_3ra2a")]
@@ -372,6 +402,12 @@ metadata/_edit_lock_ = true
 [node name="StoneCluster" parent="MainWorld" instance=ExtResource("19_owva6")]
 material = SubResource("ShaderMaterial_clgik")
 position = Vector2(193, 457)
+interact_limit = 10
+
+[node name="StoneCluster2" parent="MainWorld" instance=ExtResource("19_owva6")]
+material = SubResource("ShaderMaterial_ncb18")
+position = Vector2(96, -225)
+interact_limit = 10
 
 [node name="DungeonWorld" type="Node2D" parent="."]
 metadata/_edit_lock_ = true

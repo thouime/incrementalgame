@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://dw7jp8bpq3h0m"]
+[gd_scene load_steps=5 format=3 uid="uid://dw7jp8bpq3h0m"]
 
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_interface.gd" id="1_x3d5g"]
 [ext_resource type="PackedScene" uid="uid://cjvrn7m4iia17" path="res://Utilities/Inventory/inventory.tscn" id="2_n0jkd"]
 [ext_resource type="PackedScene" uid="uid://dj0urcd0clvl4" path="res://Utilities/Inventory/slot.tscn" id="3_oprao"]
+[ext_resource type="PackedScene" uid="uid://cfkr4tbdm1m3w" path="res://Utilities/Inventory/equipment.tscn" id="3_xmcij"]
 
 [node name="InventoryInterface" type="Control"]
 z_index = 1
@@ -30,7 +31,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="EquipInventory" parent="HBoxContainer/HBoxContainer2" instance=ExtResource("2_n0jkd")]
+[node name="Equipment" parent="HBoxContainer/HBoxContainer2" instance=ExtResource("3_xmcij")]
 layout_mode = 2
 
 [node name="ExternalInventory" parent="." instance=ExtResource("2_n0jkd")]

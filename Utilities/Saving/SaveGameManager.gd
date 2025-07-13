@@ -205,7 +205,9 @@ func save_game() -> void:
 	
 	var player := PlayerManager.player
 	var player_inventory : InventoryData = player.inventory_data
+	var player_equipment : InventoryData = player.equip_inventory_data
 	var inventory_slots := player_inventory.get_inventory_slots()
+	var equipment_slots := player_equipment.get_inventory_slots()
 	# JSON doesn't support many of Godot's types such as Vector2.
 	# var_to_str can be used to convert any Variant to a String.
 	# Keep track of the player's world position, if the player is in a dungeon
@@ -222,7 +224,8 @@ func save_game() -> void:
 			position = var_to_str(world_position),
 			direction = var_to_str(player.direction),
 			health = var_to_str(player.health),
-			inventory = serialize_inventory(inventory_slots)
+			inventory = serialize_inventory(inventory_slots),
+			equipment = serialize_equipment(equipment_slots)
 		},
 		world = {
 			# Save all placed objects in the game
@@ -243,13 +246,27 @@ func serialize_inventory(slot_datas: Array) -> Array:
 	var serialized_inventory := []
 	for slot_data: SlotData in slot_datas:
 		# If the inventory slot is empty, add it as null
-		if not slot_data:
+		if not slot_data or not slot_data.item_data:
 			serialized_inventory.append(null)
 			continue
 		serialized_inventory.append({
 			"item_name": slot_data.item_data.name,
 			"quantity": slot_data.quantity,
 			"stackable": slot_data.item_data.get_stackable()
+		})
+	return serialized_inventory
+
+func serialize_equipment(slot_datas: Array) -> Array:
+	var serialized_inventory := []
+	for slot_data: SlotData in slot_datas:
+		# If the inventory slot is empty, add it as null
+		if not slot_data or not slot_data.item_data:
+			serialized_inventory.append(null)
+			continue
+		serialized_inventory.append({
+			"item_name": slot_data.item_data.name,
+			"equipment_type": slot_data.item_data.equipment_type,
+			"defense": slot_data.item_data.defense
 		})
 	return serialized_inventory
 
@@ -360,13 +377,23 @@ func load_game() -> bool:
 	player.health = str_to_var(save_dict.player.health)
 	
 	var player_inventory : InventoryData = player.inventory_data
+	var player_equipment : InventoryDataEquip = player.equip_inventory_data
 	
 	# Load inventory
 	var inventory_array : Array = save_dict["player"]["inventory"]
 	var inventory_data := deserialize_inventory(inventory_array)
+	
 	# Update inventory with loaded inventory (overwrites default inventory)
 	player_inventory.set_inventory_slots(inventory_data)
 	hub_menu.inventory_interface.set_player_inventory_data(player_inventory)
+	
+	# Load equipment
+	var equipment_array : Array = save_dict["player"]["equipment"]
+	var equipment_data := deserialize_equipment(equipment_array)
+	
+	# Update equipment with loaded equipment
+	player_equipment.set_inventory_slots(equipment_data)
+	hub_menu.inventory_interface.set_equip_inventory_data(player_equipment)
 	
 	# Load the time from previous playthrough(s)
 	PlayerManager.time_played = save_dict["save"]["duration"]
@@ -384,7 +411,9 @@ func load_game() -> bool:
 func deserialize_inventory(
 	serialized_inventory: Array
 ) -> Array[SlotData]:
+	
 	var deserialized_slots : Array[SlotData] = []
+	
 	for slot_data: Variant in serialized_inventory:
 		var slot := SlotData.new()
 		if not slot_data:
@@ -395,6 +424,26 @@ func deserialize_inventory(
 		slot.set_quantity(slot_data["quantity"])
 		slot.item_data.set_stackable(slot_data["stackable"])
 		deserialized_slots.append(slot)
+		
+	return deserialized_slots
+
+func deserialize_equipment(
+	serialized_inventory: Array
+) -> Array[SlotData]:
+	
+	var deserialized_slots : Array[SlotData] = []
+	
+	for slot_data: Variant in serialized_inventory:
+		var slot := SlotData.new()
+		if not slot_data:
+			deserialized_slots.append(null)
+			continue
+		var item := get_item_by_name(slot_data["item_name"])
+		slot.set_item(item)
+		slot.set_defense(slot_data["defense"])
+		slot.set_equip_type(slot_data["equipment_type"])
+		deserialized_slots.append(slot)
+		
 	return deserialized_slots
 
 # Load all the objects in the game
@@ -423,7 +472,7 @@ func create_object(object_data: Dictionary) -> void:
 	var objects_path: String = "res://Entities/Objects/"
 	var object_path: String = objects_path + object_data.name + ".tscn"
 	var packed_scene: PackedScene = load(object_path)
-	
+
 	# If the file path is incorrect
 	if not packed_scene:
 		print("Could not find scene file for object!")
@@ -446,7 +495,7 @@ func create_object(object_data: Dictionary) -> void:
 	
 	loaded_objects.append(new_object)
 	
-	print("Object added to world.")
+	print(object_data.name + " added to world.")
 
 func load_type_data(object: StaticBody2D, object_data: Dictionary) -> void:
 	match object_data.type:
@@ -454,6 +503,7 @@ func load_type_data(object: StaticBody2D, object_data: Dictionary) -> void:
 			# Load inventory
 			var inventory_array : Array = object_data.inventory
 			var inventory_data := deserialize_inventory(inventory_array)
+			
 			object.inventory_data.set_inventory_slots(inventory_data)
 			object.toggle_inventory.connect(
 				hub_menu.toggle_inventory_interface

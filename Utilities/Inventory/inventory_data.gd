@@ -1,16 +1,26 @@
 extends Resource
 class_name InventoryData
 
+signal inventory_interact(inventory_data: InventoryData, index: int, button: int)
+signal inventory_updated(inventory_data: InventoryData)
+
 @export var slot_datas : Array[SlotData]
 @export var inventory_size : int = 10
 
-signal inventory_interact(inventory_data: InventoryData, index: int, button: int)
-signal inventory_updated(inventory_data: InventoryData)
+# Access to the interface containing each inventory slot (not a slot_data item)
+var inventory_containers : Array[PanelContainer]
 
 func initialize_slots(size: int, default_value: Variant = null) -> void:
 	slot_datas = []
 	for i in range(size):
 		slot_datas.append(default_value)
+
+# Set a reference to the equipment slots for checking equipment typing
+func set_inventory_containers(inv_container: Array[PanelContainer]) -> void:
+	inventory_containers = inv_container
+
+func get_inventory_containers() -> Array[PanelContainer]:
+	return inventory_containers
 
 func get_inventory_slots() -> Array[SlotData]:
 	return slot_datas

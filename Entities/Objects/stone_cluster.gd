@@ -11,6 +11,7 @@ const ITEM_FEEDBACK_EFFECT = preload(
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 @onready var activity_timer: ActivityTimer = $ActivityTimer
+@onready var sprite: Sprite2D = $Sprite1
 
 func _ready() -> void:
 	super._ready()
@@ -19,13 +20,19 @@ func _ready() -> void:
 	set_object_name("stone_cluster")
 	activity_timer.timer_finished.connect(_on_gather_timeout)
 	activity_timer.set_time(gather_time)
-	
+	activity_timer.show()
 
 # Override
 func interact_action(_player: CharacterBody2D) -> void:
-	# Specific bush logic
-	activity_timer.start()
-	print("Gathering from stone cluster...")
+
+	if current_interacts < interact_limit:
+		activity_timer.start()
+		print("Gathering from stone cluster...")
+	elif activity_timer.regen_complete:
+		print("regen complete true")
+		current_interacts = 0
+		activity_timer.start()
+		print("Gathering from stone cluster...")
 
 func stop_interact_action(_player: CharacterBody2D) -> void:
 	activity_timer.stop()
@@ -71,8 +78,13 @@ func _on_gather_timeout() -> void:
 			true,
 			item_dropped["duration"]
 		)
+
 	# Reduce the number of times the player can interact with the object
-	interact_limit -= 1
-	if interact_limit <= 0:
+	current_interacts += 1
+	# Start the regeneration of the resource, set as regen duration in export
+	if current_interacts >= interact_limit:
+		print("Resource has been depleted! It needs to regenerate...")
+		activity_timer.start_regen(regen_duration, self)
 		return
+	# Automatically restart timer
 	activity_timer.start()

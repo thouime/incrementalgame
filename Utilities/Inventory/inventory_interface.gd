@@ -4,7 +4,7 @@ var grabbed_slot_data: SlotData
 var external_inventory_owner: Node
 
 @onready var player_inventory: PanelContainer = $HBoxContainer/HBoxContainer/PlayerInventory
-@onready var equip_inventory: PanelContainer = $HBoxContainer/HBoxContainer2/EquipInventory
+@onready var equip_inventory: PanelContainer = $HBoxContainer/HBoxContainer2/Equipment
 @onready var grabbed_slot: PanelContainer = $GrabbedSlot
 @onready var external_inventory: PanelContainer = $ExternalInventory
 
@@ -16,7 +16,7 @@ func _physics_process(_delta: float) -> void:
 		grabbed_slot.global_position = (
 			get_global_mouse_position() + Vector2(5, 5)
 		)
-	
+
 	# If the player is too far from an external inventory.
 	if external_inventory_owner:
 		if external_inventory_owner.global_position.distance_to(
@@ -25,6 +25,7 @@ func _physics_process(_delta: float) -> void:
 			force_close.emit()
 
 func set_player_inventory_data(inventory_data: InventoryData) -> void:
+	
 	# If the signal is already connected, disconnect it
 	if inventory_data.inventory_interact.is_connected(on_inventory_interact):
 		inventory_data.inventory_interact.disconnect(on_inventory_interact)
@@ -32,7 +33,11 @@ func set_player_inventory_data(inventory_data: InventoryData) -> void:
 	player_inventory.set_inventory_data(inventory_data)
 
 func set_equip_inventory_data(inventory_data: InventoryData) -> void:
-	inventory_data.inventory_interact.connect(on_inventory_interact)
+	
+	if not inventory_data.inventory_interact.is_connected(
+		on_inventory_interact
+	):
+		inventory_data.inventory_interact.connect(on_inventory_interact)
 	equip_inventory.set_inventory_data(inventory_data)
 
 func set_external_inventory(_external_inventory_owner: Node) -> void:
@@ -98,7 +103,9 @@ func _on_gui_input(event: InputEvent) -> void:
 					drop_slot_data.emit(grabbed_slot_data)
 					grabbed_slot_data = null
 				MOUSE_BUTTON_RIGHT:
-					drop_slot_data.emit(grabbed_slot_data.create_single_slot_data())
+					drop_slot_data.emit(
+						grabbed_slot_data.create_single_slot_data()
+					)
 					if grabbed_slot_data.quantity < 1:
 						grabbed_slot_data = null
 						

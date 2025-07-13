@@ -44,9 +44,11 @@ func _ready() -> void:
 		
 	toggle_inventory.connect(toggle_inventory_interface)
 	inventory_interface.set_player_inventory_data(
-		PlayerManager.player.inventory_data)
+		PlayerManager.player.inventory_data
+	)
 	inventory_interface.set_equip_inventory_data(
-		PlayerManager.player.equip_inventory_data)
+		PlayerManager.player.equip_inventory_data
+	)
 	inventory_interface.force_close.connect(close_external_inventory)
 	
 	dungeon_menu.dungeon_start.connect(_on_dungeon_start)

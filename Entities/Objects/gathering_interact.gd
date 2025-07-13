@@ -1,10 +1,15 @@
 class_name  GatheringInteract
 extends "object.gd"
 
+## Time to gather before receiving loot.
 @export var gather_time: float = 2.0
-# Number of interactions before depletion
+## Number of interactions before depletion.
 @export var interact_limit: int = 10
+## Duration of time before resource regenerates.
+@export var regen_duration: float = 60
+
 var timer: Timer
+var current_interacts: int = 0
 
 func _ready() -> void:
 	super._ready()

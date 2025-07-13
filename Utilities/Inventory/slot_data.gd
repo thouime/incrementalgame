@@ -1,9 +1,17 @@
 extends Resource
 class_name SlotData
 
+enum SlotType {
+	ITEM,
+	ARMOR,
+	AXES,
+	PICKAXES
+}
+
 const MAX_STACK_SIZE: int = 99
 
 @export var item_data: ItemData
+@export var slot_type: SlotType = SlotType.ITEM
 @export_range(1, MAX_STACK_SIZE) var quantity: int = 1: set = set_quantity
 
 func can_merge_with(other_slot_data: SlotData) -> bool:
@@ -17,7 +25,7 @@ func can_fully_merge_with(other_slot_data: SlotData) -> bool:
 			and quantity + other_slot_data.quantity <= MAX_STACK_SIZE
 
 func can_partially_merge_with(other_slot_data: SlotData) -> bool:
-	return 	item_data == other_slot_data.item_data \
+	return item_data == other_slot_data.item_data \
 			and item_data.get_stackable() \
 			and MAX_STACK_SIZE - quantity > 0
 		
@@ -38,8 +46,28 @@ func set_item(item: ItemData) -> void:
 	item_data = item
 
 func set_quantity(value: int) -> void:
+	
+	if not item_data:
+		return
+		
 	quantity = value
 	var stackable := item_data.get_stackable()
 	if quantity > 1 and not stackable:
 		quantity = 1
-		push_error("%s is not stackable, setting quantity to 1." % item_data.name)
+		push_error(
+			"%s is not stackable, setting quantity to 1." % item_data.name
+		)
+
+func set_defense(value: int) -> void:
+	
+	if not item_data:
+		return
+		
+	item_data.defense = value
+	
+func set_equip_type(value: int) -> void:
+	
+	if not item_data:
+		return
+		
+	item_data.equipment_type = value

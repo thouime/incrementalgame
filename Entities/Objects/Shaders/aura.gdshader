@@ -41,29 +41,10 @@ bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, vec2 image_top_left,
 }
 
 void fragment() {
-	COLOR = vec4(UV, 0.0, 1.0); // visualize UV
+	//COLOR = vec4(UV, 0.0, 1.0); // visualize UV
     vec2 uv = UV;
     vec2 image_top_left = floor(uv * number_of_images) / number_of_images;
     vec2 image_bottom_right = image_top_left + vec2(1.0) / number_of_images;
-
-    if (add_margins) {
-        vec2 texture_pixel_size = vec2(1.0) / (vec2(1.0) / TEXTURE_PIXEL_SIZE + vec2(width * 2.0) * number_of_images);
-
-        // Calculate the UV coordinates while adding margins
-        uv = (uv - texture_pixel_size * width - image_top_left) * TEXTURE_PIXEL_SIZE / texture_pixel_size + image_top_left;
-
-        // Clamp UV to ensure we don't sample outside the intended area
-        uv = clamp(uv, image_top_left, image_bottom_right);
-
-        // Only sample if the UV is within the bounds
-        if (uv == image_top_left || uv == image_bottom_right) {
-            COLOR.a = 0.0; // Make it fully transparent if clamped to edges
-        } else {
-            COLOR = texture(TEXTURE, uv);
-        }
-    } else {
-        COLOR = texture(TEXTURE, uv);
-    }
 
 	// Use shader if the object is being focused
 	if (focus == 1) {

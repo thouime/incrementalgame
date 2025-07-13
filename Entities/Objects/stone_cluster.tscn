@@ -83,12 +83,14 @@ void fragment() {
 	        COLOR.a += (1.0 - COLOR.a) * color.a;
 	    }
 	}
+	
+	COLOR *= color;
 }"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fn076"]
 resource_local_to_scene = true
 shader = SubResource("Shader_opyij")
-shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
+shader_parameter/color = Color(0.862745, 0.913725, 0.92549, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
 shader_parameter/inside = true
@@ -99,6 +101,7 @@ shader_parameter/focus = 0
 [sub_resource type="Resource" id="Resource_04kci"]
 script = ExtResource("3_smnfi")
 item_data = ExtResource("4_fkipj")
+slot_type = 0
 quantity = 1
 
 [sub_resource type="Resource" id="Resource_yycf0"]
@@ -123,6 +126,8 @@ material = SubResource("ShaderMaterial_fn076")
 scale = Vector2(2, 2)
 script = ExtResource("1_qacki")
 drop_table = SubResource("Resource_48m23")
+interact_limit = 2
+regen_duration = 10.0
 
 [node name="Sprite1" type="Sprite2D" parent="."]
 use_parent_material = true
@@ -139,6 +144,8 @@ collision_layer = 128
 collision_mask = 0
 
 [node name="MouseArea" type="CollisionShape2D" parent="Selection"]
+visible = false
 shape = SubResource("RectangleShape2D_snbsg")
 
 [node name="ActivityTimer" parent="." instance=ExtResource("2_213bf")]
+visible = false

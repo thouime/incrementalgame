@@ -37,7 +37,7 @@ func _ready() -> void:
 		var save_info : Dictionary = GameSaveManager.get_save_info(slot)
 		save_slot.slot_id = current_slot
 		save_slot.save_location = slot
-		
+
 		slot_label.text = "Slot: " + str(current_slot)
 		name_label.text = save_info.get("save_name")
 		

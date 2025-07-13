@@ -30,6 +30,7 @@ texture = SubResource("AtlasTexture_v43ck")
 [sub_resource type="Resource" id="Resource_ofctb"]
 script = ExtResource("5_gj0ak")
 item_data = SubResource("Resource_rp73c")
+slot_type = 0
 quantity = 1
 
 [resource]

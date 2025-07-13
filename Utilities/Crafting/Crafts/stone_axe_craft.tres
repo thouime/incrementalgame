@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="CraftData" load_steps=12 format=3 uid="uid://1nxdsy72dfst"]
+
+[ext_resource type="Script" path="res://Utilities/Crafting/material_slot_data.gd" id="1_oimy0"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="2_ej13y"]
+[ext_resource type="Resource" uid="uid://bhvnyyfbu2grs" path="res://Entities/Item/Items/basic/stone_item.tres" id="3_qmh88"]
+[ext_resource type="Texture2D" uid="uid://bulp7tkpnj8vn" path="res://Entities/Item/#1 - Transparent Icons.png" id="4_sdw1l"]
+[ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="5_qcvj2"]
+[ext_resource type="Resource" uid="uid://nbfibm6gu5th" path="res://Entities/Item/Items/tools/stone_axe.tres" id="6_0nrb6"]
+[ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="7_whuy3"]
+
+[sub_resource type="Resource" id="Resource_ps2n7"]
+script = ExtResource("1_oimy0")
+quantity = 5
+item_data = ExtResource("2_ej13y")
+
+[sub_resource type="Resource" id="Resource_wha25"]
+script = ExtResource("1_oimy0")
+quantity = 15
+item_data = ExtResource("3_qmh88")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gsjt8"]
+atlas = ExtResource("4_sdw1l")
+region = Rect2(32, 320, 32, 32)
+
+[sub_resource type="Resource" id="Resource_rhutj"]
+script = ExtResource("7_whuy3")
+item_data = ExtResource("6_0nrb6")
+slot_type = 0
+quantity = 1
+
+[resource]
+script = ExtResource("5_qcvj2")
+type = 0
+slot_data = SubResource("Resource_rhutj")
+name = "Stone Axe"
+description = "The most basic type of axe there is, the stone axe. Used to chop trees."
+menu_texture = SubResource("AtlasTexture_gsjt8")
+material_slot_datas = Array[ExtResource("1_oimy0")]([SubResource("Resource_ps2n7"), SubResource("Resource_wha25")])

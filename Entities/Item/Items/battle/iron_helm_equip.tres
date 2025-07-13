@@ -9,6 +9,7 @@ region = Rect2(96, 224, 32, 32)
 
 [resource]
 script = ExtResource("1_g5hml")
+equipment_type = 1
 defence = 1
 name = "Iron Helm"
 description = "A piece of armor used to protect thine skull."

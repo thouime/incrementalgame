@@ -72,7 +72,6 @@ func hide_craft_info(craft_slot: int) -> void:
 			
 func on_slot_clicked(craft_slot: int, _button: int) -> void:
 	craft_item_request.emit(craft_datas[craft_slot])
-	print("Crafting slot clicked!")
 
 func on_slot_hovered(index: int) -> void:
 	show_craft_info(index)

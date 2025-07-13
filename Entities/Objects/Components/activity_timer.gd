@@ -2,7 +2,6 @@ extends Node2D
 class_name ActivityTimer
 
 signal timer_finished
-signal regen_finished
 
 var timer_done : bool = false
 var regen_complete : bool = true
@@ -87,12 +86,11 @@ func stop() -> void:
 	timer_circle.hide()
 	timer.stop()
 
-func set_regen_time(duration: float) -> void:
-	regen_timer.wait_time = duration
+func start_regen(duration: float, object: GatheringInteract) -> void:
+	object.modulate = Color.DARK_GRAY
 	regen_timer.one_shot = true
-	regen_timer.timeout.connect(_on_timer_timeout)
-
-func start_regen() -> void:
+	regen_timer.wait_time = duration
+	regen_timer.timeout.connect(_on_regen_timeout.bind(object))
 	regen_complete = false
 	regen_timer.start()
 
@@ -109,3 +107,8 @@ func add_timer_value(value: float) -> void:
 
 func _on_timer_timeout() -> void:
 	end()
+	
+func _on_regen_timeout(object: GatheringInteract) -> void:
+	object.modulate = Color.WHITE
+	regen_complete = true
+	regen_timer.timeout.disconnect(_on_regen_timeout)
