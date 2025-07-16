@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2u1pfnrn3raw"]
+
+[ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Common/Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="1_pkaaf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lc7yd"]
+atlas = ExtResource("1_pkaaf")
+region = Rect2(352, 416, 32, 32)
+
+[node name="CollectionSlot" type="PanelContainer"]
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="ItemLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Item Name"
+
+[node name="ItemTexture" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_lc7yd")
+stretch_mode = 3

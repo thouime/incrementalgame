@@ -11,10 +11,11 @@ signal settings_menu_closed
 @onready var building_menu: PanelContainer = $VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/BuildingMenu
 @onready var save_menu: PanelContainer = $VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu
 @onready var menu_panel: Panel = $VBoxContainer/MarginContainer/TopHud/MenuPanel
-@onready var save_list_menu: Control = $VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer/SaveListMenu
-@onready var settings_menu: Control = $VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer/SettingsMenu
-@onready var dungeon_menu: Control = $VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer/DungeonMenu
-@onready var back_button: Button = $VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer/BackButton
+@onready var settings_menu: Control = $VBoxContainer/MarginContainer/TopHud/MenuPanel/MarginContainer/VBoxContainer/SettingsMenu
+@onready var save_list_menu: Control = $VBoxContainer/MarginContainer/TopHud/MenuPanel/MarginContainer/VBoxContainer/SaveListMenu
+@onready var dungeon_menu: Control = $VBoxContainer/MarginContainer/TopHud/MenuPanel/MarginContainer/VBoxContainer/DungeonMenu
+@onready var collection_menu: Control = $VBoxContainer/MarginContainer/TopHud/MenuPanel/MarginContainer/VBoxContainer/CollectionMenu
+@onready var back_button: Button = $VBoxContainer/MarginContainer/TopHud/MenuPanel/MarginContainer/VBoxContainer/BackButton
 
 var hub_menus := []
 var setting_menus := []
@@ -33,7 +34,8 @@ func _ready() -> void:
 	setting_menus = [
 		save_list_menu,
 		settings_menu,
-		dungeon_menu
+		dungeon_menu,
+		collection_menu
 	]
 	
 	for button in v_box_container_left.get_children():
@@ -104,6 +106,11 @@ func open_settings_menu(menu: Control) -> void:
 		and inventory_interface.has_external_inventory()
 	):
 		inventory_interface.clear_external_inventory()
+	
+	# If the menu is already open, close it
+	if menu.visible:
+		close_settings_menu()
+		return
 	
 	for current_menu : Variant in hub_menus:
 		current_menu.visible = false
@@ -204,11 +211,8 @@ func _on_save_button_pressed() -> void:
 func _on_load_button_pressed() -> void:
 	open_settings_menu(save_list_menu)
 
-func _on_audio_button_pressed() -> void:
-	toggle_hub_menu(
-		null, 
-		v_box_container_right.get_node("AudioButton")
-	)
+func _on_collect_button_pressed() -> void:
+	open_settings_menu(collection_menu)
 
 func _on_settings_button_pressed() -> void:
 	v_box_container_right.get_node("SettingsButton").button_pressed = true
