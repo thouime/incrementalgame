@@ -36,6 +36,7 @@ var world_position : Vector2
 func _ready() -> void:
 	PlayerManager.player = self
 	PlayerManager.player_inventory = inventory_data
+	PlayerManager.player_equipment = equip_inventory_data
 	PlayerManager.state_machine = state_machine
 	screen_size = get_viewport_rect().size
 	set_animation()

@@ -2,6 +2,7 @@ extends Node
 
 var player: CharacterBody2D
 var player_inventory: InventoryData
+var player_equipment: InventoryDataEquip
 var state_machine : Node
 var player_state : State
 var time_played : float

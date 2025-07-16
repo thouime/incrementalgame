@@ -11,5 +11,5 @@ region = Rect2(0, 544, 32, 32)
 script = ExtResource("1_wp8pd")
 name = "Wood"
 description = "Hard material that forms the main substance of the trunk or branches of a tree. Can be used for crafting various objects."
-_stackable = false
+_stackable = true
 texture = SubResource("AtlasTexture_v0pn8")

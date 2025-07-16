@@ -441,7 +441,6 @@ func deserialize_equipment(
 		var item := get_item_by_name(slot_data["item_name"])
 		slot.set_item(item)
 		slot.set_defense(slot_data["defense"])
-		slot.set_equip_type(slot_data["equipment_type"])
 		deserialized_slots.append(slot)
 		
 	return deserialized_slots

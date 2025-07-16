@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bb20s8yg8iuot"]
+[gd_scene load_steps=35 format=3 uid="uid://bb20s8yg8iuot"]
 
 [ext_resource type="Script" path="res://Stages/World/main_world.gd" id="1_j4arc"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="2_ncyc6"]
@@ -17,12 +17,12 @@
 [ext_resource type="Script" path="res://Stages/Dungeons/dungeon_resource.gd" id="15_tvy4p"]
 [ext_resource type="PackedScene" uid="uid://cvs7h2d6kjk5g" path="res://Entities/Enemy/Goblin/goblin.tscn" id="15_utjb4"]
 [ext_resource type="PackedScene" uid="uid://6nrx3gn8vdr3" path="res://Utilities/Menus/hub_menu.tscn" id="17_3ra2a"]
+[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="19_mwanh"]
 [ext_resource type="PackedScene" uid="uid://cegfrcv0cewvw" path="res://Entities/Objects/stone_cluster.tscn" id="19_owva6"]
 
 [sub_resource type="Resource" id="Resource_2luon"]
 script = ExtResource("6_j7yip")
 item_data = ExtResource("7_mnwyd")
-slot_type = 0
 quantity = 99
 
 [sub_resource type="Resource" id="Resource_66drq"]
@@ -41,7 +41,6 @@ _stackable = false
 [sub_resource type="Resource" id="Resource_jjkp5"]
 script = ExtResource("6_j7yip")
 item_data = SubResource("Resource_jsd2a")
-slot_type = 0
 quantity = 1
 
 [sub_resource type="Resource" id="Resource_0msbn"]
@@ -119,24 +118,13 @@ void fragment() {
 
 	// Use shader if the object is being focused
 	if (focus == 1) {
-		
+
 	    if ((COLOR.a > 0.0) == inside && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, image_top_left, image_bottom_right, TEXTURE)) {
 	        COLOR.rgb = inside ? mix(COLOR.rgb, color.rgb, color.a) : color.rgb;
 	        COLOR.a += (1.0 - COLOR.a) * color.a;
 	    }
 	}
 }"
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_5c6pj"]
-resource_local_to_scene = true
-shader = SubResource("Shader_htk2q")
-shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
-shader_parameter/width = 0.8
-shader_parameter/pattern = 0
-shader_parameter/inside = true
-shader_parameter/add_margins = true
-shader_parameter/number_of_images = Vector2(1, 1)
-shader_parameter/focus = 0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5k06o"]
 resource_local_to_scene = true
@@ -340,6 +328,17 @@ shader_parameter/add_margins = false
 shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q2uik"]
+resource_local_to_scene = true
+shader = ExtResource("19_mwanh")
+shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = false
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
 [node name="Main" type="Node"]
 
 [node name="MainWorld" type="Node2D" parent="."]
@@ -367,12 +366,6 @@ scale = Vector2(1, 1)
 collision_layer = 6
 inventory_data = SubResource("Resource_66drq")
 equip_inventory_data = SubResource("Resource_0msbn")
-
-[node name="Tree" parent="MainWorld" instance=ExtResource("10_gg8qg")]
-material = SubResource("ShaderMaterial_5c6pj")
-position = Vector2(262, 257)
-collision_layer = 8
-collision_mask = 4
 
 [node name="World" parent="MainWorld" instance=ExtResource("11_34ehe")]
 position = Vector2(64, 160)
@@ -411,3 +404,7 @@ interact_limit = 10
 
 [node name="DungeonWorld" type="Node2D" parent="."]
 metadata/_edit_lock_ = true
+
+[node name="Tree" parent="." instance=ExtResource("10_gg8qg")]
+material = SubResource("ShaderMaterial_q2uik")
+position = Vector2(265, 257)

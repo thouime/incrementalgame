@@ -1,94 +1,65 @@
-[gd_scene load_steps=7 format=3 uid="uid://cednyx6i43tlg"]
+[gd_scene load_steps=23 format=3 uid="uid://cednyx6i43tlg"]
 
+[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="1_5ekcw"]
 [ext_resource type="Script" path="res://Entities/Objects/tree.gd" id="1_pwwmb"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Common/Assets/Art/objects/objects.png" id="2_ftg84"]
-
-[sub_resource type="Shader" id="Shader_tr10c"]
-code = "shader_type canvas_item;
-
-uniform vec4 color : source_color = vec4(1.0);
-uniform float width : hint_range(0, 10) = 1.0;
-uniform int pattern : hint_range(0, 2) = 0; // diamond, circle, square
-uniform bool inside = true;
-uniform bool add_margins = true; // only useful when inside is false
-uniform vec2 number_of_images = vec2(1.0); // number of horizontal and vertical images in the sprite sheet
-uniform int focus = 0; // 0 for false, 1 for true
-
-void vertex() {
-    if (add_margins) {
-        VERTEX += sign(VERTEX) * width; // replace sign(VERTEX) by (sign(VERTEX) * 2.0 - 1.0) if not Centered
-    }
-}
-
-bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, vec2 image_top_left, vec2 image_bottom_right, sampler2D texture) {
-    for (float i = -ceil(width); i <= ceil(width); i++) {
-        float x = abs(i) > width ? width * sign(i) : i;
-        float offset;
-
-        if (pattern == 0) {
-            offset = width - abs(x);
-        } else if (pattern == 1) {
-            offset = floor(sqrt(pow(width + 0.5, 2) - x * x));
-        } else if (pattern == 2) {
-            offset = width;
-        }
-
-        for (float j = -ceil(offset); j <= ceil(offset); j++) {
-            float y = abs(j) > offset ? offset * sign(j) : j;
-            vec2 xy = uv + texture_pixel_size * vec2(x, y);
-
-            if ((xy != clamp(xy, image_top_left, image_bottom_right) || texture(texture, xy).a <= 0.0) == inside) {
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-void fragment() {
-    vec2 uv = UV;
-    vec2 image_top_left = floor(uv * number_of_images) / number_of_images;
-    vec2 image_bottom_right = image_top_left + vec2(1.0) / number_of_images;
-
-    if (add_margins) {
-        vec2 texture_pixel_size = vec2(1.0) / (vec2(1.0) / TEXTURE_PIXEL_SIZE + vec2(width * 2.0) * number_of_images);
-
-        // Calculate the UV coordinates while adding margins
-        uv = (uv - texture_pixel_size * width - image_top_left) * TEXTURE_PIXEL_SIZE / texture_pixel_size + image_top_left;
-
-        // Clamp UV to ensure we don't sample outside the intended area
-        uv = clamp(uv, image_top_left, image_bottom_right);
-        
-        // Only sample if the UV is within the bounds
-        if (uv == image_top_left || uv == image_bottom_right) {
-            COLOR.a = 0.0; // Make it fully transparent if clamped to edges
-        } else {
-            COLOR = texture(TEXTURE, uv);
-        }
-    } else {
-        COLOR = texture(TEXTURE, uv);
-    }
-
-	// Use shader if the object is being focused
-	if (focus == 1) {
-	    if ((COLOR.a > 0.0) == inside && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, image_top_left, image_bottom_right, TEXTURE)) {
-	        COLOR.rgb = inside ? mix(COLOR.rgb, color.rgb, color.a) : color.rgb;
-	        COLOR.a += (1.0 - COLOR.a) * color.a;
-	    }
-	}
-}"
+[ext_resource type="PackedScene" uid="uid://dlrmxq4bnsyvu" path="res://Entities/Objects/Components/activity_timer.tscn" id="3_24h2j"]
+[ext_resource type="Script" path="res://Entities/Item/Drop Table/common_drops.gd" id="3_awmn3"]
+[ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="4_kaofd"]
+[ext_resource type="Script" path="res://Entities/Item/Drop Table/drop_table.gd" id="5_2a3hw"]
+[ext_resource type="Resource" uid="uid://bvd8gpu7r0l5c" path="res://Entities/Item/Items/basic/wood_item.tres" id="5_xvmtd"]
+[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="6_p1pnq"]
+[ext_resource type="Script" path="res://Entities/Item/Drop Table/rare_drops.gd" id="6_wlflg"]
+[ext_resource type="Resource" uid="uid://cgb13vtsuygqd" path="res://Entities/Item/Items/healing/apple.tres" id="7_g78r1"]
+[ext_resource type="Resource" uid="uid://nbfibm6gu5th" path="res://Entities/Item/Items/tools/stone_axe.tres" id="9_10tqc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wdyxv"]
 resource_local_to_scene = true
-shader = SubResource("Shader_tr10c")
+shader = ExtResource("1_5ekcw")
 shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
 shader_parameter/inside = true
-shader_parameter/add_margins = true
+shader_parameter/add_margins = false
 shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
+
+[sub_resource type="Resource" id="Resource_4mwcc"]
+script = ExtResource("4_kaofd")
+item_data = ExtResource("5_xvmtd")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_f6beo"]
+script = ExtResource("4_kaofd")
+item_data = ExtResource("6_p1pnq")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_fu05u"]
+script = ExtResource("3_awmn3")
+slot_datas = Array[ExtResource("4_kaofd")]([SubResource("Resource_4mwcc"), SubResource("Resource_f6beo")])
+
+[sub_resource type="Resource" id="Resource_gmb58"]
+script = ExtResource("4_kaofd")
+item_data = ExtResource("7_g78r1")
+quantity = 1
+
+[sub_resource type="Resource" id="Resource_bc2yo"]
+script = ExtResource("6_wlflg")
+slot_datas = Array[ExtResource("4_kaofd")]([SubResource("Resource_gmb58")])
+
+[sub_resource type="Resource" id="Resource_xa4ol"]
+script = ExtResource("5_2a3hw")
+common_chance = 0.6
+rare_chance = 0.25
+ultra_rare_chance = 0.1
+unique_chance = 0.05
+common_drops = SubResource("Resource_fu05u")
+rare_drops = SubResource("Resource_bc2yo")
+
+[sub_resource type="Resource" id="Resource_ortcc"]
+script = ExtResource("4_kaofd")
+item_data = ExtResource("9_10tqc")
+quantity = 1
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gj4gj"]
 size = Vector2(13.5, 13.5)
@@ -101,6 +72,8 @@ material = SubResource("ShaderMaterial_wdyxv")
 position = Vector2(252, 213)
 scale = Vector2(2, 2)
 script = ExtResource("1_pwwmb")
+drop_table = SubResource("Resource_xa4ol")
+equipment_requirement = SubResource("Resource_ortcc")
 metadata/_edit_group_ = true
 
 [node name="Sprite1" type="Sprite2D" parent="."]
@@ -138,3 +111,5 @@ offset_top = -6.0
 offset_right = 23.0
 offset_bottom = 34.0
 color = Color(1, 0, 0, 0.0980392)
+
+[node name="ActivityTimer" parent="." instance=ExtResource("3_24h2j")]

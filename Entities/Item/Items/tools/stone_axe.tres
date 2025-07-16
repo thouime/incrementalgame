@@ -10,7 +10,7 @@ region = Rect2(32, 320, 32, 32)
 [resource]
 script = ExtResource("1_224g0")
 equipment_type = 2
-defence = 0
+defense = 0
 name = "Stone Axe"
 description = "The most basic type of axe there is, the stone axe. Used to chop trees."
 _stackable = false

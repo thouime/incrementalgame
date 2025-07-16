@@ -1,17 +1,9 @@
 extends Resource
 class_name SlotData
 
-enum SlotType {
-	ITEM,
-	ARMOR,
-	AXES,
-	PICKAXES
-}
-
 const MAX_STACK_SIZE: int = 99
 
 @export var item_data: ItemData
-@export var slot_type: SlotType = SlotType.ITEM
 @export_range(1, MAX_STACK_SIZE) var quantity: int = 1: set = set_quantity
 
 func can_merge_with(other_slot_data: SlotData) -> bool:
@@ -64,10 +56,3 @@ func set_defense(value: int) -> void:
 		return
 		
 	item_data.defense = value
-	
-func set_equip_type(value: int) -> void:
-	
-	if not item_data:
-		return
-		
-	item_data.equipment_type = value
