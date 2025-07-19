@@ -1,0 +1,64 @@
+[gd_scene load_steps=6 format=3 uid="uid://d2u1pfnrn3raw"]
+
+[ext_resource type="Script" path="res://Utilities/Menus/Collection/collection_slot.gd" id="1_hmuqy"]
+[ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Common/Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="1_pkaaf"]
+
+[sub_resource type="Shader" id="Shader_55eyn"]
+code = "shader_type canvas_item;
+
+uniform bool enabled = true;
+
+void fragment() {
+	vec4 tex_color = texture(TEXTURE, UV);
+	
+	if (enabled) {
+		float gray = dot(tex_color.rgb, vec3(0.299, 0.587, 0.114));
+		tex_color = vec4(vec3(gray), tex_color.a * 0.5); // Greyscale and semi-transparent
+	}
+	
+	COLOR = tex_color;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ub8q6"]
+resource_local_to_scene = true
+shader = SubResource("Shader_55eyn")
+shader_parameter/enabled = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lc7yd"]
+atlas = ExtResource("1_pkaaf")
+region = Rect2(352, 416, 32, 32)
+
+[node name="CollectionSlot" type="PanelContainer"]
+script = ExtResource("1_hmuqy")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="ItemLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Item Name"
+horizontal_alignment = 1
+
+[node name="ItemTexture" type="TextureRect" parent="MarginContainer/VBoxContainer"]
+material = SubResource("ShaderMaterial_ub8q6")
+layout_mode = 2
+texture = SubResource("AtlasTexture_lc7yd")
+stretch_mode = 3
+
+[node name="PassiveLabel" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Passive Bonus: "
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Add Item"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]

@@ -35,6 +35,13 @@ func _ready() -> void:
 		
 		# Get save file json with info about the save
 		var save_info : Dictionary = GameSaveManager.get_save_info(slot)
+		
+		if save_info == null:
+			printerr("Save has been corrupted!")
+			return
+		
+		print(save_info)
+		
 		save_slot.slot_id = current_slot
 		save_slot.save_location = slot
 
