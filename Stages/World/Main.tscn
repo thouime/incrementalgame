@@ -1,37 +1,37 @@
 [gd_scene load_steps=35 format=3 uid="uid://bb20s8yg8iuot"]
 
-[ext_resource type="Script" path="res://Stages/World/main_world.gd" id="1_j4arc"]
-[ext_resource type="Script" path="res://Stages/World/grid.gd" id="2_ncyc6"]
-[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Common/Assets/Art/objects/objects.png" id="3_gd70b"]
-[ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="4_6g8ar"]
-[ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="5_j4u63"]
-[ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="6_j7yip"]
-[ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="7_mnwyd"]
-[ext_resource type="Script" path="res://Entities/Item/item_data_equip.gd" id="9_bt23d"]
-[ext_resource type="Script" path="res://Utilities/Inventory/inventory_data_equip.gd" id="9_v6ygq"]
-[ext_resource type="PackedScene" uid="uid://cednyx6i43tlg" path="res://Entities/Objects/tree.tscn" id="10_gg8qg"]
-[ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://Stages/World/world.tscn" id="11_34ehe"]
-[ext_resource type="PackedScene" uid="uid://byoflltw01rq5" path="res://Entities/Objects/bush.tscn" id="12_f32lr"]
-[ext_resource type="PackedScene" uid="uid://bsgr3kae0gnej" path="res://Stages/Dungeons/dungeon_entrance.tscn" id="13_ia6bm"]
-[ext_resource type="PackedScene" uid="uid://cftvtb33kjqt7" path="res://Stages/Dungeons/GoblinCave/GoblinCave.tscn" id="14_a630w"]
-[ext_resource type="Script" path="res://Stages/Dungeons/dungeon_resource.gd" id="15_tvy4p"]
-[ext_resource type="PackedScene" uid="uid://cvs7h2d6kjk5g" path="res://Entities/Enemy/Goblin/goblin.tscn" id="15_utjb4"]
-[ext_resource type="PackedScene" uid="uid://6nrx3gn8vdr3" path="res://Utilities/Menus/hub_menu.tscn" id="17_3ra2a"]
-[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="19_mwanh"]
-[ext_resource type="PackedScene" uid="uid://cegfrcv0cewvw" path="res://Entities/Objects/stone_cluster.tscn" id="19_owva6"]
+[ext_resource type="Script" path="res://Stages/World/main_world.gd" id="1_my0f1"]
+[ext_resource type="Script" path="res://Stages/World/grid.gd" id="2_jms7j"]
+[ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Common/Assets/Art/objects/objects.png" id="3_bq8qm"]
+[ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="4_tu2if"]
+[ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="5_5wslp"]
+[ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="6_ir37h"]
+[ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="7_w8hip"]
+[ext_resource type="Script" path="res://Utilities/Inventory/inventory_data_equip.gd" id="8_qgjrh"]
+[ext_resource type="Script" path="res://Entities/Item/item_data_equip.gd" id="9_xngxq"]
+[ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://Stages/World/world.tscn" id="10_pj4bu"]
+[ext_resource type="PackedScene" uid="uid://byoflltw01rq5" path="res://Entities/Objects/bush.tscn" id="11_8t0sd"]
+[ext_resource type="PackedScene" uid="uid://bsgr3kae0gnej" path="res://Stages/Dungeons/dungeon_entrance.tscn" id="12_gp1pg"]
+[ext_resource type="PackedScene" uid="uid://cftvtb33kjqt7" path="res://Stages/Dungeons/GoblinCave/GoblinCave.tscn" id="13_3pi58"]
+[ext_resource type="PackedScene" uid="uid://cvs7h2d6kjk5g" path="res://Entities/Enemy/Goblin/goblin.tscn" id="14_0fsef"]
+[ext_resource type="Script" path="res://Stages/Dungeons/dungeon_resource.gd" id="15_76ta7"]
+[ext_resource type="PackedScene" uid="uid://6nrx3gn8vdr3" path="res://Utilities/Menus/hub_menu.tscn" id="16_tyfer"]
+[ext_resource type="PackedScene" uid="uid://cegfrcv0cewvw" path="res://Entities/Objects/stone_cluster.tscn" id="17_xunpu"]
+[ext_resource type="PackedScene" uid="uid://cednyx6i43tlg" path="res://Entities/Objects/tree.tscn" id="18_jgwei"]
+[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="19_gbypb"]
 
 [sub_resource type="Resource" id="Resource_2luon"]
-script = ExtResource("6_j7yip")
-item_data = ExtResource("7_mnwyd")
+script = ExtResource("6_ir37h")
+item_data = ExtResource("7_w8hip")
 quantity = 99
 
 [sub_resource type="Resource" id="Resource_66drq"]
-script = ExtResource("5_j4u63")
-slot_datas = Array[ExtResource("6_j7yip")]([SubResource("Resource_2luon"), null, null, null, null, null, null, null])
+script = ExtResource("5_5wslp")
+slot_datas = Array[ExtResource("6_ir37h")]([SubResource("Resource_2luon"), null, null, null, null, null, null, null])
 inventory_size = 15
 
 [sub_resource type="Resource" id="Resource_jsd2a"]
-script = ExtResource("9_bt23d")
+script = ExtResource("9_xngxq")
 equipment_type = 0
 defense = 0
 name = ""
@@ -39,13 +39,13 @@ description = ""
 _stackable = false
 
 [sub_resource type="Resource" id="Resource_jjkp5"]
-script = ExtResource("6_j7yip")
+script = ExtResource("6_ir37h")
 item_data = SubResource("Resource_jsd2a")
 quantity = 1
 
 [sub_resource type="Resource" id="Resource_0msbn"]
-script = ExtResource("9_v6ygq")
-slot_datas = Array[ExtResource("6_j7yip")]([SubResource("Resource_jjkp5"), null, null, null, null, null, null])
+script = ExtResource("8_qgjrh")
+slot_datas = Array[ExtResource("6_ir37h")]([SubResource("Resource_jjkp5"), null, null, null, null, null, null])
 inventory_size = 7
 
 [sub_resource type="Shader" id="Shader_htk2q"]
@@ -227,15 +227,15 @@ shader_parameter/number_of_images = Vector2(1, 1)
 shader_parameter/focus = 0
 
 [sub_resource type="Resource" id="Resource_y1gps"]
-script = ExtResource("15_tvy4p")
+script = ExtResource("15_76ta7")
 name = "Goblin Cave"
-dungeon_scene = ExtResource("14_a630w")
+dungeon_scene = ExtResource("13_3pi58")
 enemy_count = 0
 difficulty = 1
 estimated_completion = 0
 loot_table = Array[String]([])
 completions = 0
-enemy_types = Array[PackedScene]([ExtResource("15_utjb4")])
+enemy_types = Array[PackedScene]([ExtResource("14_0fsef")])
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_pfw2x"]
 resource_local_to_scene = true
@@ -330,7 +330,7 @@ shader_parameter/focus = 0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q2uik"]
 resource_local_to_scene = true
-shader = ExtResource("19_mwanh")
+shader = ExtResource("19_gbypb")
 shader_parameter/color = Color(0.864358, 0.915483, 0.923664, 1)
 shader_parameter/width = 0.8
 shader_parameter/pattern = 0
@@ -342,7 +342,7 @@ shader_parameter/focus = 0
 [node name="Main" type="Node"]
 
 [node name="MainWorld" type="Node2D" parent="."]
-script = ExtResource("1_j4arc")
+script = ExtResource("1_my0f1")
 
 [node name="Grid" type="Control" parent="MainWorld"]
 light_mask = 0
@@ -350,16 +350,16 @@ visibility_layer = 512
 z_index = 100
 layout_mode = 3
 anchors_preset = 0
-script = ExtResource("2_ncyc6")
+script = ExtResource("2_jms7j")
 
 [node name="Cursor" type="Sprite2D" parent="MainWorld/Grid"]
 visible = false
 z_index = 1
-texture = ExtResource("3_gd70b")
+texture = ExtResource("3_bq8qm")
 region_enabled = true
 region_rect = Rect2(80, 0, 16, 16)
 
-[node name="Player" parent="MainWorld" instance=ExtResource("4_6g8ar")]
+[node name="Player" parent="MainWorld" instance=ExtResource("4_tu2if")]
 z_index = 2
 position = Vector2(250, 450)
 scale = Vector2(1, 1)
@@ -367,42 +367,42 @@ collision_layer = 6
 inventory_data = SubResource("Resource_66drq")
 equip_inventory_data = SubResource("Resource_0msbn")
 
-[node name="World" parent="MainWorld" instance=ExtResource("11_34ehe")]
+[node name="World" parent="MainWorld" instance=ExtResource("10_pj4bu")]
 position = Vector2(64, 160)
 metadata/_edit_lock_ = true
 
-[node name="Bush" parent="MainWorld" instance=ExtResource("12_f32lr")]
+[node name="Bush" parent="MainWorld" instance=ExtResource("11_8t0sd")]
 material = SubResource("ShaderMaterial_5k06o")
 position = Vector2(326, 427)
 input_pickable = true
 
-[node name="DungeonEntrance" parent="MainWorld" instance=ExtResource("13_ia6bm")]
+[node name="DungeonEntrance" parent="MainWorld" instance=ExtResource("12_gp1pg")]
 material = SubResource("ShaderMaterial_jkhk1")
 position = Vector2(704, -288)
 dungeon_data = SubResource("Resource_y1gps")
 
-[node name="DungeonEntrance2" parent="MainWorld" instance=ExtResource("13_ia6bm")]
+[node name="DungeonEntrance2" parent="MainWorld" instance=ExtResource("12_gp1pg")]
 material = SubResource("ShaderMaterial_pfw2x")
 position = Vector2(704, -288)
 dungeon_data = SubResource("Resource_y1gps")
 
 [node name="UI" type="CanvasLayer" parent="MainWorld"]
 
-[node name="HubMenu" parent="MainWorld/UI" instance=ExtResource("17_3ra2a")]
+[node name="HubMenu" parent="MainWorld/UI" instance=ExtResource("16_tyfer")]
 process_mode = 3
 metadata/_edit_lock_ = true
 
-[node name="StoneCluster" parent="MainWorld" instance=ExtResource("19_owva6")]
+[node name="StoneCluster" parent="MainWorld" instance=ExtResource("17_xunpu")]
 material = SubResource("ShaderMaterial_clgik")
 position = Vector2(193, 457)
 
-[node name="StoneCluster2" parent="MainWorld" instance=ExtResource("19_owva6")]
+[node name="StoneCluster2" parent="MainWorld" instance=ExtResource("17_xunpu")]
 material = SubResource("ShaderMaterial_ncb18")
 position = Vector2(96, -225)
 
 [node name="DungeonWorld" type="Node2D" parent="."]
 metadata/_edit_lock_ = true
 
-[node name="Tree" parent="." instance=ExtResource("10_gg8qg")]
+[node name="Tree" parent="." instance=ExtResource("18_jgwei")]
 material = SubResource("ShaderMaterial_q2uik")
 position = Vector2(265, 257)

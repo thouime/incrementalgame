@@ -40,8 +40,6 @@ func _ready() -> void:
 			printerr("Save has been corrupted!")
 			return
 		
-		print(save_info)
-		
 		save_slot.slot_id = current_slot
 		save_slot.save_location = slot
 

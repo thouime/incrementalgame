@@ -438,8 +438,9 @@ func load_game() -> bool:
 	
 	load_tiles(save_dict.world.tiles)
 	
-	var collection_array : Array = save_dict["player"]["collection"]
-	update_collection(collection_array)
+	if save_dict["player"].has("collection"):
+		var collection_array : Array = save_dict["player"]["collection"]
+		update_collection(collection_array)
 	
 	get_tree().paused = false
 	

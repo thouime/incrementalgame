@@ -30,7 +30,6 @@ func interact_action(_player: CharacterBody2D) -> void:
 		print("Interact Limit: ", interact_limit)
 		print("Gathering from: ", get_object_name())
 	elif activity_timer.regen_complete:
-		print("regen complete true")
 		current_interacts = 0
 		activity_timer.start()
 		print("Gathering from: ,", get_object_name())

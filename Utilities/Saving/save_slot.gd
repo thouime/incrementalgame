@@ -23,7 +23,7 @@ func _on_button_pressed() -> void:
 	GameSaveManager.set_current_save(save_location)
 	GameSaveManager.game_loaded = true
 	AudioManager.play_music("world", 3)
-	get_tree().change_scene_to_file("res://Stages/World/Main.tscn")
+	get_tree().change_scene_to_file("res://Stages/World/main.tscn")
 	
 func _on_rename_button_pressed() -> void:
 	rename_dialog.get_ok_button().pressed.connect(_on_text_entered)
