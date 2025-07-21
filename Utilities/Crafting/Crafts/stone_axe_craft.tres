@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CraftData" load_steps=12 format=3 uid="uid://1nxdsy72dfst"]
+[gd_resource type="Resource" script_class="CraftData" load_steps=12 format=3 uid="uid://b4yoogim54wxu"]
 
 [ext_resource type="Script" path="res://Utilities/Crafting/material_slot_data.gd" id="1_oimy0"]
 [ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="2_ej13y"]

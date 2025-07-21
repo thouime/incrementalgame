@@ -19,7 +19,7 @@
 [ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="13_74ibx"]
 [ext_resource type="Script" path="res://Entities/Objects/chest.gd" id="14_xiiwh"]
 [ext_resource type="Texture2D" uid="uid://1kukmo2577le" path="res://Common/Assets/Art/objects/chest_01.png" id="15_sr16n"]
-[ext_resource type="Resource" uid="uid://1nxdsy72dfst" path="res://Utilities/Crafting/Crafts/stone_axe_craft.tres" id="16_36pmc"]
+[ext_resource type="Resource" uid="uid://b4yoogim54wxu" path="res://Utilities/Crafting/Crafts/stone_axe_craft.tres" id="16_36pmc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nm7tg"]
 atlas = ExtResource("1_r02jd")
