@@ -10,7 +10,7 @@
 [ext_resource type="Resource" uid="uid://bvd8gpu7r0l5c" path="res://Entities/Item/Items/basic/wood_item.tres" id="5_xvmtd"]
 [ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="6_p1pnq"]
 [ext_resource type="Script" path="res://Entities/Item/Drop Table/rare_drops.gd" id="6_wlflg"]
-[ext_resource type="Resource" uid="uid://cgb13vtsuygqd" path="res://Entities/Item/Items/healing/apple.tres" id="7_g78r1"]
+[ext_resource type="Resource" uid="uid://b24flxxcqehq4" path="res://Entities/Item/Items/healing/apple.tres" id="7_g78r1"]
 [ext_resource type="Resource" uid="uid://nbfibm6gu5th" path="res://Entities/Item/Items/tools/stone_axe.tres" id="9_10tqc"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wdyxv"]

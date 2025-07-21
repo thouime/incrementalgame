@@ -187,7 +187,7 @@ func check_materials(material: ItemData, quantity: int) -> Dictionary:
 
 func remove_checked_items(materials: Dictionary) -> void:
 	#var materials = check_total_materials(material, quantity)
-	for material: ItemData in materials.keys():
+	for material : ItemData in materials.keys():
 		var inventory_items: Array = slot_datas
 		var required_quantity: int = materials[material]["required"] as int
 		# Current amount found
@@ -200,20 +200,22 @@ func remove_checked_items(materials: Dictionary) -> void:
 			else:
 				reduce_slot_amount_index(inv_slot, current_quantity)
 
-# Check how many of a specific material are available and which inventory slots contain them
+# Check how many of a specific material are available 
+# and which inventory slots contain them
 func check_materials_available(material: ItemData) -> Dictionary:
-	# Keeps track of the materials and their available quantities and inventory slots
+	# Keeps track of the materials 
+	# and their available quantities and inventory slots
 	var materials: Dictionary = { material: 
 			{ 
-			"total": 0,  # Total available quantity
-			"inv_slots": []  # Indices of inventory slots that contain the item
+			"total" : 0,  # Total available quantity
+			"inv_slots" : []  # Indices of inventory slots that contain the item
 			}
 		}
-	var inventory_items: Array[SlotData] = slot_datas
+	var inventory_items : Array[SlotData] = slot_datas
 
 	# Check each inventory slot for the material, adding info to dictionary
 	for index in range(inventory_items.size()):
-		var slot: SlotData = inventory_items[index]
+		var slot : SlotData = inventory_items[index]
 		if slot and slot.item_data.name == material.name:
 			materials[material]["total"] += slot.quantity  # Add the quantity of the item in this slot
 			materials[material]["inv_slots"].append(index)  # Record the index of the slot containing the item

@@ -395,12 +395,10 @@ metadata/_edit_lock_ = true
 [node name="StoneCluster" parent="MainWorld" instance=ExtResource("19_owva6")]
 material = SubResource("ShaderMaterial_clgik")
 position = Vector2(193, 457)
-interact_limit = 10
 
 [node name="StoneCluster2" parent="MainWorld" instance=ExtResource("19_owva6")]
 material = SubResource("ShaderMaterial_ncb18")
 position = Vector2(96, -225)
-interact_limit = 10
 
 [node name="DungeonWorld" type="Node2D" parent="."]
 metadata/_edit_lock_ = true

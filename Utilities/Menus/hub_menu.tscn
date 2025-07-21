@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://6nrx3gn8vdr3"]
+[gd_scene load_steps=41 format=3 uid="uid://6nrx3gn8vdr3"]
 
 [ext_resource type="Script" path="res://Utilities/Menus/hub_menu.gd" id="1_3ssx7"]
 [ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Common/Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="1_r02jd"]
@@ -7,10 +7,15 @@
 [ext_resource type="PackedScene" uid="uid://bp0gw7kcfe8n3" path="res://Utilities/Crafting/crafting_menu.tscn" id="3_yyee7"]
 [ext_resource type="PackedScene" uid="uid://dw7jp8bpq3h0m" path="res://Utilities/Inventory/inventory_interface.tscn" id="4_2da2w"]
 [ext_resource type="PackedScene" uid="uid://sdqto1qgblty" path="res://Stages/Dungeons/DungeonMenu.tscn" id="5_xa6oa"]
+[ext_resource type="Script" path="res://Utilities/Menus/Collection/collection_slot_data.gd" id="6_1l7xl"]
 [ext_resource type="Texture2D" uid="uid://n4ajdqxpoy37" path="res://Utilities/Menus/Art/Dusk's UI Icons.png" id="6_7sq6s"]
 [ext_resource type="PackedScene" uid="uid://bxeoaa7gwg4w" path="res://Utilities/Menus/generic_menu.tscn" id="6_j061h"]
+[ext_resource type="PackedScene" uid="uid://cjtj17nka7vh6" path="res://Utilities/Menus/Collection/collection_menu.tscn" id="6_x64bf"]
+[ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="7_400w8"]
 [ext_resource type="Resource" uid="uid://dech0h7erilx5" path="res://Utilities/Building/Tiles/dirt_tile.tres" id="7_fxp40"]
+[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="8_4jq8p"]
 [ext_resource type="Script" path="res://Utilities/Menus/hub_save_menu.gd" id="9_iow1x"]
+[ext_resource type="Resource" uid="uid://bkbrdn41jos3k" path="res://Entities/Item/Items/battle/iron_helm_equip.tres" id="9_notkc"]
 [ext_resource type="Theme" uid="uid://cvw8pe8ajmv6h" path="res://Common/menu_theme.tres" id="10_jj5pi"]
 [ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="10_ln0ni"]
 [ext_resource type="PackedScene" uid="uid://06qtry678qma" path="res://Utilities/Saving/SaveListMenu.tscn" id="10_xsmpw"]
@@ -20,6 +25,21 @@
 [ext_resource type="Script" path="res://Entities/Objects/chest.gd" id="14_xiiwh"]
 [ext_resource type="Texture2D" uid="uid://1kukmo2577le" path="res://Common/Assets/Art/objects/chest_01.png" id="15_sr16n"]
 [ext_resource type="Resource" uid="uid://b4yoogim54wxu" path="res://Utilities/Crafting/Crafts/stone_axe_craft.tres" id="16_36pmc"]
+
+[sub_resource type="Resource" id="Resource_pd77k"]
+script = ExtResource("6_1l7xl")
+item = ExtResource("7_400w8")
+attack_bonus = 1
+
+[sub_resource type="Resource" id="Resource_7tb04"]
+script = ExtResource("6_1l7xl")
+item = ExtResource("8_4jq8p")
+attack_bonus = 1
+
+[sub_resource type="Resource" id="Resource_dw46b"]
+script = ExtResource("6_1l7xl")
+item = ExtResource("9_notkc")
+attack_bonus = 2
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nm7tg"]
 atlas = ExtResource("1_r02jd")
@@ -82,7 +102,7 @@ margin = Rect2(4, 4, 8, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w5w8e"]
 atlas = ExtResource("6_7sq6s")
-region = Rect2(168, 0, 24, 24)
+region = Rect2(168, 144, 24, 24)
 margin = Rect2(4, 4, 8, 8)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3prao"]
@@ -122,30 +142,41 @@ visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 5
 
-[node name="SettingsMenu" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer" instance=ExtResource("3_1ffct")]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="SettingsMenu" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/MarginContainer/VBoxContainer" instance=ExtResource("3_1ffct")]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="SaveListMenu" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer" instance=ExtResource("10_xsmpw")]
+[node name="SaveListMenu" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/MarginContainer/VBoxContainer" instance=ExtResource("10_xsmpw")]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="DungeonMenu" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer" instance=ExtResource("5_xa6oa")]
+[node name="DungeonMenu" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/MarginContainer/VBoxContainer" instance=ExtResource("5_xa6oa")]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="BackButton" type="Button" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer"]
+[node name="CollectionMenu" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/MarginContainer/VBoxContainer" instance=ExtResource("6_x64bf")]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+collection_list = Array[ExtResource("6_1l7xl")]([SubResource("Resource_pd77k"), SubResource("Resource_7tb04"), SubResource("Resource_dw46b"), null, null, null, null, null, null, null])
+
+[node name="BackButton" type="Button" parent="VBoxContainer/MarginContainer/TopHud/MenuPanel/MarginContainer/VBoxContainer"]
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -276,7 +307,7 @@ toggle_mode = true
 icon = SubResource("AtlasTexture_x5wa0")
 icon_alignment = 2
 
-[node name="AudioButton" type="Button" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight"]
+[node name="CollectButton" type="Button" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight"]
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/hover = ExtResource("2_otr56")
@@ -294,12 +325,12 @@ toggle_mode = true
 icon = SubResource("AtlasTexture_3prao")
 icon_alignment = 2
 
-[connection signal="pressed" from="VBoxContainer/MarginContainer/TopHud/MenuPanel/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/TopHud/MenuPanel/MarginContainer/VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft/InventoryButton" to="." method="_on_inventory_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft/CraftingButton" to="." method="_on_crafting_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerLeft/BuildingButton" to="." method="_on_building_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu/MarginContainer/HBoxContainer/HBoxContainer2/SaveButton" to="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu" method="_on_save_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer/HubSaveMenu/MarginContainer/HBoxContainer/HBoxContainer/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight/SaveButton" to="." method="_on_save_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight/AudioButton" to="." method="_on_audio_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight/CollectButton" to="." method="_on_collect_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/VBoxContainerRight/SettingsButton" to="." method="_on_settings_button_pressed"]

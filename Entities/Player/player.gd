@@ -19,6 +19,7 @@ var player_size : Vector2
 var sprite_offset : Vector2 = Vector2(144, 144)
 var direction: Vector2 = Vector2.UP
 var health : int = 100
+var attack_bonus : int = 0
 var target_position : Vector2 = Vector2.ZERO
 var interact_target : Node = null
 var placed_tiles : Dictionary
@@ -170,7 +171,11 @@ func is_in_group_recursive(node: Node, group: String) -> bool:
 		node = node.get_parent()
 	return false
 
+func add_bonus_attack(attack: int) -> void:
+	attack_bonus += attack
+
 func get_attack_damage() -> int:
-	var min_damage := int(attack_power * 0.8)
-	var max_damage := int(attack_power * 1.2)
+	var total_attack := attack_power + attack_bonus
+	var min_damage := int(total_attack * 0.8)
+	var max_damage := int(total_attack * 1.2)
 	return randi_range(min_damage, max_damage)

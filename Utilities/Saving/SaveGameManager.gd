@@ -225,7 +225,8 @@ func save_game() -> void:
 			direction = var_to_str(player.direction),
 			health = var_to_str(player.health),
 			inventory = serialize_inventory(inventory_slots),
-			equipment = serialize_equipment(equipment_slots)
+			equipment = serialize_equipment(equipment_slots),
+			collection = serialize_collection()
 		},
 		world = {
 			# Save all placed objects in the game
@@ -341,6 +342,41 @@ func save_tiles(tiles: Dictionary) -> Dictionary:
 	# Return the final dictionary with "ground" and "boundary" directly under "tiles"
 	return serialized_tiles
 
+func serialize_collection () -> Array:
+	
+	if hub_menu == null:
+		printerr("Hub menu not found!")
+		return []
+	
+	var collection_menu : Control = hub_menu.collection_menu
+	
+	if collection_menu == null:
+		printerr("Collection Menu not found!")
+		return []
+	
+	var collection_list : Array[CollectionSlotData] = (
+		collection_menu.collection_list
+	)
+	
+	if collection_list == null:
+		printerr("Collection Menu not found!")
+		return []
+	
+	var collectables := []
+	
+	for collectable : CollectionSlotData in collection_list:
+		if collectable == null:
+			continue
+		var is_locked : bool = collectable.collection_slot.is_locked
+		if not is_locked:
+			continue
+		collectables.append({
+			"item_name" : collectable.item.name,
+			"attack_bonus" : collectable.attack_bonus
+		})
+
+	return collectables
+
 func load_game() -> bool:
 	
 	# Ensure a save slot is set
@@ -402,6 +438,9 @@ func load_game() -> bool:
 	
 	load_tiles(save_dict.world.tiles)
 	
+	var collection_array : Array = save_dict["player"]["collection"]
+	update_collection(collection_array)
+	
 	get_tree().paused = false
 	
 	print("Game loaded successfully!")
@@ -444,6 +483,33 @@ func deserialize_equipment(
 		deserialized_slots.append(slot)
 		
 	return deserialized_slots
+
+func update_collection(serialized_collection : Array) -> void:
+	
+	if hub_menu == null:
+		printerr("Hub menu not found!")
+		return
+	
+	var collection_menu : Control = hub_menu.collection_menu
+	
+	if collection_menu == null:
+		printerr("Collection Menu not found!")
+		return
+	
+	var collection_list : Array[CollectionSlotData] = (
+		collection_menu.collection_list
+	)
+	
+	if collection_list == null:
+		printerr("Collection Menu not found!")
+		return
+	
+	for collect_data in collection_list:
+		for collectable : Dictionary in serialized_collection:
+			if collect_data == null:
+				continue
+			if collect_data.item.name == collectable.item_name:
+				collect_data.collection_slot.lock_item()
 
 # Load all the objects in the game
 func load_objects(serialized_objects: Array) -> void:
