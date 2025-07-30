@@ -9,7 +9,7 @@ func _ready() -> void:
 	set_object_type("External Inventory")
 	set_object_name("chest")
 	inventory_data = InventoryData.new()
-	inventory_data.initialize_slots(20)
+	inventory_data.initialize_slots(10)
 	add_to_group("external_inventory")
 
 func interact_action(_player: CharacterBody2D) -> void:

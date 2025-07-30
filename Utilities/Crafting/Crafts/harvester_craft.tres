@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="CraftData" load_steps=14 format=3 uid="uid://du03002h7xbj"]
+
+[ext_resource type="Script" path="res://Utilities/Crafting/material_slot_data.gd" id="1_q7kk0"]
+[ext_resource type="Resource" uid="uid://bvd8gpu7r0l5c" path="res://Entities/Item/Items/basic/wood_item.tres" id="2_0nrjv"]
+[ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="2_ujkdu"]
+[ext_resource type="Resource" uid="uid://bhvnyyfbu2grs" path="res://Entities/Item/Items/basic/stone_item.tres" id="3_bdaa8"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="4_3guli"]
+[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="5_m8jic"]
+[ext_resource type="Texture2D" uid="uid://n4ajdqxpoy37" path="res://Utilities/Menus/Art/Dusk's UI Icons.png" id="6_vt6xa"]
+[ext_resource type="PackedScene" uid="uid://dnb1drol8a7qw" path="res://Entities/Objects/Automation/harvester.tscn" id="7_0aycv"]
+
+[sub_resource type="Resource" id="Resource_7x5o0"]
+script = ExtResource("1_q7kk0")
+quantity = 10
+item_data = ExtResource("2_0nrjv")
+
+[sub_resource type="Resource" id="Resource_63qkr"]
+script = ExtResource("1_q7kk0")
+quantity = 10
+item_data = ExtResource("3_bdaa8")
+
+[sub_resource type="Resource" id="Resource_7v8om"]
+script = ExtResource("1_q7kk0")
+quantity = 10
+item_data = ExtResource("4_3guli")
+
+[sub_resource type="Resource" id="Resource_qjt32"]
+script = ExtResource("1_q7kk0")
+quantity = 10
+item_data = ExtResource("5_m8jic")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mmhfr"]
+atlas = ExtResource("6_vt6xa")
+region = Rect2(120, 0, 24, 24)
+
+[resource]
+script = ExtResource("2_ujkdu")
+type = 1
+object_scene = ExtResource("7_0aycv")
+name = "Harvester"
+description = "Used to automatically harvest from resources."
+menu_texture = SubResource("AtlasTexture_mmhfr")
+material_slot_datas = Array[ExtResource("1_q7kk0")]([SubResource("Resource_7x5o0"), SubResource("Resource_63qkr"), SubResource("Resource_7v8om"), SubResource("Resource_qjt32")])

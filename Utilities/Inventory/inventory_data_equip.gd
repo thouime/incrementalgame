@@ -46,6 +46,8 @@ func get_equips() -> Dictionary:
 			continue
 		var equip : ItemData = slot_data.item_data
 		# Set the dictionary key to the name of the enum value
+		if not equip:
+			continue
 		equipment_dict[equip.EquipType.find_key(equip.equipment_type)] = equip
 		
 	

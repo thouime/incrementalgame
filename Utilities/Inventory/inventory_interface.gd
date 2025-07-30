@@ -2,11 +2,12 @@ extends Control
 
 var grabbed_slot_data: SlotData
 var external_inventory_owner: Node
+var external_inventory_distance: int = 100
 
-@onready var player_inventory: PanelContainer = $HBoxContainer/HBoxContainer/PlayerInventory
-@onready var equip_inventory: PanelContainer = $HBoxContainer/HBoxContainer2/Equipment
-@onready var grabbed_slot: PanelContainer = $GrabbedSlot
 @onready var external_inventory: PanelContainer = $ExternalInventory
+@onready var player_inventory: PanelContainer = $HBoxContainer/HBoxContainer/PlayerInventory
+@onready var equip_inventory: PanelContainer = $HBoxContainer/HBoxContainer2/EquipInventory
+@onready var grabbed_slot: PanelContainer = $GrabbedSlot
 
 signal drop_slot_data(slot_data: SlotData)
 signal force_close
@@ -21,7 +22,7 @@ func _physics_process(_delta: float) -> void:
 	if external_inventory_owner:
 		if external_inventory_owner.global_position.distance_to(
 			PlayerManager.get_global_position()
-		) > 50:
+		) > external_inventory_distance:
 			force_close.emit()
 
 func set_player_inventory_data(inventory_data: InventoryData) -> void:

@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://dnb1drol8a7qw"]
+
+[ext_resource type="Script" path="res://Entities/Objects/Automation/harvester.gd" id="1_75q2f"]
+[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="1_qc5ig"]
+[ext_resource type="Texture2D" uid="uid://n4ajdqxpoy37" path="res://Utilities/Menus/Art/Dusk's UI Icons.png" id="2_wdc7m"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8dka2"]
+resource_local_to_scene = true
+shader = ExtResource("1_qc5ig")
+shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/width = 0.8
+shader_parameter/pattern = 0
+shader_parameter/inside = true
+shader_parameter/add_margins = false
+shader_parameter/number_of_images = Vector2(1, 1)
+shader_parameter/focus = 0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2bqs2"]
+
+[node name="Harvester" type="Node2D"]
+z_index = 4
+material = SubResource("ShaderMaterial_8dka2")
+script = ExtResource("1_75q2f")
+rotation_speed = 75.0
+
+[node name="Sprite1" type="Sprite2D" parent="."]
+texture = ExtResource("2_wdc7m")
+region_enabled = true
+region_rect = Rect2(120, 0, 24, 24)
+
+[node name="Selection" type="Area2D" parent="."]
+
+[node name="MouseArea" type="CollisionShape2D" parent="Selection"]
+shape = SubResource("RectangleShape2D_2bqs2")

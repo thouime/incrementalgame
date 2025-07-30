@@ -1,4 +1,4 @@
-extends StaticBody2D
+extends Node2D
 
 signal interact
 
@@ -17,6 +17,8 @@ func _ready() -> void:
 	# Get player offset from object
 	_get_offset()
 	
+	initialize()
+	
 	# Add signals for detecting mouse interaction
 	selection.mouse_entered.connect(_on_selection_mouse_entered)
 	selection.mouse_exited.connect(_on_selection_mouse_exited)
@@ -31,6 +33,9 @@ func _get_offset() -> void:
 		if child is Sprite2D:
 			player_offset += child.get_rect().size.x
 	player_offset = player_offset / 2 + 10
+
+func initialize() -> void:
+	set_object_type("default object")
 
 func get_player_generated() -> bool:
 	return player_generated

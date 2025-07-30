@@ -1,4 +1,4 @@
-class_name  GatheringInteract
+class_name GatheringInteract
 extends "object.gd"
 
 const ITEM_FEEDBACK_EFFECT = preload(
@@ -17,35 +17,32 @@ const ITEM_FEEDBACK_EFFECT = preload(
 @export var equipment_requirement : SlotData
 
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-var timer: Timer
 var current_interacts: int = 0
+var harvester : Node2D
 
 func _ready() -> void:
 	super._ready()
-	object_type = "Gathering"
+	initialize()
+	
+	add_to_group("Gathering Objects")
 	
 	if not drop_table:
 		printerr("Drop Table not setup for: ", get_object_name())
 		return
 	drop_table.setup()
 
-func interact_action(player: CharacterBody2D) -> void:
-	start_timer(player)
+func initialize() -> void:
+	set_object_type("gathering")
 
-func start_timer(player: CharacterBody2D) -> void:
-	timer = Timer.new()
-	add_child(timer)
-	timer.wait_time = gather_time
-	timer.one_shot = false
-	timer.timeout.connect(_on_timer_timeout.bind(player))
-	timer.start()
+func interact_action(_player: CharacterBody2D) -> void:
+	if harvester:
+		harvester.interact_action(_player)
+		return
+	_default_interact()
 
-func stop_interact_action(_player: CharacterBody2D) -> void:
-	if timer:
-		timer.stop()
-		timer.queue_free()
-		timer = null
-		print("Stopped gathering.")
+# Override this method with the default interaction
+func _default_interact() -> void:
+	pass
 
 func get_drop(player: CharacterBody2D) -> Dictionary:
 	
@@ -70,7 +67,10 @@ func get_drop(player: CharacterBody2D) -> Dictionary:
 		}
 		
 		new_slot_data.set_quantity(quantity)
-		player.inventory_data.pick_up_slot_data(new_slot_data)
+		if harvester:
+			harvester.inventory_data.pick_up_slot_data(new_slot_data)
+		else:
+			player.inventory_data.pick_up_slot_data(new_slot_data)
 		print("Collected item: ", selected_drop.item_data.name, " x", new_slot_data.quantity)
 		return drop_data
 	else:

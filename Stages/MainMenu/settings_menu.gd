@@ -25,8 +25,8 @@ var resolutions := [
 func _ready() -> void:
 	
 	# Only enable back button if accessed from the main menu
-	if GameSaveManager.game_loaded:
-		back.hide()
+	#if GameSaveManager.game_loaded:
+		#back.hide()
 	
 	add_resolutions()
 	load_settings()
@@ -44,7 +44,9 @@ func load_settings() -> void:
 	AudioManager.set_music_volume(int(music_slider.value))
 	AudioManager.set_sfx_volume(int(sfx_slider.value))
 
-	res_button.select(get_resolution_index(SettingsManager.user_settings["resolution"]))
+	res_button.select(get_resolution_index(
+		SettingsManager.user_settings["resolution"])
+	)
 
 func save_settings() -> void:
 	SettingsManager.user_settings["global_volume"] = int(global_slider.value)
@@ -99,4 +101,8 @@ func get_resolution_index(res_size: Vector2i) -> int:
 
 func _on_back_pressed() -> void:
 	save_settings()
-	get_tree().change_scene_to_file("res://Stages/MainMenu/MainMenu.tscn")
+	if GameSaveManager.game_loaded:
+		GameSaveManager.save_game()
+	if get_tree().paused:
+		get_tree().paused = false
+	get_tree().change_scene_to_file("res://Stages/MainMenu/main_menu.tscn")

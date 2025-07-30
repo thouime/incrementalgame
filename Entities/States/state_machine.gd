@@ -65,7 +65,7 @@ func _connect_interact_signals() -> void:
 			node.connect("interact", _on_interact_signal)
 	
 func _on_interact_signal(
-	pos: Vector2, offset: float, object: StaticBody2D
+	pos: Vector2, offset: float, object: Node2D
 ) -> void:
 	if current_state and current_state.has_method("_on_interact_signal"):
 		current_state._on_interact_signal(pos, offset, object)

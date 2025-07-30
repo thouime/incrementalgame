@@ -37,7 +37,7 @@ func _ready() -> void:
 	activity_timer.set_time(compost_duration)
 	
 # Override
-func interact_action(_player: CharacterBody2D) -> void:
+func _default_interact() -> void:
 	print("Interacting with composter...")
 	#CraftingSystem.try_craft(composted_dirt)
 	if not activity_timer.is_running() and not compost_ready:

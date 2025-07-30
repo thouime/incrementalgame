@@ -134,7 +134,7 @@ custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_8j17j")
-text = "Back"
+text = "Main Menu"
 
 [connection signal="value_changed" from="HBoxContainer/MarginContainer/VBoxContainer/GlobalVolume/HBoxContainer/GlobalSlider" to="." method="_on_global_slider_value_changed"]
 [connection signal="value_changed" from="HBoxContainer/MarginContainer/VBoxContainer/GlobalVolume/HBoxContainer/GlobalSpinBox" to="." method="_on_global_spin_box_value_changed"]

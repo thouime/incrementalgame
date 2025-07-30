@@ -80,7 +80,7 @@ func stop_gathering() -> void:
 func _on_interact_signal(
 	pos: Vector2, 
 	offset: float,
-	object: StaticBody2D
+	object: Node2D
 ) -> void:
 	# Check if they are already interacting with the same object
 	if object != parent.interact_target:

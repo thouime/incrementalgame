@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://6nrx3gn8vdr3"]
+[gd_scene load_steps=42 format=3 uid="uid://6nrx3gn8vdr3"]
 
 [ext_resource type="Script" path="res://Utilities/Menus/hub_menu.gd" id="1_3ssx7"]
 [ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Common/Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="1_r02jd"]
@@ -25,6 +25,7 @@
 [ext_resource type="Script" path="res://Entities/Objects/chest.gd" id="14_xiiwh"]
 [ext_resource type="Texture2D" uid="uid://1kukmo2577le" path="res://Common/Assets/Art/objects/chest_01.png" id="15_sr16n"]
 [ext_resource type="Resource" uid="uid://b4yoogim54wxu" path="res://Utilities/Crafting/Crafts/stone_axe_craft.tres" id="16_36pmc"]
+[ext_resource type="Resource" uid="uid://du03002h7xbj" path="res://Utilities/Crafting/Crafts/harvester_craft.tres" id="22_gmfby"]
 
 [sub_resource type="Resource" id="Resource_pd77k"]
 script = ExtResource("6_1l7xl")
@@ -245,7 +246,7 @@ layout_mode = 2
 [node name="CraftingMenu" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer" instance=ExtResource("3_yyee7")]
 visible = false
 layout_mode = 2
-craft_datas = Array[ExtResource("10_ln0ni")]([ExtResource("11_ks6y0"), SubResource("Resource_oxbik"), ExtResource("16_36pmc")])
+craft_datas = Array[ExtResource("10_ln0ni")]([ExtResource("11_ks6y0"), SubResource("Resource_oxbik"), ExtResource("16_36pmc"), ExtResource("22_gmfby")])
 
 [node name="BuildingMenu" parent="VBoxContainer/BottomHud/PanelContainer/MarginContainer/HBoxContainer/PanelContainer" instance=ExtResource("6_j061h")]
 visible = false

@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_interface.gd" id="1_x3d5g"]
 [ext_resource type="PackedScene" uid="uid://cjvrn7m4iia17" path="res://Utilities/Inventory/inventory.tscn" id="2_n0jkd"]
 [ext_resource type="PackedScene" uid="uid://dj0urcd0clvl4" path="res://Utilities/Inventory/slot.tscn" id="3_oprao"]
-[ext_resource type="PackedScene" uid="uid://cfkr4tbdm1m3w" path="res://Utilities/Inventory/equipment.tscn" id="3_xmcij"]
+[ext_resource type="PackedScene" path="res://Utilities/Inventory/equipment.tscn" id="3_xmcij"]
 
 [node name="InventoryInterface" type="Control"]
 z_index = 1
@@ -12,12 +12,29 @@ anchors_preset = 0
 mouse_filter = 1
 script = ExtResource("1_x3d5g")
 
+[node name="GrabbedSlot" parent="." instance=ExtResource("3_oprao")]
+visible = false
+modulate = Color(1, 1, 1, 0.490196)
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ExternalInventory" parent="." instance=ExtResource("2_n0jkd")]
+layout_mode = 1
+anchors_preset = -1
+offset_top = -25.0
+offset_right = 16.0
+offset_bottom = -9.0
+grow_vertical = 0
+
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 16.0
-grow_horizontal = 2
+offset_right = 196.0
+offset_bottom = 68.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
@@ -31,26 +48,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="Equipment" parent="HBoxContainer/HBoxContainer2" instance=ExtResource("3_xmcij")]
+[node name="EquipInventory" parent="HBoxContainer/HBoxContainer2" instance=ExtResource("3_xmcij")]
 layout_mode = 2
-
-[node name="ExternalInventory" parent="." instance=ExtResource("2_n0jkd")]
-visible = false
-layout_mode = 0
-offset_top = -100.0
-offset_right = 40.0
-offset_bottom = -60.0
-
-[node name="GrabbedSlot" parent="." instance=ExtResource("3_oprao")]
-visible = false
-modulate = Color(1, 1, 1, 0.490196)
-self_modulate = Color(1, 1, 1, 0)
-layout_mode = 0
-
-[node name="CenterContainer" type="CenterContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
 [connection signal="visibility_changed" from="." to="." method="_on_visibility_changed"]

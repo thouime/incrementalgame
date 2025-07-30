@@ -11,13 +11,14 @@ func _ready() -> void:
 	activity_timer.set_time(gather_time)
 
 # Override
-func interact_action(_player: CharacterBody2D) -> void:
+func _default_interact() -> void:
 	# Specific bush logic
 	activity_timer.start()
 	print("Gathering from bush...")
 
 func stop_interact_action(_player: CharacterBody2D) -> void:
-	activity_timer.stop()
+	if not harvester:
+		activity_timer.stop()
 
 func is_gathering() -> bool:
 	return activity_timer.is_running()

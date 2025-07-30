@@ -13,19 +13,18 @@ func _ready() -> void:
 	activity_timer.show()
 
 # Override
-func interact_action(_player: CharacterBody2D) -> void:
-
+func _default_interact() -> void:
 	if current_interacts < interact_limit:
 		activity_timer.start()
 		print("Gathering from stone cluster...")
 	elif activity_timer.regen_complete:
-		print("regen complete true")
 		current_interacts = 0
 		activity_timer.start()
 		print("Gathering from stone cluster...")
 
 func stop_interact_action(_player: CharacterBody2D) -> void:
-	activity_timer.stop()
+	if not harvester:
+		activity_timer.stop()
 
 func is_gathering() -> bool:
 	return activity_timer.is_running()
@@ -40,6 +39,7 @@ func _on_gather_timeout() -> void:
 	if current_interacts >= interact_limit:
 		print("Resource has been depleted! It needs to regenerate...")
 		activity_timer.start_regen(regen_duration, self)
+		current_interacts = 0
 		return
 	# Automatically restart timer
 	activity_timer.start()

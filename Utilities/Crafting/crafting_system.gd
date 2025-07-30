@@ -3,7 +3,10 @@ extends Node
 signal start_building
 signal stop_building
 
-var preview_object : Node = null # Temporary "ghost" object that follos the mouse.
+# Temporary "ghost" object that follows the mouse.
+var preview_object : Node = null
+# Temporary object for placing automating machines on
+var target_object : Node2D = null
 var items_to_remove : Dictionary
 # Check if the grid is active
 var grid_active : bool = false
@@ -24,15 +27,25 @@ func _process(_delta: float) -> void:
 		draw_grid()
 
 func _input(event: InputEvent) -> void:
-	# Handle left mouse button press
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-			if grid_active and placement_mode:
-				place_object()
-		# Handle cancel action (e.g., pressing the "cancel" action key)
-		elif event.is_action_pressed("cancel"):
-			if grid_active:
-				cancel_place_object()
+	if not event is InputEventMouseButton:
+		return
+	
+	if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		
+		if not (grid_active and placement_mode):
+			return
+		
+		if preview_object.object_type == "automation":
+			can_object_automate(grid.get_cursor(), 32)
+			place_automated_object()
+			# place in middle of object (?)
+			return
+		place_object()
+		return
+		
+	# Handle cancel action (e.g., pressing the "cancel" action key)
+	if event.is_action_pressed("cancel") and grid_active:
+		cancel_place_object()
 
 func set_references(references : Dictionary) -> void:
 	main = references["main"]
@@ -45,7 +58,6 @@ func set_references(references : Dictionary) -> void:
 
 # Check if the player has the required materials in the player inventory
 func try_craft(craft_slot: CraftData) -> void:
-	print("trying to craft...")
 	var material_slots: Dictionary = {}
 	var missing_materials: bool = false
 	# Check for materials and quantities
@@ -70,7 +82,7 @@ func craft(material_slots: Dictionary, craft_slot: CraftData) -> void:
 	if craft_slot.type == craft_slot.Type.OBJECT:
 		start_building.emit()
 		print("Preparing grid...")
-		var new_object: StaticBody2D = craft_slot.object_scene.instantiate()
+		var new_object: Variant = craft_slot.object_scene.instantiate()
 		var sprite: Sprite2D = new_object.get_node("Sprite1")
 		
 		# Ensure unique material and shader
@@ -80,6 +92,7 @@ func craft(material_slots: Dictionary, craft_slot: CraftData) -> void:
 				new_material.shader = new_material.shader.duplicate()
 			new_object.material = new_material
 		
+		new_object.initialize()
 		preview_object = new_object
 		items_to_remove = material_slots
 		# Change the cursor to the sprite of the craft
@@ -126,6 +139,14 @@ func draw_grid() -> void:
 
 func check_area(cursor_position: Vector2, grid_size: int) -> bool:
 	# Define the area to check for overlapping objects
+	
+	var objects_underneath : Array = (
+		get_underlying_objects(cursor_position, grid_size)
+	)
+	
+	return objects_underneath.size() == 0
+
+func get_underlying_objects(cursor_position: Vector2, grid_size: int) -> Array:
 	var shape: RectangleShape2D = RectangleShape2D.new()
 	shape.extents = Vector2(float(grid_size) / 2.0, float(grid_size) / 2.0)
 
@@ -143,7 +164,8 @@ func check_area(cursor_position: Vector2, grid_size: int) -> bool:
 	var results: Array = space_state.intersect_shape(query, 1)
 	if results.size() > 0:
 		print("There is an object in the way.")
-	return results.size() == 0
+	
+	return results
 
 func check_ground(
 		cursor_position: Vector2, 
@@ -208,57 +230,106 @@ func can_place(
 ) -> bool:
 	return (check_area(cursor_position, grid_size) and 
 			check_ground(cursor_position, tilemap, grid_size))
+
+func can_object_automate(cursor_position: Vector2, grid_size: int) -> bool:
+	var results : Array = get_underlying_objects(cursor_position, grid_size)
+	var object : Node2D
+	for result : Dictionary in results:
+		
+		if result.has("collider"):
+			object = result["collider"]
+		
+		if not object or not object is GatheringInteract:
+			print("continuing, object: ", object)
+			continue
 			
+		# Check if object already has a harvester
+		if not object.harvester:
+			target_object = object
+			return true
+			
+		print("Object already has a harvester!")
+		return false
+	return false
+
 func place_object() -> void:
-	if preview_object:
-		# Check if object can be placed
-		# Checks if attempting to place on void or another object
-		if(!can_place(grid.get_cursor(), grass_tiles, 32)):
-			return
-		
-		# Remove the required items to craft the object
-		inventory.remove_checked_items(items_to_remove)
-		items_to_remove.clear()
-
-
-		# Set object position to the grid cursor position
-		preview_object.position = grid.get_cursor()
-		# Keep track of objects created by the player for saving
-		preview_object.player_generated = true
-		# Add the object to the world
-		main.add_child(preview_object)
-		# Set unique identifier for the object instance (for saving/loading)
-		preview_object.object_id = preview_object.get_instance_id()
-		preview_object.connect("interact", PlayerManager.state_machine._on_interact_signal)
-		
-		# Any external inventories need to be connected to inventory signal
-		if preview_object.is_in_group("external_inventory"):
-			preview_object.toggle_inventory.connect(
-				hub_menu.toggle_inventory_interface
-			)
-		
-		# Object was successfully placed, so we are done building
-		stop_building.emit()
-		
-		# Shaders are disabled while building, this turns it back on
-		preview_object.draw_shader(true)
-		
-		print("Object added to world.")
-
-		# Reset the preview object for the next action
-		preview_object = null
-
-		# Change mouse mode back to visible
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-		grid.build_cursor.visible = false
-
-		# Deactivate grid and placement mode
-		grid_active = false
-		grid.visible = false
-		placement_mode = false
-	else:
+	if not preview_object:
 		print("There is no reference to the object!")
+		return
+	# Check if object can be placed
+	# Checks if attempting to place on void or another object
+	if(!can_place(grid.get_cursor(), grass_tiles, 32)):
+		return
+	
+	# Set object position to the grid cursor position
+	preview_object.position = grid.get_cursor()
+	
+	setup_object()
 
+func place_automated_object() -> void: 
+	if not preview_object:
+		print("There is no reference to the object!")
+		return
+	
+	if not target_object:
+		printerr("No target object for automation!")
+		return
+	
+	var sprite: Sprite2D = target_object.get_node("Sprite1")
+	var center_position: Vector2 = sprite.global_position
+	# Set object position to the grid cursor position
+	preview_object.position = center_position
+	
+	# If it's a harvester automation object
+	# Give each object a reference to eachother
+	if preview_object.object_name == "harvester":
+		target_object.harvester = preview_object
+		preview_object.gathering_object = target_object
+	
+	setup_object()
+
+func setup_object() -> void:
+	# Remove the required items to craft the object
+	inventory.remove_checked_items(items_to_remove)
+	items_to_remove.clear()
+
+	# Keep track of objects created by the player for saving
+	preview_object.player_generated = true
+	# Add the object to the world
+	main.add_child(preview_object)
+	# Set unique identifier for the object instance (for saving/loading)
+	preview_object.object_id = preview_object.get_instance_id()
+	preview_object.connect(
+		"interact", PlayerManager.state_machine._on_interact_signal
+	)
+	
+	# Any external inventories need to be connected to inventory signal
+	if preview_object.is_in_group("external_inventory"):
+		preview_object.toggle_inventory.connect(
+			hub_menu.toggle_inventory_interface
+		)
+	
+	# Object was successfully placed, so we are done building
+	stop_building.emit()
+	
+	print("Object added to world.")
+
+	# Change mouse mode back to visible
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	grid.build_cursor.visible = false
+
+	# Shaders are disabled while building, this turns it back on
+	preview_object.draw_shader(true)
+
+	# Deactivate grid and placement mode
+	grid_active = false
+	grid.visible = false
+	placement_mode = false
+	
+	# Clear references to objects
+	preview_object = null
+	target_object = null
+	
 func cancel_place_object() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	grid.build_cursor.visible = false

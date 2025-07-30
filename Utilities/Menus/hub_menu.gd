@@ -167,7 +167,7 @@ func toggle_inventory_interface(external_inventory_owner: Node = null) -> void:
 		
 		# Always set the external inventory if it's provided
 		inventory_interface.set_external_inventory(external_inventory_owner)
-		
+
 		toggle_hub_menu(
 			inventory_interface, 
 			v_box_container_left.get_node("InventoryButton")

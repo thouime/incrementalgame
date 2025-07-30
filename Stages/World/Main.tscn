@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bb20s8yg8iuot"]
+[gd_scene load_steps=41 format=3 uid="uid://bb20s8yg8iuot"]
 
 [ext_resource type="Script" path="res://Stages/World/main_world.gd" id="1_my0f1"]
 [ext_resource type="Script" path="res://Stages/World/grid.gd" id="2_jms7j"]
@@ -6,10 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://dn215u4niu0ji" path="res://Entities/Player/player.tscn" id="4_tu2if"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data.gd" id="5_5wslp"]
 [ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="6_ir37h"]
-[ext_resource type="Resource" uid="uid://cw25rm77yy7k1" path="res://Entities/Item/Items/basic/dirt_item.tres" id="7_w8hip"]
+[ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="7_6wypw"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="8_p57k8"]
 [ext_resource type="Script" path="res://Utilities/Inventory/inventory_data_equip.gd" id="8_qgjrh"]
+[ext_resource type="Resource" uid="uid://bhvnyyfbu2grs" path="res://Entities/Item/Items/basic/stone_item.tres" id="9_1yk6w"]
 [ext_resource type="Script" path="res://Entities/Item/item_data_equip.gd" id="9_xngxq"]
 [ext_resource type="PackedScene" uid="uid://dptrl8y01po4m" path="res://Stages/World/world.tscn" id="10_pj4bu"]
+[ext_resource type="Resource" uid="uid://bvd8gpu7r0l5c" path="res://Entities/Item/Items/basic/wood_item.tres" id="10_rdguh"]
 [ext_resource type="PackedScene" uid="uid://byoflltw01rq5" path="res://Entities/Objects/bush.tscn" id="11_8t0sd"]
 [ext_resource type="PackedScene" uid="uid://bsgr3kae0gnej" path="res://Stages/Dungeons/dungeon_entrance.tscn" id="12_gp1pg"]
 [ext_resource type="PackedScene" uid="uid://cftvtb33kjqt7" path="res://Stages/Dungeons/GoblinCave/GoblinCave.tscn" id="13_3pi58"]
@@ -22,12 +25,27 @@
 
 [sub_resource type="Resource" id="Resource_2luon"]
 script = ExtResource("6_ir37h")
-item_data = ExtResource("7_w8hip")
+item_data = ExtResource("7_6wypw")
+quantity = 99
+
+[sub_resource type="Resource" id="Resource_cafxv"]
+script = ExtResource("6_ir37h")
+item_data = ExtResource("8_p57k8")
+quantity = 99
+
+[sub_resource type="Resource" id="Resource_uui4l"]
+script = ExtResource("6_ir37h")
+item_data = ExtResource("9_1yk6w")
+quantity = 99
+
+[sub_resource type="Resource" id="Resource_g1pwx"]
+script = ExtResource("6_ir37h")
+item_data = ExtResource("10_rdguh")
 quantity = 99
 
 [sub_resource type="Resource" id="Resource_66drq"]
 script = ExtResource("5_5wslp")
-slot_datas = Array[ExtResource("6_ir37h")]([SubResource("Resource_2luon"), null, null, null, null, null, null, null])
+slot_datas = Array[ExtResource("6_ir37h")]([SubResource("Resource_2luon"), SubResource("Resource_cafxv"), SubResource("Resource_uui4l"), SubResource("Resource_g1pwx"), null, null, null, null])
 inventory_size = 15
 
 [sub_resource type="Resource" id="Resource_jsd2a"]
@@ -400,9 +418,9 @@ position = Vector2(193, 457)
 material = SubResource("ShaderMaterial_ncb18")
 position = Vector2(96, -225)
 
-[node name="DungeonWorld" type="Node2D" parent="."]
-metadata/_edit_lock_ = true
-
-[node name="Tree" parent="." instance=ExtResource("18_jgwei")]
+[node name="Tree" parent="MainWorld" instance=ExtResource("18_jgwei")]
 material = SubResource("ShaderMaterial_q2uik")
 position = Vector2(265, 257)
+
+[node name="DungeonWorld" type="Node2D" parent="."]
+metadata/_edit_lock_ = true

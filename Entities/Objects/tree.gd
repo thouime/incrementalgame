@@ -10,9 +10,7 @@ func _ready() -> void:
 	activity_timer.set_time(gather_time)
 	activity_timer.show()
 
-	
-func interact_action(_player: CharacterBody2D) -> void:
-
+func _default_interact() -> void:
 	if equipment_requirement:
 		var required_equip : ItemData = equipment_requirement.item_data
 		var required_type : int = required_equip.equipment_type
@@ -32,10 +30,11 @@ func interact_action(_player: CharacterBody2D) -> void:
 	elif activity_timer.regen_complete:
 		current_interacts = 0
 		activity_timer.start()
-		print("Gathering from: ,", get_object_name())
+		print("Gathering from: ", get_object_name())
 
 func stop_interact_action(_player: CharacterBody2D) -> void:
-	activity_timer.stop()
+	if not harvester:
+		activity_timer.stop()
 
 func _on_gather_timeout() -> void:
 	super._on_gather_timeout()
@@ -43,6 +42,7 @@ func _on_gather_timeout() -> void:
 	if current_interacts >= interact_limit:
 		print("Resource has been depleted! It needs to regenerate...")
 		activity_timer.start_regen(regen_duration, self)
+		current_interacts = 0
 		return
 	# Automatically restart timer
 	activity_timer.start()

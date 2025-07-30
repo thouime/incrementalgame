@@ -288,6 +288,13 @@ func save_objects() -> Array:
 			"scale": var_to_str(object.scale)
 		}
 		
+		# Save object positions the harvester is placed on
+		if object_name == "harvester":
+			if object.gathering_object:
+				object_data["gather_position"] = (
+					var_to_str(object.gathering_object.global_position)
+				)
+		
 		# Save specific data for unique objects 
 		save_type_data(object, object_data)
 		
@@ -296,14 +303,18 @@ func save_objects() -> Array:
 		save_tiles(PlayerManager.player.placed_tiles)
 	return serialized_objects
 
-func save_type_data(object: StaticBody2D, object_data: Dictionary) -> void:
-	match object_data["type"]:
-		"External Inventory":
-			var inventory: Array[SlotData] = object.inventory_data.get_inventory_slots()
-			var serialized_inventory: Array = serialize_inventory(inventory)
-			object_data["inventory"] = serialized_inventory
-		"Processing":
-			object_data["fill_status"] = object.current_amount
+func save_type_data(object: Node2D, object_data: Dictionary) -> void:
+	if (
+		object_data["type"] == "External Inventory"
+		or object_data["type"] == "automation"
+	):
+		var inventory: Array[SlotData] = (
+			object.inventory_data.get_inventory_slots()
+		)
+		var serialized_inventory: Array = serialize_inventory(inventory)
+		object_data["inventory"] = serialized_inventory
+	elif(object_data["type"] == "Processing"):
+		object_data["fill_status"] = object.current_amount
 
 func save_tiles(tiles: Dictionary) -> Dictionary:
 	var serialized_tiles := {
@@ -515,8 +526,9 @@ func update_collection(serialized_collection : Array) -> void:
 # Load all the objects in the game
 func load_objects(serialized_objects: Array) -> void:
 	clear_loaded_objects()
+	var gathering_objects : Dictionary = map_gathering_objects()
 	for object_data: Variant in serialized_objects:
-		create_object(object_data)
+		create_object(object_data, gathering_objects)
 			
 # Clear all player made objects before loading them in
 func clear_loaded_objects() -> void:
@@ -533,9 +545,20 @@ func find_object_by_id(object_id: int) -> Node:
 			return object
 	return null
 
-func create_object(object_data: Dictionary) -> void:
+func map_gathering_objects() -> Dictionary:
+	var gathering_objects := {}
+	for gathering in get_tree().get_nodes_in_group("Gathering Objects"):
+		if gathering is GatheringInteract:
+			var position : Vector2 = gathering.global_position.floor()
+			gathering_objects[position] = gathering
+	return gathering_objects
+
+func create_object(object_data: Dictionary, gather_objects: Dictionary) -> void:
 	# Get object scene from objects folder
 	var objects_path: String = "res://Entities/Objects/"
+	var automation_path: String = "res://Entities/Objects/Automation/"
+	if object_data.type == "automation":
+		objects_path = automation_path
 	var object_path: String = objects_path + object_data.name + ".tscn"
 	var packed_scene: PackedScene = load(object_path)
 
@@ -544,14 +567,31 @@ func create_object(object_data: Dictionary) -> void:
 		print("Could not find scene file for object!")
 		return
 		
-	var new_object: StaticBody2D = packed_scene.instantiate()
+	var new_object: Node2D = packed_scene.instantiate()
 
 	# Set properites of object
 	add_shaders(new_object)
 	new_object.position = str_to_var(object_data.position)
 	new_object.scale = str_to_var(object_data.scale)
 	new_object.player_generated = true
-	new_object.connect("interact", PlayerManager.state_machine._on_interact_signal)
+	new_object.connect(
+		"interact", PlayerManager.state_machine._on_interact_signal
+	)
+	
+	if object_data.name == "harvester":
+		# check for object underneath
+		# set reference of gathering object to object underneath
+		# set object underneath reference to harvester
+		if object_data.has("gather_position"):
+			var gather_pos : Vector2 = (
+				str_to_var(object_data["gather_position"])
+			)
+			if not gather_objects.has(gather_pos):
+				printerr("Could not find gathering object!")
+			elif gather_objects[gather_pos]:
+				var gather_object : Node2D = gather_objects[gather_pos]
+				gather_object.harvester = new_object
+				new_object.gathering_object = gather_object
 	
 	# Add to scene and initialize
 	main.add_child(new_object)
@@ -563,24 +603,26 @@ func create_object(object_data: Dictionary) -> void:
 	
 	print(object_data.name + " added to world.")
 
-func load_type_data(object: StaticBody2D, object_data: Dictionary) -> void:
-	match object_data.type:
-		"External Inventory":
-			# Load inventory
-			var inventory_array : Array = object_data.inventory
-			var inventory_data := deserialize_inventory(inventory_array)
-			
-			object.inventory_data.set_inventory_slots(inventory_data)
-			object.toggle_inventory.connect(
-				hub_menu.toggle_inventory_interface
-			)
-			print("External Inventory connected")
-		"Processing":
-			# Load fill status
-			if object_data.fill_status > 0:
-				object.set_current_amount(object_data.fill_status)
+func load_type_data(object: Node2D, object_data: Dictionary) -> void:
+	if (
+		object_data.type == "External Inventory" 
+		or object_data.type == "automation"
+	):
+		# Load inventory
+		var inventory_array : Array = object_data.inventory
+		var inventory_data := deserialize_inventory(inventory_array)
+		
+		object.inventory_data.set_inventory_slots(inventory_data)
+		object.toggle_inventory.connect(
+			hub_menu.toggle_inventory_interface
+		)
+		print("External Inventory connected")
+	elif object_data.type == "Processing":
+		# Load fill status
+		if object_data.fill_status > 0:
+			object.set_current_amount(object_data.fill_status)
 
-func add_shaders(new_object: StaticBody2D) -> void:
+func add_shaders(new_object: Node2D) -> void:
 	if new_object.material:
 		var new_material: ShaderMaterial = new_object.material.duplicate()
 		if new_material.shader:

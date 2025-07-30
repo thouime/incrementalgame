@@ -300,7 +300,7 @@ func _on_interact_signal(
 	
 	pos: Vector2, 
 	offset: float,
-	object: StaticBody2D
+	object: Node2D
 ) -> void:
 
 	if is_dragging:

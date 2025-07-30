@@ -60,4 +60,4 @@ func format_playtime(duration : float) -> String:
 	return "%02d:%02d:%02d" % [hours, minutes, seconds]
 	
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file("res://Stages/MainMenu/MainMenu.tscn")
+	get_tree().change_scene_to_file("res://Stages/MainMenu/main_menu.tscn")
