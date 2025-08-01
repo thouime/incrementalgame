@@ -22,6 +22,7 @@ z_index = 4
 material = SubResource("ShaderMaterial_8dka2")
 script = ExtResource("1_75q2f")
 rotation_speed = 75.0
+gather_time = 10.0
 
 [node name="Sprite1" type="Sprite2D" parent="."]
 texture = ExtResource("2_wdc7m")

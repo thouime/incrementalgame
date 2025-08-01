@@ -4,6 +4,8 @@ extends "object.gd"
 
 signal toggle_inventory(external_inventory_owner: Node)
 
+var connector : Node2D
+
 func _ready() -> void:
 	super._ready()
 	set_object_type("External Inventory")

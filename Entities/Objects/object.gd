@@ -10,19 +10,19 @@ var object_name: String
 # Unique identifier for the instance of the object (for saving/loading)
 var object_id: int
 
-@onready var selection: Area2D = $Selection
-
 func _ready() -> void:
 	add_to_group("interactables")
 	# Get player offset from object
 	_get_offset()
-	
 	initialize()
 	
-	# Add signals for detecting mouse interaction
-	selection.mouse_entered.connect(_on_selection_mouse_entered)
-	selection.mouse_exited.connect(_on_selection_mouse_exited)
-	selection.input_event.connect(_on_selection_input_event)
+	var selection: Area2D = get_node_or_null("Selection")
+	
+	if selection:
+		# Add signals for detecting mouse interaction
+		selection.mouse_entered.connect(_on_selection_mouse_entered)
+		selection.mouse_exited.connect(_on_selection_mouse_exited)
+		selection.input_event.connect(_on_selection_input_event)
 	
 	# Add to persist group for saving
 	add_to_group("Persist")

@@ -49,8 +49,20 @@ func setup_automation() -> void:
 		# Restart the timer automatically after object regenerates
 		activity_timer.regen_timer.timeout.connect(activity_timer.start)
 
-# add item to internal buffer (figure out if it holds max stack or not)
-# also many objects have different item types
+
+func add_item(slot_data: SlotData, connector : Node2D = null) -> void:
+	inventory_data.pick_up_slot_data(slot_data)
+	
+	if not connector:
+		return
+		
+	if not connector.has_method("transfer_items"):
+		return
+			
+	connector.transfer_items(inventory_data)
+	# add to buffer
+	# buffer checks for external inventory then adds
+	
 # check if there is a connected inventory
 # if not connected inventory, do next check
 # if connected inventory, send to inventory

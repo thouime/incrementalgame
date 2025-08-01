@@ -224,3 +224,10 @@ func check_materials_available(material: ItemData) -> Dictionary:
 
 func on_slot_clicked(index: int, button: int) -> void:
 	inventory_interact.emit(self, index, button)
+
+func get_first_item() -> SlotData:
+	for slot_data in slot_datas:
+		if not slot_data:
+			continue
+		return slot_data
+	return null

@@ -38,13 +38,20 @@ func _ready() -> void:
 		
 		if save_info == null:
 			printerr("Save has been corrupted!")
-			return
+			continue
 		
 		save_slot.slot_id = current_slot
 		save_slot.save_location = slot
 
 		slot_label.text = "Slot: " + str(current_slot)
-		name_label.text = save_info.get("save_name")
+		
+		var save_name : String = save_info.get("save_name")
+		
+		if not save_name:
+			printerr("Save has been corrupted!")
+			continue
+		
+		name_label.text = save_name
 		
 		played_label.text = "Time Played: " + (
 			format_playtime(save_info.get("duration"))

@@ -24,6 +24,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="ExternalInventory" parent="." instance=ExtResource("2_n0jkd")]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 offset_top = -25.0

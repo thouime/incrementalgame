@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="CraftData" load_steps=9 format=3 uid="uid://bwm3753yq62xq"]
+
+[ext_resource type="Script" path="res://Utilities/Crafting/material_slot_data.gd" id="1_5vhrs"]
+[ext_resource type="Resource" uid="uid://bhvnyyfbu2grs" path="res://Entities/Item/Items/basic/stone_item.tres" id="2_201mt"]
+[ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="3_hgibj"]
+[ext_resource type="Texture2D" uid="uid://bj5clrdbvbygk" path="res://Entities/Item/item_atlas.tres" id="4_s6phv"]
+[ext_resource type="PackedScene" uid="uid://bp41jtptkw577" path="res://Entities/Objects/Automation/connector.tscn" id="5_0omn6"]
+[ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="5_jg41x"]
+
+[sub_resource type="Resource" id="Resource_mw8v8"]
+script = ExtResource("1_5vhrs")
+quantity = 10
+item_data = ExtResource("2_201mt")
+
+[sub_resource type="Resource" id="Resource_iyigd"]
+script = ExtResource("1_5vhrs")
+quantity = 10
+item_data = ExtResource("3_hgibj")
+
+[resource]
+script = ExtResource("5_jg41x")
+type = 1
+object_scene = ExtResource("5_0omn6")
+name = "Connector"
+description = "Used to connect machines for item transfer."
+menu_texture = ExtResource("4_s6phv")
+material_slot_datas = Array[ExtResource("1_5vhrs")]([SubResource("Resource_mw8v8"), SubResource("Resource_iyigd")])

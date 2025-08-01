@@ -45,7 +45,7 @@ quantity = 99
 
 [sub_resource type="Resource" id="Resource_66drq"]
 script = ExtResource("5_5wslp")
-slot_datas = Array[ExtResource("6_ir37h")]([SubResource("Resource_2luon"), SubResource("Resource_cafxv"), SubResource("Resource_uui4l"), SubResource("Resource_g1pwx"), null, null, null, null])
+slot_datas = Array[ExtResource("6_ir37h")]([SubResource("Resource_2luon"), SubResource("Resource_cafxv"), SubResource("Resource_uui4l"), SubResource("Resource_g1pwx"), null, null, null, null, null, null])
 inventory_size = 15
 
 [sub_resource type="Resource" id="Resource_jsd2a"]

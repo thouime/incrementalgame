@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bp0gw7kcfe8n3"]
+[gd_scene load_steps=18 format=3 uid="uid://bp0gw7kcfe8n3"]
 
 [ext_resource type="Script" path="res://Utilities/Crafting/crafting_menu.gd" id="1_esne6"]
 [ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="2_jujmr"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://1kukmo2577le" path="res://Common/Assets/Art/objects/chest_01.png" id="8_8gxi3"]
 [ext_resource type="Resource" uid="uid://b4yoogim54wxu" path="res://Utilities/Crafting/Crafts/stone_axe_craft.tres" id="9_8qayt"]
 [ext_resource type="Resource" uid="uid://du03002h7xbj" path="res://Utilities/Crafting/Crafts/harvester_craft.tres" id="10_nh4vg"]
+[ext_resource type="Resource" uid="uid://bwm3753yq62xq" path="res://Utilities/Crafting/Crafts/connector_craft.tres" id="11_o6n2j"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0ygva"]
 atlas = ExtResource("7_omde8")
@@ -58,7 +59,7 @@ custom_minimum_size = Vector2(332, 56)
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_esne6")
-craft_datas = Array[ExtResource("2_jujmr")]([ExtResource("3_cscr7"), SubResource("Resource_oxbik"), ExtResource("9_8qayt"), ExtResource("10_nh4vg")])
+craft_datas = Array[ExtResource("2_jujmr")]([ExtResource("3_cscr7"), SubResource("Resource_oxbik"), ExtResource("9_8qayt"), ExtResource("10_nh4vg"), ExtResource("11_o6n2j")])
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2

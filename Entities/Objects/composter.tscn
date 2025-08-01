@@ -22,6 +22,7 @@ size = Vector2(32, 32)
 size = Vector2(32, 32)
 
 [node name="Composter" type="StaticBody2D"]
+z_index = 1
 material = SubResource("ShaderMaterial_f8ghe")
 script = ExtResource("1_wf30t")
 compost_duration = 5

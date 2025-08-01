@@ -19,6 +19,7 @@ const ITEM_FEEDBACK_EFFECT = preload(
 var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var current_interacts: int = 0
 var harvester : Node2D
+var connector : Node2D
 
 func _ready() -> void:
 	super._ready()
@@ -67,8 +68,16 @@ func get_drop(player: CharacterBody2D) -> Dictionary:
 		}
 		
 		new_slot_data.set_quantity(quantity)
-		if harvester:
-			harvester.inventory_data.pick_up_slot_data(new_slot_data)
+		if connector:
+			var target_inventory : InventoryData = (
+				connector.target_object.inventory_data
+			)
+			if harvester:
+				harvester.add_item(new_slot_data, connector)
+			else:
+				target_inventory.pick_up_slot_data(new_slot_data)
+		elif harvester:
+			harvester.add_item(new_slot_data)
 		else:
 			player.inventory_data.pick_up_slot_data(new_slot_data)
 		print("Collected item: ", selected_drop.item_data.name, " x", new_slot_data.quantity)

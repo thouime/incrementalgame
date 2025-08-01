@@ -5,7 +5,9 @@ signal stop_building
 
 # Temporary "ghost" object that follows the mouse.
 var preview_object : Node = null
-# Temporary object for placing automating machines on
+# Object for placing automating machines on
+var source_object : Node2D = null
+# Object for receiving input
 var target_object : Node2D = null
 var items_to_remove : Dictionary
 # Check if the grid is active
@@ -30,18 +32,32 @@ func _input(event: InputEvent) -> void:
 	if not event is InputEventMouseButton:
 		return
 	
-	if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		
-		if not (grid_active and placement_mode):
-			return
-		
-		if preview_object.object_type == "automation":
-			can_object_automate(grid.get_cursor(), 32)
-			place_automated_object()
-			# place in middle of object (?)
-			return
-		place_object()
+	if event.button_index != MOUSE_BUTTON_LEFT or not event.pressed:
 		return
+		
+	if not (grid_active and placement_mode):
+		return
+	
+	if preview_object.object_type == "automation":
+		
+		if preview_object.object_name == "connector":
+			if not can_object_transfer(grid.get_cursor(), 32):
+				return
+			
+			# We already have a target object, now set input object
+			if source_object:
+				if not can_object_transfer(grid.get_cursor(), 32):
+					return
+				place_connector()
+			
+			return
+		
+		can_object_automate(grid.get_cursor(), 32)
+		place_automated_object()
+		return
+		
+	else: 
+		place_object()
 		
 	# Handle cancel action (e.g., pressing the "cancel" action key)
 	if event.is_action_pressed("cancel") and grid_active:
@@ -245,10 +261,68 @@ func can_object_automate(cursor_position: Vector2, grid_size: int) -> bool:
 			
 		# Check if object already has a harvester
 		if not object.harvester:
-			target_object = object
+			source_object = object
 			return true
 			
 		print("Object already has a harvester!")
+		return false
+	return false
+
+func can_object_transfer(cursor_position: Vector2, grid_size: int) -> bool:
+	var results : Array = get_underlying_objects(cursor_position, grid_size)
+	var object : Node2D
+	for result : Dictionary in results:
+		
+		if result.has("collider"):
+			object = result["collider"]
+		
+		if object is TileMapLayer:
+			continue
+
+		if object.get("connector"):
+			print("Object already has a connector!")
+			return false
+		
+		if object is GatheringInteract:
+			print("Object is a gathering type")
+			# only output to a chest
+			if source_object:
+				printerr("Gathering Objects can't receive input!")
+				return false
+			
+			source_object = object
+			return true
+		
+		if object.object_name == "chest":
+			print("Object is a chest")
+			if source_object:
+				if source_object.object_name == "chest":
+					printerr("Can't connect a chest to a chest!")
+					return false
+				target_object = object
+				return true
+			else:
+				source_object = object
+				var sprite: Sprite2D = preview_object.get_node("TargetSprite")
+				grid.set_cursor(sprite)
+				return true
+		
+		if object.object_type == "Processing":
+			print("Object is a processing type")
+			# Processing types don't have inventories
+			if source_object:
+				target_object = object
+			else:
+				source_object = object
+				
+			return true
+
+		# Check if object already has a connector
+		if not object.get("connector"):
+			source_object = object
+			return true
+			
+		print("Can't place connector on object!")
 		return false
 	return false
 
@@ -271,11 +345,11 @@ func place_automated_object() -> void:
 		print("There is no reference to the object!")
 		return
 	
-	if not target_object:
+	if not source_object:
 		printerr("No target object for automation!")
 		return
 	
-	var sprite: Sprite2D = target_object.get_node("Sprite1")
+	var sprite: Sprite2D = source_object.get_node("Sprite1")
 	var center_position: Vector2 = sprite.global_position
 	# Set object position to the grid cursor position
 	preview_object.position = center_position
@@ -283,11 +357,35 @@ func place_automated_object() -> void:
 	# If it's a harvester automation object
 	# Give each object a reference to eachother
 	if preview_object.object_name == "harvester":
-		target_object.harvester = preview_object
-		preview_object.gathering_object = target_object
+		source_object.harvester = preview_object
+		preview_object.gathering_object = source_object
 	
 	setup_object()
 
+func place_connector() -> void:
+
+	if not (source_object and target_object):
+		printerr("Need both a target object and target input!")
+		return
+		
+	# 5 tiles distance
+	var max_distance : float = 128
+	var distance : float = (
+		source_object.position.distance_to(target_object.position)
+	)
+	
+	if distance > max_distance:
+		print("Objects are too far apart, must be less than: ", max_distance)
+		return
+	
+	source_object.connector = preview_object
+	target_object.connector = preview_object
+	
+	preview_object.source_object = source_object
+	preview_object.target_object = target_object
+	
+	setup_object()
+	
 func setup_object() -> void:
 	# Remove the required items to craft the object
 	inventory.remove_checked_items(items_to_remove)
@@ -299,9 +397,11 @@ func setup_object() -> void:
 	main.add_child(preview_object)
 	# Set unique identifier for the object instance (for saving/loading)
 	preview_object.object_id = preview_object.get_instance_id()
-	preview_object.connect(
-		"interact", PlayerManager.state_machine._on_interact_signal
-	)
+	
+	if not preview_object.object_type == "automation":
+		preview_object.connect(
+			"interact", PlayerManager.state_machine._on_interact_signal
+		)
 	
 	# Any external inventories need to be connected to inventory signal
 	if preview_object.is_in_group("external_inventory"):
@@ -328,6 +428,7 @@ func setup_object() -> void:
 	
 	# Clear references to objects
 	preview_object = null
+	source_object = null
 	target_object = null
 	
 func cancel_place_object() -> void:
@@ -336,6 +437,8 @@ func cancel_place_object() -> void:
 	grid_active = false
 	grid.visible = false
 	placement_mode = false
+	source_object = null
+	target_object = null
 
 func _on_stop_building() -> void:
 	cancel_place_object()

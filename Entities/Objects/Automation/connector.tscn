@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=3 uid="uid://bp41jtptkw577"]
+
+[ext_resource type="Script" path="res://Entities/Objects/Automation/connector.gd" id="1_g11ry"]
+[ext_resource type="Texture2D" uid="uid://bulp7tkpnj8vn" path="res://Entities/Item/#1 - Transparent Icons.png" id="2_t1onb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tb0yw"]
+atlas = ExtResource("2_t1onb")
+region = Rect2(0, 64, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rfeu4"]
+atlas = ExtResource("2_t1onb")
+region = Rect2(32, 64, 32, 32)
+
+[node name="Connector" type="Node2D"]
+z_index = 5
+script = ExtResource("1_g11ry")
+
+[node name="Sprite1" type="Sprite2D" parent="."]
+visible = false
+texture = SubResource("AtlasTexture_tb0yw")
+
+[node name="SourceSprite" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.588235)
+texture = SubResource("AtlasTexture_tb0yw")
+
+[node name="TargetSprite" type="Sprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.588235)
+texture = SubResource("AtlasTexture_rfeu4")
+
+[node name="TransferTimer" type="Timer" parent="."]

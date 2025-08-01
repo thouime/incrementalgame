@@ -15,6 +15,9 @@ var compostable_amount : int
 var leaves_needed : int # Leaves needed to fill the compost bin
 
 var compost_ready : bool = false
+
+var connector : Node2D
+
 @onready var inventory : InventoryData = PlayerManager.player_inventory
 @onready var activity_timer: ActivityTimer = $ActivityTimer
 
@@ -37,7 +40,7 @@ func _ready() -> void:
 	activity_timer.set_time(compost_duration)
 	
 # Override
-func _default_interact() -> void:
+func interact_action(_player: CharacterBody2D) -> void:
 	print("Interacting with composter...")
 	#CraftingSystem.try_craft(composted_dirt)
 	if not activity_timer.is_running() and not compost_ready:

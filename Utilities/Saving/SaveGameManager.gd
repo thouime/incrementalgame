@@ -294,6 +294,17 @@ func save_objects() -> Array:
 				object_data["gather_position"] = (
 					var_to_str(object.gathering_object.global_position)
 				)
+		if object_name == "connector":
+			if object.source_object:
+				object_data["source_position"] = (
+					var_to_str(object.source_object.global_position)
+				)
+			if object.target_object:
+				object_data["target_position"] = (
+					var_to_str(object.target_object.global_position)
+				)
+			object_data["transfer_speed"] = object.transfer_speed
+			object_data["transfer_quantity"] = object.transfer_quantity
 		
 		# Save specific data for unique objects 
 		save_type_data(object, object_data)
@@ -306,7 +317,7 @@ func save_objects() -> Array:
 func save_type_data(object: Node2D, object_data: Dictionary) -> void:
 	if (
 		object_data["type"] == "External Inventory"
-		or object_data["type"] == "automation"
+		or object_data["name"] == "harvester"
 	):
 		var inventory: Array[SlotData] = (
 			object.inventory_data.get_inventory_slots()
@@ -526,10 +537,17 @@ func update_collection(serialized_collection : Array) -> void:
 # Load all the objects in the game
 func load_objects(serialized_objects: Array) -> void:
 	clear_loaded_objects()
-	var gathering_objects : Dictionary = map_gathering_objects()
+	var persisting_objects : Dictionary = map_objects()
+	var automation_objects : Array
+	# Place automation objects last after all other objects have been loaded
 	for object_data: Variant in serialized_objects:
-		create_object(object_data, gathering_objects)
-			
+		if object_data.has("type") and object_data.type == "automation":
+			automation_objects.append(object_data)
+			continue
+		create_object(object_data, persisting_objects)
+	for automation_data: Variant in automation_objects:
+		create_object(automation_data, persisting_objects)
+
 # Clear all player made objects before loading them in
 func clear_loaded_objects() -> void:
 	for child in main.get_children():
@@ -545,15 +563,16 @@ func find_object_by_id(object_id: int) -> Node:
 			return object
 	return null
 
-func map_gathering_objects() -> Dictionary:
-	var gathering_objects := {}
-	for gathering in get_tree().get_nodes_in_group("Gathering Objects"):
-		if gathering is GatheringInteract:
-			var position : Vector2 = gathering.global_position.floor()
-			gathering_objects[position] = gathering
-	return gathering_objects
+func map_objects() -> Dictionary:
+	var persisting_objects := {}
+	for object in get_tree().get_nodes_in_group("Persist"):
+		var position : Vector2 = object.global_position.floor()
+		persisting_objects[position] = object
+	return persisting_objects
 
-func create_object(object_data: Dictionary, gather_objects: Dictionary) -> void:
+func create_object(
+	object_data: Dictionary, persist_objects: Dictionary
+) -> void:
 	# Get object scene from objects folder
 	var objects_path: String = "res://Entities/Objects/"
 	var automation_path: String = "res://Entities/Objects/Automation/"
@@ -586,15 +605,38 @@ func create_object(object_data: Dictionary, gather_objects: Dictionary) -> void:
 			var gather_pos : Vector2 = (
 				str_to_var(object_data["gather_position"])
 			)
-			if not gather_objects.has(gather_pos):
+			if not persist_objects.has(gather_pos):
 				printerr("Could not find gathering object!")
-			elif gather_objects[gather_pos]:
-				var gather_object : Node2D = gather_objects[gather_pos]
+			elif persist_objects[gather_pos]:
+				var gather_object : Node2D = persist_objects[gather_pos]
 				gather_object.harvester = new_object
 				new_object.gathering_object = gather_object
+				
+	if object_data.name == "connector":
+		new_object.transfer_speed = object_data["transfer_speed"]
+		new_object.transfer_quantity = object_data["transfer_quantity"]
+		if object_data.has("source_position"):
+			var source_pos : Vector2 = str_to_var(object_data["source_position"])
+			if not persist_objects.has(source_pos):
+				printerr("Could not find source object!")
+			elif persist_objects[source_pos]:
+				var source_object : Node2D = persist_objects[source_pos]
+				new_object.source_object = source_object
+				source_object.connector = new_object
+		if object_data.has("target_position"):
+			var target_pos : Vector2 = str_to_var(object_data["target_position"])
+			if not persist_objects.has(target_pos):
+				printerr("Could not find target object!")
+			elif persist_objects[target_pos]:
+				var target_object : Node2D = persist_objects[target_pos]
+				new_object.target_object = target_object
+				target_object.connector = new_object
 	
 	# Add to scene and initialize
 	main.add_child(new_object)
+	
+	if object_data.has("type") and object_data["type"] != "automation":
+		persist_objects[new_object.position] = new_object
 	
 	# Need the objects to run _ready initialization before running this
 	load_type_data(new_object, object_data)
@@ -606,7 +648,7 @@ func create_object(object_data: Dictionary, gather_objects: Dictionary) -> void:
 func load_type_data(object: Node2D, object_data: Dictionary) -> void:
 	if (
 		object_data.type == "External Inventory" 
-		or object_data.type == "automation"
+		or object_data.name == "harvester"
 	):
 		# Load inventory
 		var inventory_array : Array = object_data.inventory
