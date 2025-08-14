@@ -25,9 +25,9 @@ Developing this project will allow me to practice programming and project manage
 - Create automation objects to automatically collect resources.
 
 ## Screenshots
-![Start Area](Common/Screenshots/StartArea.png)
-![Land Bridge](Common/Screenshots/LandBridge.png)
-![Dungeon](Common/Screenshots/Dungeon.png)
+![Start Area](Common/Screenshots/StartArea.PNG)
+![Land Bridge](Common/Screenshots/LandBridge.PNG)
+![Dungeon](Common/Screenshots/Dungeon.PNG)
 
 ## Controls
 - **Movement**: Use `WASD`, click to move, or click on highlighted objects.
