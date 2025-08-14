@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://bsgr3kae0gnej"]
 
-[ext_resource type="Script" path="res://Stages/Dungeons/dungeon_entrance.gd" id="1_xn4hr"]
+[ext_resource type="Script" uid="uid://didxhbjulbpyl" path="res://Stages/Dungeons/dungeon_entrance.gd" id="1_xn4hr"]
 [ext_resource type="Texture2D" uid="uid://cqa7xob3lsi47" path="res://Stages/Dungeons/Art/cave.png" id="2_m7we2"]
 
 [sub_resource type="Shader" id="Shader_s2hej"]

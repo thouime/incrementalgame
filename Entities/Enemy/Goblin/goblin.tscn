@@ -1,8 +1,8 @@
 [gd_scene load_steps=48 format=3 uid="uid://cvs7h2d6kjk5g"]
 
-[ext_resource type="Script" path="res://Entities/Enemy/Goblin/goblin.gd" id="1_exp43"]
+[ext_resource type="Script" uid="uid://lxuw0metx4sm" path="res://Entities/Enemy/Goblin/goblin.gd" id="1_exp43"]
 [ext_resource type="Texture2D" uid="uid://dgoei6ltb7ed2" path="res://Entities/Enemy/Goblin/Art/Torch_Red.png" id="2_b30ch"]
-[ext_resource type="Script" path="res://Entities/Enemy/StateMachine/ai_state_machine.gd" id="3_l4asc"]
+[ext_resource type="Script" uid="uid://db0m5flk0ged1" path="res://Entities/Enemy/StateMachine/ai_state_machine.gd" id="3_l4asc"]
 [ext_resource type="PackedScene" uid="uid://cxhslr7musn0q" path="res://Entities/Enemy/StateMachine/wander.tscn" id="4_5bqax"]
 [ext_resource type="PackedScene" uid="uid://33t0n5w1dix" path="res://Entities/Enemy/StateMachine/enemy_idle.tscn" id="5_arvjo"]
 [ext_resource type="PackedScene" uid="uid://by85hgvr7gewi" path="res://Entities/Enemy/StateMachine/chase.tscn" id="6_mlfi2"]

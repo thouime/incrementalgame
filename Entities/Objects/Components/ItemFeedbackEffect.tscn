@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://cn7qj7rgi8kbg"]
 
-[ext_resource type="Script" path="res://Entities/Objects/Components/item_feedback_effect.gd" id="1_64578"]
+[ext_resource type="Script" uid="uid://djhmwh70k6siy" path="res://Entities/Objects/Components/item_feedback_effect.gd" id="1_64578"]
 [ext_resource type="Texture2D" uid="uid://bulp7tkpnj8vn" path="res://Entities/Item/#1 - Transparent Icons.png" id="2_73n8b"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_sefog"]
@@ -156,9 +156,9 @@ tracks/3/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_n4ghj"]
 _data = {
-"RESET": SubResource("Animation_m0u2k"),
-"consume": SubResource("Animation_imbd1"),
-"gain": SubResource("Animation_lo03p")
+&"RESET": SubResource("Animation_m0u2k"),
+&"consume": SubResource("Animation_imbd1"),
+&"gain": SubResource("Animation_lo03p")
 }
 
 [node name="ItemFeedbackEffect" type="Node2D"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://06qtry678qma"]
 
-[ext_resource type="Script" path="res://Utilities/Saving/save_list_menu.gd" id="1_t02lv"]
+[ext_resource type="Script" uid="uid://bo8cr0tn0u78q" path="res://Utilities/Saving/save_list_menu.gd" id="1_t02lv"]
 [ext_resource type="Theme" uid="uid://cvw8pe8ajmv6h" path="res://Common/menu_theme.tres" id="2_kmgs8"]
 
 [node name="SaveListMenu" type="Control"]

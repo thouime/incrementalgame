@@ -1,10 +1,10 @@
 [gd_scene load_steps=18 format=4 uid="uid://cftvtb33kjqt7"]
 
 [ext_resource type="Texture2D" uid="uid://dlxicdtjk25fb" path="res://Stages/Dungeons/Art/Dungeon_Tileset.png" id="1_h0nrj"]
-[ext_resource type="Script" path="res://Stages/Dungeons/GoblinCave/goblin_cave.gd" id="1_jfqik"]
+[ext_resource type="Script" uid="uid://djxdd5bsuyqy2" path="res://Stages/Dungeons/GoblinCave/goblin_cave.gd" id="1_jfqik"]
 [ext_resource type="PackedScene" uid="uid://cqxkf0rt3anyd" path="res://Entities/Objects/ladder.tscn" id="2_pyhmx"]
-[ext_resource type="Script" path="res://Stages/Dungeons/GoblinCave/player_spawn.gd" id="2_txgom"]
-[ext_resource type="Script" path="res://Stages/Dungeons/GoblinCave/enemy_spawn.gd" id="3_q3heu"]
+[ext_resource type="Script" uid="uid://dbih7lx6ecntj" path="res://Stages/Dungeons/GoblinCave/player_spawn.gd" id="2_txgom"]
+[ext_resource type="Script" uid="uid://cut0j62wcejkk" path="res://Stages/Dungeons/GoblinCave/enemy_spawn.gd" id="3_q3heu"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_d8bsc"]
 vertices = PackedVector2Array(555, 811, 693, 821, 363, 821, 517, 811, 693, 699, 667, 779, 667, 741, 629, 779, 565, 699, 629, 741, 555, 773, 517, 773, 459, 779, 459, 741, 491, 683, 421, 779, 363, 683, 421, 741, 715, 43, 715, 27, 725, 27, 725, 43, 763, 43, 763, 27, 901, 27, 901, 213, 773, 213, 773, 437, 725, 437, 667, 213, 581, 517, 581, 597, 565, 597, 491, 597, 475, 597, 475, 517, 379, 517, 379, 501, 405, 475, 667, 475, 219, 501, 219, 421, 293, 443, 155, 421, 155, 347, 203, 347, 293, 373, 27, 261, 27, 187, 82, 187, 82, 231, 203, 261, 136, 231, 136, 187, 213, 187, 213, 267, 325, 267, 325, 373, 405, 443, 539, 213, 539, 27, 677, 27, 677, 43, 725, 517)

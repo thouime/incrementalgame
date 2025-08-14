@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="CraftData" load_steps=15 format=3 uid="uid://blampwk84srx8"]
 
-[ext_resource type="Script" path="res://Utilities/Crafting/material_slot_data.gd" id="1_8kewf"]
-[ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="1_pqv7l"]
+[ext_resource type="Script" uid="uid://dd3y4b417hyhp" path="res://Utilities/Crafting/material_slot_data.gd" id="1_8kewf"]
+[ext_resource type="Script" uid="uid://dn4hyecyr1cv5" path="res://Utilities/Crafting/craft_data.gd" id="1_pqv7l"]
 [ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Common/Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="2_87lh3"]
 [ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="2_rq8b6"]
-[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="5_v5rjc"]
-[ext_resource type="Script" path="res://Entities/Objects/composter.gd" id="6_1sei0"]
+[ext_resource type="Shader" uid="uid://ci7j7ihxngfo5" path="res://Entities/Objects/Shaders/aura.gdshader" id="5_v5rjc"]
+[ext_resource type="Script" uid="uid://dpk6p5rnah3b3" path="res://Entities/Objects/composter.gd" id="6_1sei0"]
 [ext_resource type="Texture2D" uid="uid://c6usy0wvkpmhs" path="res://Common/Assets/Art/MyArt/composter.png" id="6_drfhh"]
 [ext_resource type="PackedScene" uid="uid://dlrmxq4bnsyvu" path="res://Entities/Objects/Components/activity_timer.tscn" id="7_3aweh"]
 

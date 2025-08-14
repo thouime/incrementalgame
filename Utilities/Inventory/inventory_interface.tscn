@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://dw7jp8bpq3h0m"]
 
-[ext_resource type="Script" path="res://Utilities/Inventory/inventory_interface.gd" id="1_x3d5g"]
+[ext_resource type="Script" uid="uid://b5wjywtgu1glc" path="res://Utilities/Inventory/inventory_interface.gd" id="1_x3d5g"]
 [ext_resource type="PackedScene" uid="uid://cjvrn7m4iia17" path="res://Utilities/Inventory/inventory.tscn" id="2_n0jkd"]
 [ext_resource type="PackedScene" uid="uid://dj0urcd0clvl4" path="res://Utilities/Inventory/slot.tscn" id="3_oprao"]
-[ext_resource type="PackedScene" path="res://Utilities/Inventory/equipment.tscn" id="3_xmcij"]
+[ext_resource type="PackedScene" uid="uid://cfkr4tbdm1m3w" path="res://Utilities/Inventory/equipment.tscn" id="3_xmcij"]
 
 [node name="InventoryInterface" type="Control"]
 z_index = 1

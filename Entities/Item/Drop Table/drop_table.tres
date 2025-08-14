@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="DropTable" load_steps=2 format=3 uid="uid://b2nvp6hafp1b"]
 
-[ext_resource type="Script" path="res://Entities/Item/Drop Table/drop_table.gd" id="1_bh6ws"]
+[ext_resource type="Script" uid="uid://p1tl04qfw2k2" path="res://Entities/Item/Drop Table/drop_table.gd" id="1_bh6ws"]
 
 [resource]
 script = ExtResource("1_bh6ws")

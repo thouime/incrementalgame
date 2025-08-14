@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cworgwa38bkjg"]
 
-[ext_resource type="Script" path="res://Utilities/Saving/v_box_container.gd" id="1_gf6re"]
-[ext_resource type="Script" path="res://Utilities/Saving/SaveGameManager.gd" id="2_8bveb"]
+[ext_resource type="Script" uid="uid://cf1hwn85m21ic" path="res://Utilities/Saving/v_box_container.gd" id="1_gf6re"]
+[ext_resource type="Script" uid="uid://b77dl6ibxisiv" path="res://Utilities/Saving/SaveGameManager.gd" id="2_8bveb"]
 
 [node name="Control" type="Control"]
 layout_mode = 3

@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://d2u1pfnrn3raw"]
 
-[ext_resource type="Script" path="res://Utilities/Menus/Collection/collection_slot.gd" id="1_hmuqy"]
+[ext_resource type="Script" uid="uid://dcg5tf10bcfbo" path="res://Utilities/Menus/Collection/collection_slot.gd" id="1_hmuqy"]
 [ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Common/Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="1_pkaaf"]
 
 [sub_resource type="Shader" id="Shader_55eyn"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://eg3a76ml4c2v"]
 
-[ext_resource type="Script" path="res://Utilities/Menus/slot_info.gd" id="1_cdgpl"]
+[ext_resource type="Script" uid="uid://dm8kqcxxhauas" path="res://Utilities/Menus/slot_info.gd" id="1_cdgpl"]
 
 [node name="SlotInfo" type="PanelContainer"]
 visible = false

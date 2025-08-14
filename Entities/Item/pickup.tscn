@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://ciuy4rj4cpsvn"]
 
-[ext_resource type="Script" path="res://Entities/Item/pickup.gd" id="1_eo06y"]
+[ext_resource type="Script" uid="uid://b4hk7ugklefj2" path="res://Entities/Item/pickup.gd" id="1_eo06y"]
 [ext_resource type="Texture2D" uid="uid://bj5clrdbvbygk" path="res://Entities/Item/item_atlas.tres" id="2_d7unv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_4culy"]

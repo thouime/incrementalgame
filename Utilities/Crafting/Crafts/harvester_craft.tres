@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="CraftData" load_steps=14 format=3 uid="uid://du03002h7xbj"]
 
-[ext_resource type="Script" path="res://Utilities/Crafting/material_slot_data.gd" id="1_q7kk0"]
+[ext_resource type="Script" uid="uid://dd3y4b417hyhp" path="res://Utilities/Crafting/material_slot_data.gd" id="1_q7kk0"]
 [ext_resource type="Resource" uid="uid://bvd8gpu7r0l5c" path="res://Entities/Item/Items/basic/wood_item.tres" id="2_0nrjv"]
-[ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="2_ujkdu"]
+[ext_resource type="Script" uid="uid://dn4hyecyr1cv5" path="res://Utilities/Crafting/craft_data.gd" id="2_ujkdu"]
 [ext_resource type="Resource" uid="uid://bhvnyyfbu2grs" path="res://Entities/Item/Items/basic/stone_item.tres" id="3_bdaa8"]
 [ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="4_3guli"]
 [ext_resource type="Resource" uid="uid://c47yrnik4v8vy" path="res://Entities/Item/Items/basic/leaf_item.tres" id="5_m8jic"]

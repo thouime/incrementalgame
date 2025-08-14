@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://vbocle3chtva"]
 
 [ext_resource type="PackedScene" uid="uid://clxpt0o22wqni" path="res://Entities/Objects/object.tscn" id="1_vdmus"]
-[ext_resource type="Script" path="res://Entities/Objects/timer_object_.gd" id="2_wde66"]
+[ext_resource type="Script" uid="uid://vfban21pcwyg" path="res://Entities/Objects/timer_object_.gd" id="2_wde66"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y7c47"]
 bg_color = Color(0.6, 0.6, 0.6, 0)

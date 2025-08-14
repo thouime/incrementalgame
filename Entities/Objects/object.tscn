@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://clxpt0o22wqni"]
 
-[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="1_efrtx"]
-[ext_resource type="Script" path="res://Entities/Objects/object.gd" id="2_u8dp0"]
+[ext_resource type="Shader" uid="uid://ci7j7ihxngfo5" path="res://Entities/Objects/Shaders/aura.gdshader" id="1_efrtx"]
+[ext_resource type="Script" uid="uid://d16gb8itpnp6c" path="res://Entities/Objects/object.gd" id="2_u8dp0"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Common/Assets/Art/objects/objects.png" id="3_al1du"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_s3k23"]

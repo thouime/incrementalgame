@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ctm1l62jljjxo"]
 
-[ext_resource type="Script" path="res://Utilities/Menus/hub_save_menu.gd" id="1_0ilmg"]
+[ext_resource type="Script" uid="uid://dhmfrb313jrn" path="res://Utilities/Menus/hub_save_menu.gd" id="1_0ilmg"]
 [ext_resource type="Theme" uid="uid://cvw8pe8ajmv6h" path="res://Common/menu_theme.tres" id="1_1bm8j"]
 
 [node name="HubSaveMenu" type="PanelContainer"]

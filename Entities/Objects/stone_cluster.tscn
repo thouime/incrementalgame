@@ -1,13 +1,13 @@
 [gd_scene load_steps=15 format=3 uid="uid://cegfrcv0cewvw"]
 
-[ext_resource type="Script" path="res://Entities/Objects/stone_cluster.gd" id="1_qacki"]
-[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="1_y7ar6"]
+[ext_resource type="Script" uid="uid://bbh47qjuauvdm" path="res://Entities/Objects/stone_cluster.gd" id="1_qacki"]
+[ext_resource type="Shader" uid="uid://ci7j7ihxngfo5" path="res://Entities/Objects/Shaders/aura.gdshader" id="1_y7ar6"]
 [ext_resource type="Texture2D" uid="uid://525imn4ikpss" path="res://Common/Assets/Art/objects/objects.png" id="1_yjujc"]
 [ext_resource type="PackedScene" uid="uid://dlrmxq4bnsyvu" path="res://Entities/Objects/Components/activity_timer.tscn" id="2_213bf"]
-[ext_resource type="Script" path="res://Entities/Item/Drop Table/common_drops.gd" id="2_ltc1j"]
-[ext_resource type="Script" path="res://Utilities/Inventory/slot_data.gd" id="3_smnfi"]
+[ext_resource type="Script" uid="uid://ck3guw8b8l0si" path="res://Entities/Item/Drop Table/common_drops.gd" id="2_ltc1j"]
+[ext_resource type="Script" uid="uid://c433uyphag8so" path="res://Utilities/Inventory/slot_data.gd" id="3_smnfi"]
 [ext_resource type="Resource" uid="uid://bhvnyyfbu2grs" path="res://Entities/Item/Items/basic/stone_item.tres" id="4_fkipj"]
-[ext_resource type="Script" path="res://Entities/Item/Drop Table/drop_table.gd" id="4_ryl4p"]
+[ext_resource type="Script" uid="uid://p1tl04qfw2k2" path="res://Entities/Item/Drop Table/drop_table.gd" id="4_ryl4p"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_fn076"]
 resource_local_to_scene = true

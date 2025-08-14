@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="CraftData" load_steps=9 format=3 uid="uid://bwm3753yq62xq"]
 
-[ext_resource type="Script" path="res://Utilities/Crafting/material_slot_data.gd" id="1_5vhrs"]
+[ext_resource type="Script" uid="uid://dd3y4b417hyhp" path="res://Utilities/Crafting/material_slot_data.gd" id="1_5vhrs"]
 [ext_resource type="Resource" uid="uid://bhvnyyfbu2grs" path="res://Entities/Item/Items/basic/stone_item.tres" id="2_201mt"]
 [ext_resource type="Resource" uid="uid://c8ia8q7d2wx6o" path="res://Entities/Item/Items/basic/stick_item.tres" id="3_hgibj"]
 [ext_resource type="Texture2D" uid="uid://bj5clrdbvbygk" path="res://Entities/Item/item_atlas.tres" id="4_s6phv"]
 [ext_resource type="PackedScene" uid="uid://bp41jtptkw577" path="res://Entities/Objects/Automation/connector.tscn" id="5_0omn6"]
-[ext_resource type="Script" path="res://Utilities/Crafting/craft_data.gd" id="5_jg41x"]
+[ext_resource type="Script" uid="uid://dn4hyecyr1cv5" path="res://Utilities/Crafting/craft_data.gd" id="5_jg41x"]
 
 [sub_resource type="Resource" id="Resource_mw8v8"]
 script = ExtResource("1_5vhrs")

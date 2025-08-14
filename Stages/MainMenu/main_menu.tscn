@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://drby8qevp80qx"]
 
-[ext_resource type="Script" path="res://Stages/MainMenu/main_menu.gd" id="1_eux81"]
+[ext_resource type="Script" uid="uid://b23gg4hpgs6mr" path="res://Stages/MainMenu/main_menu.gd" id="1_eux81"]
 [ext_resource type="FontFile" uid="uid://c514dyw4umvhl" path="res://Common/EagleLake-Regular.ttf" id="2_jlc3i"]
 
 [node name="MainMenu" type="Control"]

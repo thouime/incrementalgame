@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://dlrmxq4bnsyvu"]
 
-[ext_resource type="Script" path="res://Entities/Objects/Components/activity_timer.gd" id="1_tks2k"]
-[ext_resource type="Script" path="res://Entities/Objects/Components/timer_circle.gd" id="3_2ioon"]
+[ext_resource type="Script" uid="uid://d3m7nvwnl0e6e" path="res://Entities/Objects/Components/activity_timer.gd" id="1_tks2k"]
+[ext_resource type="Script" uid="uid://cwi850hsv0tyd" path="res://Entities/Objects/Components/timer_circle.gd" id="3_2ioon"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y7c47"]
 bg_color = Color(0.6, 0.6, 0.6, 0)

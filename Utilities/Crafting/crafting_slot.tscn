@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://cv6y5ynvreyg8"]
 
-[ext_resource type="Script" path="res://Utilities/Crafting/crafting_slot.gd" id="1_xuakc"]
+[ext_resource type="Script" uid="uid://dswuf3pyhuop6" path="res://Utilities/Crafting/crafting_slot.gd" id="1_xuakc"]
 [ext_resource type="Texture2D" uid="uid://b3m4h3bnds4o4" path="res://Common/Assets/Art/Shikashi's Fantasy Icons Pack v2/#1 - Transparent Icons.png" id="1_yss3i"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xdoaq"]

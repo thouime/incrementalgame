@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cjtj17nka7vh6"]
 
-[ext_resource type="Script" path="res://Utilities/Menus/Collection/collection_menu.gd" id="1_0g07k"]
+[ext_resource type="Script" uid="uid://d3klf1f1xsvqf" path="res://Utilities/Menus/Collection/collection_menu.gd" id="1_0g07k"]
 
 [node name="CollectionMenu" type="Control"]
 layout_mode = 3

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c8wct85o6jfcu"]
 
-[ext_resource type="Script" path="res://Utilities/Inventory/hot_bar_inventory.gd" id="1_d1jts"]
+[ext_resource type="Script" uid="uid://cgockgvby4req" path="res://Utilities/Inventory/hot_bar_inventory.gd" id="1_d1jts"]
 
 [node name="HotBarInventory" type="PanelContainer"]
 script = ExtResource("1_d1jts")

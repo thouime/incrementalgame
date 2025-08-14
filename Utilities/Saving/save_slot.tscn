@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dm3a3bjpx8q5x"]
 
 [ext_resource type="Theme" uid="uid://cvw8pe8ajmv6h" path="res://Common/menu_theme.tres" id="1_fuurq"]
-[ext_resource type="Script" path="res://Utilities/Saving/save_slot.gd" id="2_65sfl"]
+[ext_resource type="Script" uid="uid://bw8vlrf6jfcc" path="res://Utilities/Saving/save_slot.gd" id="2_65sfl"]
 [ext_resource type="Texture2D" uid="uid://dglfq4rf1deo5" path="res://Utilities/Menus/Art/MegaPixelArt32x32pxIcons_SpriteSheet.png" id="3_n42j1"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qunj1"]

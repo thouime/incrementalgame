@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://dnb1drol8a7qw"]
 
-[ext_resource type="Script" path="res://Entities/Objects/Automation/harvester.gd" id="1_75q2f"]
-[ext_resource type="Shader" path="res://Entities/Objects/Shaders/aura.gdshader" id="1_qc5ig"]
+[ext_resource type="Script" uid="uid://vh2ldhs3ni5c" path="res://Entities/Objects/Automation/harvester.gd" id="1_75q2f"]
+[ext_resource type="Shader" uid="uid://ci7j7ihxngfo5" path="res://Entities/Objects/Shaders/aura.gdshader" id="1_qc5ig"]
 [ext_resource type="Texture2D" uid="uid://n4ajdqxpoy37" path="res://Utilities/Menus/Art/Dusk's UI Icons.png" id="2_wdc7m"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8dka2"]

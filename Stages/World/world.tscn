@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dcymbv1v6ockq" path="res://Common/Assets/Art/tilesets/plains.png" id="1_wsh2b"]
 [ext_resource type="Texture2D" uid="uid://bvvg2wlc68jns" path="res://Common/Assets/Art/tilesets/walls/walls.png" id="2_mqpwd"]
-[ext_resource type="Script" path="res://Stages/World/player_spawn.gd" id="3_4ccwd"]
+[ext_resource type="Script" uid="uid://dc3aeenhqu2hc" path="res://Stages/World/player_spawn.gd" id="3_4ccwd"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ujrhf"]
 texture = ExtResource("1_wsh2b")
