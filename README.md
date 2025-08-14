@@ -16,7 +16,13 @@ Developing this project allowed me to practice programming and project managemen
 - Expand your island by gathering materials.
 - Explore other islands to upgrade your character and conquer the skies.
 - Automate processes for resource gathering.
-- Engage in incremental upgrades and world-building.
+- Collection System
+- Inventory System
+- Crafting System
+- Building System for adding tiles to the world during gameplay
+- Automation for gathering materials
+- Equipment System
+- Dungeons and Auto Combat
 
 ## Getting Started
 - Gather from environmental objects like the boulder and the bush.
