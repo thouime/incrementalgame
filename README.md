@@ -19,29 +19,26 @@ Developing this project will allow me to practice programming and project manage
 - Engage in incremental upgrades and world-building.
 
 ## Getting Started
-TBD
+- Gather from environmental objects like the boulder and the bush.
+- Craft an axe to gather from the tree.
+- Expand the island to explore for a dungeon located above.
+- Create automation objects to automatically collect resources.
 
 ## Screenshots
-TBD
+![Start Area](Common/Screenshots/StartArea.png)
+![Land Bridge](Common/Screenshots/LandBridge.png)
+![Dungeon](Common/Screenshots/Dungeon.png)
 
 ## Controls
-- **Movement**: Use `WASD` or click on highlighted objects.
+- **Movement**: Use `WASD`, click to move, or click on highlighted objects.
 - **Interact with chests**: Click on chests to open them.
-- **Inventory**: Press `I` or `TAB` to open your inventory.
+- **Inventory**: Use lower interface to access menus and inventory.
 
 ## Roadmap
-- Grid System
-- Building
-- Saving
-- Automation
-- Idle Combat
-- Dungeons
-- Monsters
-- Collection
-- Interface
-- Art
-- Sound Effects
-- Music
+- Add more content such as dungeons and resources.
+- Update art.
+- Optimize code.
+- Polish game and add optional content.
 
 ## License
-TBD
+This project is for personal portfolio demonstration only. No copying, modification, or redistribution is allowed without permission.
